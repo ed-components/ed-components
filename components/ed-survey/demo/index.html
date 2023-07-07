@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <title>ed-survey component demo</title>
+    <style>
+      @import 'https://unpkg.com/open-props';
+      @import 'https://unpkg.com/open-props/normalize.light.min.css';
+      @import 'https://unpkg.com/open-props/buttons.light.min.css';
+
+      body {
+        max-width: var(--size-md);
+        margin: 0 auto;
+      }
+    </style>
+    <script type="module" src="../dist/src/ed-survey.js"></script>
+  </head>
+
+  <body>
+    <h1>ed-survey component demo</h1>
+    <ed-survey> Do you understand what is a web-component? </ed-survey>
+
+    <ed-survey type="rating">
+      <p>Do you prefer <strong>rating</strong> surveys?</p>
+    </ed-survey>
+    <script>
+      document.querySelectorAll('ed-survey').forEach(el =>
+        el.addEventListener('edEvent', e => {
+          console.log(e.detail);
+        })
+      );
+    </script>
+
+    <!--
+      <script type="module">
+    import { html, render } from 'lit';
+    import '../dist/src/ed-survey.js';
+
+    const header = 'Hello owc World!';
+    render(
+      html`
+        <ed-survey .header=${header}>
+          some light-dom
+        </ed-survey>
+      `,
+      document.querySelector('#demo')
+    );
+  </script> -->
+  </body>
+</html>

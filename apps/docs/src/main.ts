@@ -1,6 +1,9 @@
 import "./style.css";
 import typescriptLogo from "./typescript.svg";
 import { Header, Counter, setupCounter } from "ui";
+import StopWatchElement from "stop-watch";
+
+StopWatchElement.define()
 
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   <div>
@@ -14,6 +17,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
     <div class="card">
       ${Counter()}
     </div>
+    <stop-watch role="timer"></stop-watch>
   </div>
 `;
 
