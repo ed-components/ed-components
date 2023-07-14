@@ -6,6 +6,10 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'EdComponents',
+      customCss: [
+        // Relative path to your custom CSS file
+        './src/styles/custom.css',
+      ],
       social: {
         github: 'https://github.com/ed-components/ed-components'
       },
