@@ -11,4 +11,3 @@ Scaffolded with `npm init @open-wc`.
 ✔ Would you like to use typescript? › Yes
 ✔ What is the tag name of your web component? … ed-survey
 ```
-

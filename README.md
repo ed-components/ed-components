@@ -19,14 +19,11 @@ ed-components can be exported to various formats using [pandoc]()
 
 An open-source library of contents is published as a git repo.
 
-
 ## events
 
 Use https://www.xapijs.dev/
 
-
-
-## Dev: Mono repo config 
+## Dev: Mono repo config
 
 ## White book
 
@@ -43,14 +40,11 @@ ed-components can be exported to various formats using [pandoc]()
 
 An open-source library of contents is published as a git repo.
 
-
 ## events
 
 Use https://www.xapijs.dev/
 
-
-
-## Dev: Mono repo config 
+## Dev: Mono repo config
 
 This is an official starter Turborepo.
 
@@ -84,4 +78,3 @@ This Turborepo has some additional tools already setup for you:
 - [ESLint](https://eslint.org/) for code linting
 - [Jest](https://jestjs.io) test runner for all things JavaScript
 - [Prettier](https://prettier.io) for code formatting
-
