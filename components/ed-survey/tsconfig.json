@@ -15,10 +15,12 @@
     "inlineSources": true,
     "rootDir": "./",
     "declaration": true,
-    "incremental": true
+    "incremental": true,
+    // Skip typechecking libraries and .d.ts files
+    "skipLibCheck": true
   },
   "include": [
-    "**/*.ts",
+    "src/**/*.ts",
     "src/nudeui/meter-discrete.js",
     "src/nudeui/nd-rating.js"
   ]

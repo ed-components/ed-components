@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>&lt;ed-survey&gt;</title>
+	<link rel="icon" href="../logo.svg">
+	<link rel="stylesheet" href="../style.css" />
+    
+	
+	<script src="./dist/src/ed-survey.js" type="module"></script>
+	
+	
+</head>
+<body>
+
+<nav>
+	<a href="#installation">Installation</a>
+	<a href="https://github.com/LeaVerou/nudeui/tree/main/ed-survey">GitHub</a>
+</nav>
+
+<h2>Usage</h2>
+<pre><code class="language-html">&lt;h1&gt;ed-survey component demo&lt;/h1&gt;
+&lt;ed-survey&gt; Do you understand what is a web-component? &lt;/ed-survey&gt;
+
+&lt;ed-survey type=&quot;rating&quot;&gt;
+  &lt;p&gt;Do you prefer &lt;strong&gt;rating&lt;/strong&gt; surveys?&lt;/p&gt;
+&lt;/ed-survey&gt;
+// TODO don't work on demo
+&lt;script&gt;
+  document.querySelectorAll('ed-survey').forEach(el =&gt;
+    el.addEventListener('edEvent', e =&gt; {
+      console.log(e.detail);
+    })
+  );
+&lt;/script&gt;
+</code></pre>
+<h2>Credits</h2>
+<p>This component uses <a href="https://github.com/LeaVerou/nudeui/">nudeui</a> <code>vu-rating</code>
+web component written by Léa Verou under MIT. Retrieved 2023-07-08.</p>
+<header>
+<h1><code>&lt;nd-rating&gt;</code></h1>
+<p>Like <a href="../meter-discrete/"><code>&lt;meter-discrete&gt;</code></a>, but editable. Useful to display and set ratings etc.</p>
+</header>
+<main>
+<h2>Features</h2>
+<ul>
+<li>All features of <a href="../meter-discrete/"><code>&lt;meter-discrete&gt;</code></a>, plus:</li>
+<li>Uses <a href="https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals"><code>ElementInternals</code></a> to work like a built-in form element</li>
+<li>Keyboard accessible (use arrow keys)</li>
+<li>Ultra light (3KB <strong>unminified</strong> and <strong>uncompressed</strong> + another 3KB for <code>&lt;meter-discrete&gt;</code>)</li>
+</ul>
+<h2>Examples</h2>
+<p>Basic</p>
+<pre><code class="language-html">&lt;nd-rating max=&quot;5&quot; value=&quot;3.5&quot;&gt;&lt;/nd-rating&gt;
+&lt;button onclick=&quot;this.previousElementSibling.readonly = !this.previousElementSibling.readonly&quot;&gt;Toggle readonly&lt;/button&gt;
+</code></pre>
+<p>With step</p>
+<pre><code class="language-html">&lt;nd-rating max=&quot;5&quot; value=&quot;3.5&quot; step=&quot;0.1&quot; style=&quot;font-size: 200%&quot;&gt;&lt;/nd-rating&gt;
+</code></pre>
+<p>Different styles</p>
+<pre><code class="language-html">&lt;style&gt;
+#minimal_rating {
+	font-size: 200%;
+}
+
+#minimal_rating::part(value),
+#minimal_rating::part(inactive) {
+	filter: contrast(0%) sepia() hue-rotate(140deg);
+}
+
+#minimal_rating::part(inactive) {
+	opacity: .5;
+}
+&lt;/style&gt;
+&lt;nd-rating id=&quot;minimal_rating&quot; max=&quot;5&quot; value=&quot;2.5&quot; step=&quot;0.5&quot; icon=&quot;💜&quot;&gt;&lt;/nd-rating&gt;
+</code></pre>
+<p>Actual image instead of emoji:</p>
+<pre><code class="language-html">&lt;nd-rating value=&quot;3.5&quot; icon=&quot;../logo.svg&quot;&gt;&lt;/nd-rating&gt;
+</code></pre>
+<p>Participates in form submission (requires <a href="https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals"><code>ElementInternals</code></a> support):</p>
+<pre><code class="language-html">&lt;form action=&quot;about:blank&quot; target=&quot;_blank&quot;&gt;
+	&lt;nd-rating name=&quot;myrating&quot;&gt;&lt;/nd-rating&gt;
+	&lt;button type=submit&gt;Submit&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+</main>
+
+
+<section id="installation">
+
+<h2>Installation</h2>
+
+
+
+<p>Just include the component's JS file and you're good:
+
+<pre class="language-html"><code>&lt;script src="https://nudeui.com/ed-survey/ed-survey.js" type="module">&lt;/script>
+</code></pre>
+
+<p>In case you want to link to local files: CSS is fetched automatically, and assumed to be in the same directory as the JS file.
+
+
+</section>
+
+
+<script src="../global.js" type="module"></script>
+
+</body>
+</html>

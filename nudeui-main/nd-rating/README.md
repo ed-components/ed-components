@@ -1,30 +1,6 @@
 ---
-id: ed-survey
+id: nd-rating
 ---
-
-## Usage
-
-```html
-<h1>ed-survey component demo</h1>
-<ed-survey> Do you understand what is a web-component? </ed-survey>
-
-<ed-survey type="rating">
-  <p>Do you prefer <strong>rating</strong> surveys?</p>
-</ed-survey>
-// TODO don't work on demo
-<script>
-  document.querySelectorAll('ed-survey').forEach(el =>
-    el.addEventListener('edEvent', e => {
-      console.log(e.detail);
-    })
-  );
-</script>
-```
-
-## Credits
-
-This component uses [nudeui](https://github.com/LeaVerou/nudeui/) `vu-rating`
-web component written by Léa Verou under MIT. Retrieved 2023-07-08.
 
 <header>
 

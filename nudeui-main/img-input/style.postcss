@@ -1,0 +1,28 @@
+#drop-zone {
+	display: grid;
+	gap: .3em;
+	grid-template: "url browse" auto
+	                "preview preview" auto / 1fr auto;
+
+	&[part~="dragover"] {
+		outline: 2px dashed hsl(0 0% 10% / .5);
+		outline-offset: 4px;
+	}
+}
+
+#url {
+	grid-area: url;
+}
+
+input[type=file] {
+	display: none;
+}
+
+#preview {
+	grid-area: preview;
+	max-width: 100%;
+}
+
+:host([nopreview]) #preview {
+	display: none;
+}
