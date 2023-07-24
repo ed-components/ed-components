@@ -5,10 +5,11 @@ A set of web-components for education.
 ## Components
 
 - [`<ed-survey>`](./ed-survey/)
-- 
+-
+
 ## Development
 
-### Create a new component 
+### Create a new component
 
 Scaffolded with `npm init @open-wc`.
 
@@ -26,7 +27,7 @@ npm i ed-survey
 
 ```html
 <script type="module">
-  import 'ed-survey/ed-survey.js';
+  import "ed-survey/ed-survey.js";
 </script>
 
 <ed-survey></ed-survey>
@@ -73,6 +74,3 @@ npm start
 ```
 
 To run a local development server that serves the basic demo located in `demo/index.html`
-
-
-
