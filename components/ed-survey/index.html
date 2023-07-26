@@ -5,11 +5,11 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>&lt;ed-survey&gt;</title>
-	<link rel="icon" href="../logo.svg">
-	<link rel="stylesheet" href="../style.css" />
+	<link rel="icon" href="../../logo.svg">
+	<link rel="stylesheet" href="../../style.css" />
     
 	
-	<script src="./dist/src/ed-survey.js" type="module"></script>
+	<script src="./dist/ed-survey.js" type="module"></script>
 	
 	
 </head>
@@ -54,38 +54,49 @@ web component written by Léa Verou under MIT. Retrieved 2023-07-08.</p>
 <h2>Examples</h2>
 <p>Basic</p>
 <pre><code class="language-html">&lt;nd-rating max=&quot;5&quot; value=&quot;3.5&quot;&gt;&lt;/nd-rating&gt;
-&lt;button onclick=&quot;this.previousElementSibling.readonly = !this.previousElementSibling.readonly&quot;&gt;Toggle readonly&lt;/button&gt;
+&lt;button
+  onclick=&quot;this.previousElementSibling.readonly = !this.previousElementSibling.readonly&quot;
+&gt;
+  Toggle readonly
+&lt;/button&gt;
 </code></pre>
 <p>With step</p>
 <pre><code class="language-html">&lt;nd-rating max=&quot;5&quot; value=&quot;3.5&quot; step=&quot;0.1&quot; style=&quot;font-size: 200%&quot;&gt;&lt;/nd-rating&gt;
 </code></pre>
 <p>Different styles</p>
 <pre><code class="language-html">&lt;style&gt;
-#minimal_rating {
-	font-size: 200%;
-}
+  #minimal_rating {
+    font-size: 200%;
+  }
 
-#minimal_rating::part(value),
-#minimal_rating::part(inactive) {
-	filter: contrast(0%) sepia() hue-rotate(140deg);
-}
+  #minimal_rating::part(value),
+  #minimal_rating::part(inactive) {
+    filter: contrast(0%) sepia() hue-rotate(140deg);
+  }
 
-#minimal_rating::part(inactive) {
-	opacity: .5;
-}
+  #minimal_rating::part(inactive) {
+    opacity: 0.5;
+  }
 &lt;/style&gt;
-&lt;nd-rating id=&quot;minimal_rating&quot; max=&quot;5&quot; value=&quot;2.5&quot; step=&quot;0.5&quot; icon=&quot;💜&quot;&gt;&lt;/nd-rating&gt;
+&lt;nd-rating
+  id=&quot;minimal_rating&quot;
+  max=&quot;5&quot;
+  value=&quot;2.5&quot;
+  step=&quot;0.5&quot;
+  icon=&quot;💜&quot;
+&gt;&lt;/nd-rating&gt;
 </code></pre>
 <p>Actual image instead of emoji:</p>
 <pre><code class="language-html">&lt;nd-rating value=&quot;3.5&quot; icon=&quot;../logo.svg&quot;&gt;&lt;/nd-rating&gt;
 </code></pre>
 <p>Participates in form submission (requires <a href="https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals"><code>ElementInternals</code></a> support):</p>
 <pre><code class="language-html">&lt;form action=&quot;about:blank&quot; target=&quot;_blank&quot;&gt;
-	&lt;nd-rating name=&quot;myrating&quot;&gt;&lt;/nd-rating&gt;
-	&lt;button type=submit&gt;Submit&lt;/button&gt;
+  &lt;nd-rating name=&quot;myrating&quot;&gt;&lt;/nd-rating&gt;
+  &lt;button type=&quot;submit&quot;&gt;Submit&lt;/button&gt;
 &lt;/form&gt;
 </code></pre>
 </main>
+
 
 
 <section id="installation">
@@ -105,7 +116,7 @@ web component written by Léa Verou under MIT. Retrieved 2023-07-08.</p>
 </section>
 
 
-<script src="../global.js" type="module"></script>
+<script src="../../global.js" type="module"></script>
 
 </body>
 </html>

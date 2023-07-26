@@ -3,15 +3,15 @@
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=2.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>{{ title or defaultTitle }}</title>
 	<link rel="icon" href="{{ page | relative }}/logo.svg">
 	<link rel="stylesheet" href="{{ page | relative }}/style.css" />
-
+    
 	{% if css_only %}
 	<link rel="stylesheet" href="{{ id }}.css">
 	{% elseif id %}
-	<script src="{{ page | relative }}/dist/src/{{ id }}.js" type="module"></script>
+	<script src="/js/{{ id }}.js" type="module"></script>
 	{% endif %}
 	{{ includes | safe }}
 </head>

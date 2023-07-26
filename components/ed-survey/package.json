@@ -5,11 +5,11 @@
   "author": "ed-survey",
   "version": "0.0.0",
   "type": "module",
-  "main": "dist/src/index.js",
-  "module": "dist/src/index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
   "exports": {
-    ".": "./dist/src/index.js",
-    "./ed-survey.js": "./dist/src/ed-survey.js"
+    ".": "./dist/index.js",
+    "./ed-survey.js": "./dist/ed-survey.js"
   },
   "scripts": {
     "analyze": "cem analyze --litelement",

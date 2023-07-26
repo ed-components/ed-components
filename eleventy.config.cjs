@@ -1,8 +1,4 @@
-// let markdownIt = require("markdown-it");
-const EleventyVitePlugin = require("@11ty/eleventy-plugin-vite");
-
-module.exports = (config) => {
-  config.addPlugin(EleventyVitePlugin);
+module.exports = (eleventyConfig) => {
   let data = {
     layout: "page.njk",
     permalink: "{{ page.filePathStem | replace('README', '') }}/index.html",
@@ -18,18 +14,16 @@ module.exports = (config) => {
   };
 
   for (let p in data) {
-    config.addGlobalData(p, data[p]);
+    eleventyConfig.addGlobalData(p, data[p]);
   }
 
-  config.setDataDeepMerge(true);
+  eleventyConfig.setDataDeepMerge(true);
 
-  // config.setLibrary("md", markdownIt({
-  // 		html: true,
-  // 	})
-  // 	.disable("code")
-  // );
+  // Copy `_assets` to `.`
+  eleventyConfig.addPassthroughCopy({ "_assets/*.js": "." });
+  eleventyConfig.addPassthroughCopy({ "_assets/*.css": "." });
 
-  config.addFilter("relative", (page) => {
+  eleventyConfig.addFilter("relative", (page) => {
     let path = page.url.replace(/[^/]+$/, "");
     let ret = require("path").relative(path, "/");
 
@@ -40,7 +34,8 @@ module.exports = (config) => {
     markdownTemplateEngine: "njk",
     templateFormats: ["md", "njk"],
     dir: {
-      output: ".",
+      input: ".",
+      // output: ".",
     },
   };
 };

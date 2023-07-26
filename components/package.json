@@ -4,13 +4,7 @@
   "description": "",
   "main": "index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build:css": "postcss \"**/*.postcss\" --base . --dir . --ext .css --config postcss.config.cjs",
-    "build:html": "npx @11ty/eleventy --config=.eleventy.cjs",
-    "build": "npm run build:html && npm run build:css",
-    "watch:css": "postcss \"**/*.postcss\" --base . --dir . --ext .css --config postcss.config.cjs --watch",
-    "watch:html": "npx @11ty/eleventy --config=.eleventy.cjs --serve",
-    "watch": "npx concurrently -n w: npm:watch:*"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -25,16 +19,5 @@
   "bugs": {
     "url": "https://github.com/leaverou/nudeui/issues"
   },
-  "homepage": "https://github.com/leaverou/nudeui#readme",
-  "devDependencies": {
-    "@11ty/eleventy": "^2.0.1",
-    "concurrently": "^8.2.0",
-    "postcss": "^8.4.26",
-    "postcss-cli": "^10.1.0",
-    "postcss-nesting": "^12.0.0",
-    "tslib": "^2.6.0"
-  },
-  "dependencies": {
-    "@11ty/eleventy-plugin-vite": "^4.0.0"
-  }
+  "homepage": "https://github.com/leaverou/nudeui#readme"
 }
