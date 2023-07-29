@@ -1,4 +1,6 @@
+// @ts-nocheck
 // from https://github.com/LeaVerou/nudeui licence MIT
+
 export const internals = Symbol('internals');
 
 export default class MeterDiscrete extends HTMLElement {

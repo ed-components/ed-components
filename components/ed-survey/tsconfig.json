@@ -4,22 +4,19 @@
     "module": "es2015",
     "moduleResolution": "node",
     "lib": ["es2019", "dom"],
-
     "declaration": true,
-
     "declarationMap": true,
-
     "experimentalDecorators": true,
-
     "useDefineForClassFields": false,
     "sourceMap": true,
     "inlineSources": true,
+    "outDir": "dist",
     // Skip typechecking libraries and .d.ts files
     "skipLibCheck": true
   },
   "include": [
     "src/**/*.ts",
-    "src/nudeui/meter-discrete.js",
-    "src/nudeui/nd-rating.js"
+    "test/**/*.test.ts",
+    "src/nudeui/*.js"
   ]
 }

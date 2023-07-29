@@ -1,5 +1,6 @@
+// @ts-nocheck
 // from https://github.com/LeaVerou/nudeui licence MIT
-import MeterDiscrete, { internals } from './meter-discrete.js';
+import MeterDiscrete, { internals } from './meter-discrete';
 
 export class NudeRating extends MeterDiscrete {
   constructor() {
