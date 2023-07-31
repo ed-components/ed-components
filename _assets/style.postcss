@@ -1,216 +1,232 @@
-@import url('https://prismjs.com/themes/prism-solarizedlight.min.css');
-@import 'https://unpkg.com/open-props';
-@import 'https://unpkg.com/open-props/normalize.light.min.css';
-@import 'https://unpkg.com/open-props/buttons.light.min.css';
+@import url("https://prismjs.com/themes/prism-solarizedlight.min.css");
+/* the props */
+@import "https://unpkg.com/open-props";
 
+/* optional imports that use the props */
+@import "https://unpkg.com/open-props/normalize.min.css";
+@import "https://unpkg.com/open-props/src/index.css";
+@import "https://unpkg.com/open-props/src/extra/normalize.css";
+@import "https://unpkg.com/open-props/src/extra/theme.light.switch.css";
+@import "https://unpkg.com/open-props/src/extra/theme.dark.switch.css";
 
 :root {
-	--accent-color-hs: 335 90%;
-	--accent-color: hsl(var(--accent-color-hs) 50%);
-	--color-magenta-hs: var(--accent-color-hs);
-	--accent-color-2-hs: 200 90%;
-	--accent-color-2: hsl(var(--accent-color-2-hs) 50%);
-	--color-blue-hs: var(--accent-color-2-hs);
-	--color-blue: var(--accent-color-2);
-	--focus-color: var(--color-blue);
-	--gray: 220 10%;
+  --max-inline-body: calc(100vw - (var(--size-8) * 2));
+  --brand-bg-gradient: linear-gradient(
+    to bottom,
+    var(--purple-3),
+    var(--violet-3),
+    var(--indigo-3),
+    var(--cyan-3)
+  );
 
-	--font-body: system-ui, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-	--font-mono: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  @media (--md-n-below) {
+    --max-inline-body: calc(100vw - (var(--size-3) * 2));
+  }
 
-	--page-width: 900px;
+  @nest [data-theme="light"] & {
+    --brand-bg-gradient: linear-gradient(
+      to bottom,
+      var(--purple-6),
+      var(--violet-6),
+      var(--indigo-6),
+      var(--cyan-6)
+    );
+  }
 }
 
 body {
-	display: flex;
-	flex-direction: column;
-	margin: 0;
-	min-height: 100vh;
-	font: 100%/1.5 var(--font-body);
+  padding-block-start: var(--size-fluid-2);
+  overflow-x: hidden;
+  display: grid;
+  justify-items: flex-start;
+  grid-template-columns: var(--size-8) calc(100% - 2 * var(--size-8)) var(
+      --size-8
+    );
+
+  & > * {
+    grid-column: 2;
+  }
+
+  & > .place-full {
+    width: 100%;
+    grid-column: 1 / -1;
+  }
+
+  @media (--md-n-below) {
+    grid-template-columns: var(--size-3) calc(100% - 2 * var(--size-3)) var(
+        --size-3
+      );
+  }
 }
 
-body > *,
-body > md-block > * {
-	order: 10;
-	padding: 1em clamp(1em, 50vw - var(--page-width) / 2, 50vw);
-
-	&:is(header) {
-		order: 0;
-		background: var(--accent-color);
-		color: white;
-
-		& h1 {
-			margin: 0;
-			font-size: 300%;
-
-			& + p {
-				margin: 0;
-				font-weight: bold;
-			}
-		}
-
-		& a {
-			color: inherit;
-		}
-
-		& .home {
-			text-transform: uppercase;
-			font-weight: 900;
-			font-size: 75%;
-
-			&:not(:hover) {
-				text-decoration: none;
-			}
-
-			&::before {
-				content: "🏠";
-				margin-right: .3em;
-			}
-		}
-	}
+/* nav */
+header {
+  display: grid;
+  gap: var(--size-2);
 }
 
 nav {
-	order: 1;
-	display: flex;
-	padding-top: 0;
-	padding-bottom: 0;
-	background: hsl(var(--accent-color-hs) 65%);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--size-4);
+  justify-self: stretch;
 
-	& > a {
-		flex: 1;
-		padding: .4em .5em;
-		color: white;
-		font-weight: bold;
-		background: linear-gradient(to right, hsl(var(--accent-color-hs) 50%), hsl(var(--accent-color-hs) 75%)) no-repeat left / 0 100%;
-		transition: .3s;
+  & > a[href]:not(:hover, :focus-visible) {
+    color: var(--text-1);
+    text-decoration-color: var(--link);
+  }
 
-		&:hover {
-			background-size: 100% 100%;
-		}
+  & > a[href="/"] {
+    margin-inline-end: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--size-2);
 
-		&:where(:not(:hover)) {
-			text-decoration: none;
-		}
-	}
+    &:hover {
+      text-decoration: none;
+    }
+
+    & > svg {
+      inline-size: var(--size-9);
+    }
+  }
+
+  & > a[href="#getting-started"] {
+    @media (--sm-n-below) {
+      display: none;
+    }
+  }
 }
 
-md-block {
-	display: contents;
+.github-icon {
+  fill: var(--nav-icon);
+  stroke: none;
+
+  @nest :hover > & {
+    fill: var(--nav-icon-hover);
+  }
 }
 
-code, pre {
-	font-family: var(--font-mono);
+/* no way out of this duplication afaik */
+[data-theme="light"] {
+  --nav-icon: var(--gray-7);
+  --nav-icon-hover: var(--gray-9);
 }
 
-button, input, textarea, select,
-::part(button), ::part(input) {
-	font: inherit;
-	box-sizing: border-box;
+[data-theme="dark"] {
+  --nav-icon: var(--gray-5);
+  --nav-icon-hover: var(--gray-2);
 }
 
-input:where([type="number"]),
-::part(input-number) {
-	width: 3em;
+.theme-toggle {
+  background: none;
 }
 
-input:where(:not([type]), [type="text"], [type="url"], [type="number"]), textarea, select,
-::part(input), ::part(textarea), ::part(select) {
-	border: 1px solid hsl(var(--gray) 50% / .5);
-	border-radius: .2em;
-	padding: .2em .4em;
-	min-width: 4em;
+#moon,
+#sun {
+  fill: var(--nav-icon);
+  stroke: none;
+
+  @nest :hover > svg > & {
+    fill: var(--nav-icon-hover);
+  }
 }
 
-iframe {
-	border: 0;
+#sun {
+  transition: transform 0.5s var(--ease-4);
+  transform-origin: center center;
 }
 
-fieldset {
-	border: none;
-	margin: .5rem 0;
-	background: hsl(var(--gray) 50% / .1);
-	border-radius: .3em;
+#sun-beams {
+  --_opacity-dur: 0.15s;
+  stroke: var(--nav-icon);
+  stroke-width: 2px;
+  transform-origin: center center;
+  transition: transform 0.5s var(--ease-elastic-4),
+    opacity var(--_opacity-dur) var(--ease-3);
 
-	& > legend {
-		font-weight: bold;
-	}
+  @nest :hover > svg > & {
+    stroke: var(--nav-icon-hover);
+  }
 }
 
-button, ::part(button) {
-	padding: .8em .9em;
-	border: 1px solid hsl(var(--gray) 0% / .2);
-	border-radius: calc(.15em + .15rem);
-	background-color: white;
-	cursor: pointer;
-	font-size: var(--font-size-small);
-	text-decoration: none;
-	color: inherit;
-	transition-duration: .2s;
-	transition-property: background-color, border-color, color;
-	line-height: 1.1;
-	white-space: nowrap;
-
-	&:disabled {
-		cursor: not-allowed;
-		opacity: .5;
-	}
-
-	&:active,
-	&[aria-pressed="true"] {
-		box-shadow: 0 .1em .2em hsl(0 0% 0% / .2) inset, 0 0 0 2em hsl(var(--gray) 50% / .12) inset;
-	}
-
-	&:where(:enabled) {
-		&:hover {
-			border-color: hsl(var(--accent-color-hs) 80%);
-			background-color: hsl(var(--accent-color-hs) 95%);
-			color: hsl(var(--accent-color-hs) 15%);
-		}
-	}
-
-	/* Icon */
-	& i {
-		display: inline-block;
-		opacity: .7;
-	}
-
-	&.icon-prefix:where(:not(.icon-only)) i:first-of-type {
-		margin-right: .4em;
-	}
-
-	&.icon-suffix i:last-of-type {
-		margin-left: .4em;
-	}
-
-	&[type=submit] {
-		background: var(--accent-color-2);
-		color: white;
-
-		&:where(:enabled) {
-			&:hover {
-				border-color: hsl(var(--accent-color-2-hs) 80%);
-			}
-		}
-	}
+#moon > circle {
+  transition: transform 0.5s var(--ease-out-3);
 }
 
-.failed {
-	--color-hs: 0 50%;
-	border: 1px solid hsl(var(--color-hs) 60%);
-	background: hsl(var(--color-hs) 95%);
-	color: hsl(var(--color-hs) 20%);
-	padding: 1em;
+[data-theme="light"] {
+  & #sun {
+    transform: scale(0.5);
+  }
 
-	& :is(h2, h3, h4, h5, h6) {
-		color: hsl(var(--color-hs) 50%);
-	}
+  & #sun-beams {
+    transform: rotateZ(0.25turn);
+    --_opacity-dur: 0.5s;
+  }
+}
 
-	& h2 {
-		margin-top: 0;
+[data-theme="dark"] {
+  & #moon > circle {
+    transform: translateX(-20px);
+  }
 
-		&::before {
-			content: "⚠️";
-		}
-	}
+  & #sun-beams {
+    opacity: 0;
+  }
+}
+
+/* logo */
+.op-logo {
+  display: grid;
+  font-weight: var(--font-weight-3);
+  font-size: var(--font-size-2);
+  color: var(--indigo-3);
+  letter-spacing: var(--font-letterspacing-4);
+
+  @media (--xs-n-below) {
+    display: none;
+  }
+
+  @nest [data-theme="light"] & {
+    color: var(--indigo-7);
+  }
+
+  & > span {
+    line-height: 0.9;
+    text-transform: uppercase;
+
+    &::first-letter {
+      font-weight: var(--font-weight-9);
+    }
+  }
+}
+
+.op-icon-p {
+  stroke: var(--indigo-2);
+  @nest a:hover & {
+    stroke: var(--indigo-1);
+  }
+
+  @nest [data-theme="light"] & {
+    stroke: var(--indigo-7);
+  }
+
+  @nest [data-theme="light"] a:hover & {
+    stroke: var(--indigo-8);
+  }
+}
+
+.op-icon-o {
+  stroke: var(--indigo-4);
+  @nest a:hover & {
+    stroke: var(--indigo-3);
+  }
+
+  @nest [data-theme="light"] & {
+    stroke: var(--indigo-5);
+  }
+  @nest [data-theme="light"] a:hover & {
+    stroke: var(--indigo-6);
+  }
 }

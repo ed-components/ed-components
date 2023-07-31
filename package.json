@@ -6,7 +6,7 @@
     "build:html": "npx @11ty/eleventy",
     "build": "npm run build:html && npm run build:css",
     "watch:css": "postcss \"**/*.postcss\" --base . --dir . --ext .css --config postcss.config.cjs --watch",
-    "watch:html": "npx @11ty/eleventy --serve",
+    "watch:html": "npx @11ty/eleventy --serve & open http://localhost:8080",
     "watch:js": "for comp in components/ed-*/;do comp=$(basename $comp) && echo $comp && esbuild components/$comp/dist/src/$comp.js --bundle --minify --outdir=_site/js;done",
     "start": "npx concurrently -n w: npm:watch:*"
   },
@@ -20,5 +20,9 @@
     "postcss-nesting": "^12.0.0",
     "prettier": "^2.5.1",
     "tslib": "^2.6.0"
+  },
+  "dependencies": {
+    "open-props": "^1.5.10",
+    "postcss-preset-env": "^9.1.0"
   }
 }
