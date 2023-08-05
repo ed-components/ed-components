@@ -1,3 +1,7 @@
 {
-  "recommendations": ["csstools.postcss", "vunguyentuan.vscode-postcss"]
+  "recommendations": [
+    "csstools.postcss",
+    "vunguyentuan.vscode-postcss",
+    "eseom.nunjucks-template"
+  ]
 }

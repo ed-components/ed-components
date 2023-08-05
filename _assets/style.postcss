@@ -23,7 +23,7 @@
     --max-inline-body: calc(100vw - (var(--size-3) * 2));
   }
 
-  @nest [data-theme="light"] & {
+  [data-theme="light"] & {
     --brand-bg-gradient: linear-gradient(
       to bottom,
       var(--purple-6),
@@ -103,7 +103,7 @@ nav {
   fill: var(--nav-icon);
   stroke: none;
 
-  @nest :hover > & {
+  :hover > & {
     fill: var(--nav-icon-hover);
   }
 }
@@ -128,7 +128,7 @@ nav {
   fill: var(--nav-icon);
   stroke: none;
 
-  @nest :hover > svg > & {
+  :hover > svg > & {
     fill: var(--nav-icon-hover);
   }
 }
@@ -146,7 +146,7 @@ nav {
   transition: transform 0.5s var(--ease-elastic-4),
     opacity var(--_opacity-dur) var(--ease-3);
 
-  @nest :hover > svg > & {
+  :hover > svg > & {
     stroke: var(--nav-icon-hover);
   }
 }
@@ -177,6 +177,9 @@ nav {
 }
 
 /* logo */
+.op-icon {
+  height: calc(var(--font-size-2) * 4);
+}
 .op-logo {
   display: grid;
   font-weight: var(--font-weight-3);
@@ -188,7 +191,7 @@ nav {
     display: none;
   }
 
-  @nest [data-theme="light"] & {
+  [data-theme="light"] & {
     color: var(--indigo-7);
   }
 
@@ -204,29 +207,43 @@ nav {
 
 .op-icon-p {
   stroke: var(--indigo-2);
-  @nest a:hover & {
+  a:hover & {
     stroke: var(--indigo-1);
   }
 
-  @nest [data-theme="light"] & {
+  [data-theme="light"] & {
     stroke: var(--indigo-7);
   }
 
-  @nest [data-theme="light"] a:hover & {
+  [data-theme="light"] a:hover & {
     stroke: var(--indigo-8);
   }
 }
 
 .op-icon-o {
   stroke: var(--indigo-4);
-  @nest a:hover & {
+  a:hover & {
     stroke: var(--indigo-3);
   }
 
-  @nest [data-theme="light"] & {
+  [data-theme="light"] & {
     stroke: var(--indigo-5);
   }
-  @nest [data-theme="light"] a:hover & {
+  [data-theme="light"] a:hover & {
     stroke: var(--indigo-6);
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  /* todo: why isnt --firefoxONLY working here? */
+  @supports not (-moz-appearance: none) {
+    background: var(--brand-bg-gradient) fixed;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 }

@@ -22,6 +22,7 @@ module.exports = (eleventyConfig) => {
   // Copy `_assets` to `.`
   eleventyConfig.addPassthroughCopy({ "_assets/*.js": "." });
   eleventyConfig.addPassthroughCopy({ "_assets/*.css": "." });
+  eleventyConfig.addPassthroughCopy({ "_assets/*.svg": "." });
 
   eleventyConfig.addFilter("relative", (page) => {
     let path = page.url.replace(/[^/]+$/, "");
