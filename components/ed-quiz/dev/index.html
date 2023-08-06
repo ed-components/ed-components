@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>ed-quiz element demo</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      max-width: 768px;
+      margin: 0 auto;
+      width: 100%;
+      padding-right: .75rem;
+      padding-left: .75rem;
+      margin-right: auto;
+      margin-left: auto;
+    }
+
+    :root {
+      --wc-blue: #0d6efd;
+      --wc-indigo: #6610f2;
+      --wc-purple: #6f42c1;
+      --wc-pink: #d63384;
+      --wc-red: #dc3545;
+      --wc-orange: #fd7e14;
+      --wc-yellow: #ffc107;
+      --wc-green: #198754;
+      --wc-teal: #20c997;
+      --wc-cyan: #0dcaf0;
+      --wc-white: #fff;
+      --wc-gray: #6c757d;
+      --wc-gray-dark: #343a40;
+      --wc-primary: #0d6efd;
+      --wc-secondary: #6c757d;
+      --wc-success: #198754;
+      --wc-info: #0dcaf0;
+      --wc-warning: #ffc107;
+      --wc-danger: #dc3545;
+      --wc-light: #f8f9fa;
+      --wc-dark: #212529;
+      --wc-font-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      --wc-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --wc-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
+    }
+
+  </style>
+  <script type="module" src="./ed-quiz.js"></script>
+</head>
+
+<body>
+  <ed-quiz title="My wonderful quiz">
+    ---
+    title: My wonderful quiz
+    description: A quiz to test the web component ed-quiz.
+    progress: true
+    results: true
+    subject: Computer programming
+    level: High School
+    tags: ["quiz", "web-components", "html"]
+    ---
+
+    ## `mdquiz` example
+
+    ![raspberries](https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Raspberry_-_whole_%28Rubus_idaeus%29.jpg/220px-Raspberry_-_whole_%28Rubus_idaeus%29.jpg)
+
+    Note that there is **only one true answer per question**.
+
+    1. This is a _question_.
+
+    - [x] `True`
+    - [ ] `False`
+
+    1. Another QCM
+
+    - [ ] First _false_ answer
+    - [x] Second **true** answer
+    - [ ] Third _false_ answer
+    - [ ] LONG ANSWER: Third _false_ answer Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam,
+    accusamus. Iste beatae necessitatibus quibusdam odit quas nobis rerum nesciunt harum modi exercitationem
+    reprehenderit, quisquam tenetur sint maxime consequuntur? Adipisci, fuga.
+
+    1. Some inline maths $\eta = \frac{m}{G_m}$, and display mode:
+
+    $$
+    L = \frac{1}{2} \rho v^2 S C_L
+    $$
+
+    - [x] true
+    - [ ] false
+
+  </ed-quiz>
+
+  <ed-quiz>
+    ---
+    title: My wonderful quiz
+    description: A quiz to test the web component ed-quiz.
+    progress: true
+    results: true
+    subject: Computer programming
+    level: High School
+    tags: ["quiz", "web-components", "html"]
+    ---
+
+    ## `mdquiz` example
+
+    ![raspberries](https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Raspberry_-_whole_%28Rubus_idaeus%29.jpg/220px-Raspberry_-_whole_%28Rubus_idaeus%29.jpg)
+
+    Note that there is **only one true answer per question**.
+
+    1. This is a _question_.
+
+    - [x] `True`
+    - [ ] `False`
+
+    1. Another QCM
+
+    - [ ] First _false_ answer
+    - [x] Second **true** answer
+    - [ ] Third _false_ answer
+    - [ ] Third _false_ answer Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam, accusamus. Iste
+    beatae necessitatibus quibusdam odit quas nobis rerum nesciunt harum modi exercitationem reprehenderit, quisquam
+    tenetur sint maxime consequuntur? Adipisci, fuga.
+
+
+
+  </ed-quiz>
+
+  <ed-quiz>
+    ---
+    description: A quiz to test the web component ed-quiz.
+    progress: true
+    results: true
+    subject: Computer programming
+    level: High School
+    tags: ["quiz", "web-components", "html"]
+    ---
+
+    ## `mdquiz` example
+
+    ![raspberries](https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Raspberry_-_whole_%28Rubus_idaeus%29.jpg/220px-Raspberry_-_whole_%28Rubus_idaeus%29.jpg)
+
+    Note that there is **only one true answer per question**.
+
+    1. This is a _question_.
+
+    - [x] `True`
+    - [ ] `False`
+
+    1. Another QCM
+
+    - [ ] First _false_ answer
+    - [x] Second **true** answer
+    - [ ] Third _false_ answer
+    - [ ] Third _false_ answer Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam, accusamus. Iste
+    beatae necessitatibus quibusdam odit quas nobis rerum nesciunt harum modi exercitationem reprehenderit, quisquam
+    tenetur sint maxime consequuntur? Adipisci, fuga.
+  </ed-quiz>
+
+</body>
+
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>ed-quiz element demo</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      max-width: 768px;
+      margin: 0 auto;
+      width: 100%;
+      padding-right: .75rem;
+      padding-left: .75rem;
+      margin-right: auto;
+      margin-left: auto;
+    }
+    :root {
+    --wc-blue: #0d6efd;
+    --wc-indigo: #6610f2;
+    --wc-purple: #6f42c1;
+    --wc-pink: #d63384;
+    --wc-red: #dc3545;
+    --wc-orange: #fd7e14;
+    --wc-yellow: #ffc107;
+    --wc-green: #198754;
+    --wc-teal: #20c997;
+    --wc-cyan: #0dcaf0;
+    --wc-white: #fff;
+    --wc-gray: #6c757d;
+    --wc-gray-dark: #343a40;
+    --wc-primary: #0d6efd;
+    --wc-secondary: #6c757d;
+    --wc-success: #198754;
+    --wc-info: #0dcaf0;
+    --wc-warning: #ffc107;
+    --wc-danger: #dc3545;
+    --wc-light: #f8f9fa;
+    --wc-dark: #212529;
+    --wc-font-sans-serif: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    --wc-font-monospace: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+    --wc-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
+}
+
+  </style>
+  <script type="module" src="../src/wc-input-svg.js"></script>
+</head>
+
+<body>
+  <wc-input-svg>
+    <span slot="text-label" >Noop</span>
+  </wc-input-svg>
+  <wc-input-svg id="test" checked>
+    <span slot="text-label" >checked</span>
+  </wc-input-svg>
+  <wc-input-svg disabled>
+    <span slot="text-label" >disabled</span>
+  </wc-input-svg>
+  <wc-input-svg  checked disabled>
+    <span slot="text-label" >checked disabled</span>
+  </wc-input-svg>
+  
+</body>
+
+</html>

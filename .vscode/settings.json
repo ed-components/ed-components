@@ -1,4 +1,6 @@
 {
   "editor.formatOnSave": true,
-  "svg.preview.background": "custom"
+  "[markdown]": {
+    "editor.formatOnSave": false
+  }
 }

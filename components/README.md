@@ -5,6 +5,7 @@ A set of web-components for education.
 ## Components
 
 - [`<ed-survey>`](./ed-survey/)
+- [`<ed-quiz>`](./ed-quiz/)
 - TODO ...
 
 ## Development
@@ -13,7 +14,7 @@ A set of web-components for education.
 
 Scaffolded with `npm init @open-wc`.
 
-# \<ed-example-component>
+# <ed-example-component>
 
 This webcomponent follows the [open-wc](https://github.com/open-wc/open-wc) recommendation.
 

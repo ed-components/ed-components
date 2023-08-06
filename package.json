@@ -7,7 +7,7 @@
     "build": "npm run build:html && npm run build:css",
     "watch:css": "postcss \"_assets/style.postcss\" --verbose --base . --dir . --ext .css --config postcss.config.cjs --watch",
     "watch:html": "npx @11ty/eleventy --serve & open http://localhost:8080",
-    "watch:js": "for comp in components/ed-*/;do comp=$(basename $comp) && echo $comp && esbuild components/$comp/src/$comp.js --bundle --minify --outdir=_site/js;done",
+    "watch:js": "for comp in components/ed-*/;do comp=$(basename $comp) && echo $comp && esbuild components/$comp/src/$comp.js --watch --bundle --minify --outdir=_site/js;done",
     "start": "npx concurrently -n w: npm:watch:*"
   },
   "devDependencies": {

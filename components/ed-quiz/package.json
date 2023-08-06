@@ -1,0 +1,42 @@
+{
+  "name": "ed-quiz",
+  "version": "0.1.0",
+  "description": "A web component to create quiz using markdown gfm markdown.",
+  "keywords": [
+    "quiz",
+    "markdown",
+    "web-component"
+  ],
+  "license": "MIT",
+  "author": "Benjamin Abel <dev.abel@free.fr> (lyceum.fr)",
+  "main": "index.js",
+  "repository": "https://framagit.org/lyceum/design",
+  "scripts": {
+    "start": "npm-run-all --parallel server format build:parser build:dev",
+    "server": "npx live-server --no-browser --port=5500 dev",
+    "lint": "standard src/ed-quiz.js src/lib/md2html.js",
+    "format": "standard --fix src/ed-quiz.js src/lib/md2html.js ",
+    "build": "esbuild ./src/ed-quiz.js --bundle --format=esm --minify --outfile=index.js",
+    "build:dev": "esbuild ./src/ed-quiz.js --watch --bundle --format=esm --outfile=./dev/ed-quiz.js",
+    "build:parser": "esbuild  ./src/lib/md2html.js --watch --bundle --format=esm --minify --sourcemap --outfile=src/lib/build.js",
+    "package": "npx rimraf package && npm pack | tail -n 1 | xargs tar -xf",
+    "preversion": "npm run lint",
+    "postversion": "git push --follow-tags"
+  },
+  "devDependencies": {
+    "esbuild": "^0.12.11",
+    "npm-run-all": "^4.1.5",
+    "standard": "^16.0.3"
+  },
+  "standard": {
+    "ignore": [
+      "index.js"
+    ]
+  },
+  "dependencies": {
+    "micromark": "^3.0.0",
+    "micromark-extension-frontmatter": "^1.0.0",
+    "micromark-extension-gfm": "^1.0.0",
+    "micromark-extension-math": "^1.0.0"
+  }
+}
