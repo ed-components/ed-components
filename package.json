@@ -1,13 +1,14 @@
 {
   "private": true,
   "scripts": {
-    "format": "prettier --write \"**/*.{js,mjs,cjs,ts,md}\"",
+    "format": "prettier --write \"**/*.{js,mjs,cjs,ts}\"",
     "build:css": "postcss \"_assets/style.postcss\" --base . --dir . --ext .css --config postcss.config.cjs",
     "build:html": "npx @11ty/eleventy",
-    "build": "npm run build:html && npm run build:css",
+    "build:js": "for comp in components/ed-*/;do comp=$(basename $comp) && echo $comp && esbuild components/$comp/src/$comp.ts --bundle --minify --outdir=_site/js;done",
+    "build": "npx concurrently -n w: npm:build:*",
     "watch:css": "postcss \"_assets/style.postcss\" --verbose --base . --dir . --ext .css --config postcss.config.cjs --watch",
-    "watch:html": "npx @11ty/eleventy --serve & open http://localhost:8080",
-    "watch:js": "for comp in components/ed-*/;do comp=$(basename $comp) && echo $comp && esbuild components/$comp/src/$comp.js --watch --bundle --minify --outdir=_site/js;done",
+    "watch:html": "npx @11ty/eleventy --serve",
+    "watch:js": "for comp in components/ed-*/;do comp=$(basename $comp) && echo $comp && esbuild components/$comp/src/$comp.ts --watch --bundle --outdir=_site/js;done",
     "start": "npx concurrently -n w: npm:watch:*"
   },
   "devDependencies": {
