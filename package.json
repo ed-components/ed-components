@@ -2,10 +2,10 @@
   "private": true,
   "scripts": {
     "format": "prettier --write \"**/*.{js,mjs,cjs,ts,md}\"",
-    "build:css": "postcss \"**/*.postcss\" --base . --dir . --ext .css --config postcss.config.cjs",
+    "build:css": "postcss \"_assets/style.postcss\" --base . --dir . --ext .css --config postcss.config.cjs",
     "build:html": "npx @11ty/eleventy",
     "build": "npm run build:html && npm run build:css",
-    "watch:css": "postcss \"**/*.postcss\" --base . --dir . --ext .css --config postcss.config.cjs --watch",
+    "watch:css": "postcss \"_assets/style.postcss\" --verbose --base . --dir . --ext .css --config postcss.config.cjs --watch",
     "watch:html": "npx @11ty/eleventy --serve & open http://localhost:8080",
     "watch:js": "for comp in components/ed-*/;do comp=$(basename $comp) && echo $comp && esbuild components/$comp/dist/src/$comp.js --bundle --minify --outdir=_site/js;done",
     "start": "npx concurrently -n w: npm:watch:*"
@@ -13,16 +13,18 @@
   "devDependencies": {
     "@11ty/eleventy": "^2.0.1",
     "concurrently": "^8.2.0",
+    "cssnano": "^6.0.1",
     "esbuild": "^0.18.17",
-    "lit": "^2.7.6",
-    "postcss": "^8.4.26",
+    "open-props": "^1.5.10",
+    "postcss": "^8.4.27",
     "postcss-cli": "^10.1.0",
+    "postcss-combine-duplicated-selectors": "^10.0.3",
     "postcss-nesting": "^12.0.0",
+    "postcss-preset-env": "^9.1.0",
     "prettier": "^2.5.1",
     "tslib": "^2.6.0"
   },
   "dependencies": {
-    "open-props": "^1.5.10",
-    "postcss-preset-env": "^9.1.0"
+    "postcss-import": "^15.1.0"
   }
 }

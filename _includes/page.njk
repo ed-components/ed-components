@@ -1,39 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>{{ title or defaultTitle }}</title>
-	<link rel="icon" href="{{ page | relative }}/logo.svg">
-	<link rel="stylesheet" href="{{ page | relative }}/style.css" />
-	{{ includes | safe }}
-</head>
-<body>
-
-{% include "_nav.njk" %}
- 
-
-
-{{ content | safe }}
-
-{% if id %}
-<section id="installation">
-
-<h2>Installation</h2>
-
-<p>Just include the component's JS file and you're good:
-
-<pre class="language-html"><code>&lt;script src="https://nudeui.com/{{ id }}/{{ id }}.js" type="module">&lt;/script>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{ title or defaultTitle }}</title>
+        <link rel="icon" href="/logo.svg">
+        <link rel="stylesheet" href="/style.css"/> {{ includes | safe }}
+    </head>
+    <body>
+        {% include "_nav.njk" %}
+        {{ content | safe }}
+        {% if id %}
+            <section id="installation">
+                <h2>Installation</h2>
+                <p>Just include the component's JS file and you're good:<pre class="language-html"><code>&lt;script src="https://nudeui.com/{{ id }}/{{ id }}.js" type="module">&lt;/script>
 </code></pre>
-
-<p>In case you want to link to local files: CSS is fetched automatically, and assumed to be in the same directory as the JS file.</p>
-
-</section>
-<script src="/js/{{ id }}.js" type="module"></script>
-{% endif %}
-
-<script src="{{ page | relative }}/global.js" type="module"></script>
-<script src="{{ page | relative }}/theme-toggle.js"></script>
-</body>
+                </p>
+                <p>In case you want to link to local files: CSS is fetched automatically, and assumed to be in the same directory as the
+                    JS file.</p>
+            </section>
+            <script src="/js/{{ id }}.js" type="module"></script>
+        {% endif %}
+        <script src="/global.js" type="module"></script>
+        <script src="/theme-toggle.js"></script>
+    </body>
 </html>

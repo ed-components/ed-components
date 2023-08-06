@@ -1,13 +1,12 @@
 @import url("https://prismjs.com/themes/prism-solarizedlight.min.css");
 /* the props */
-@import "https://unpkg.com/open-props";
+@import "open-props/open-props.min.css";
 
 /* optional imports that use the props */
-@import "https://unpkg.com/open-props/normalize.min.css";
-@import "https://unpkg.com/open-props/src/index.css";
-@import "https://unpkg.com/open-props/src/extra/normalize.css";
-@import "https://unpkg.com/open-props/src/extra/theme.light.switch.css";
-@import "https://unpkg.com/open-props/src/extra/theme.dark.switch.css";
+@import "open-props/src/index.css";
+@import "open-props/src/extra/normalize.css";
+@import "open-props/src/extra/theme.light.switch.css";
+@import "open-props/src/extra/theme.dark.switch.css";
 
 :root {
   --max-inline-body: calc(100vw - (var(--size-8) * 2));
@@ -177,15 +176,15 @@ nav {
 }
 
 /* logo */
-.op-icon {
+.edc-icon {
   height: calc(var(--font-size-2) * 4);
 }
-.op-logo {
+.edc-logo {
   display: grid;
   font-weight: var(--font-weight-3);
   font-size: var(--font-size-2);
   color: var(--indigo-3);
-  letter-spacing: var(--font-letterspacing-4);
+  letter-spacing: var(--font-letterspacing-2);
 
   @media (--xs-n-below) {
     display: none;
@@ -205,44 +204,31 @@ nav {
   }
 }
 
-.op-icon-p {
-  stroke: var(--indigo-2);
-  a:hover & {
-    stroke: var(--indigo-1);
+/* hero */
+h1 {
+  overflow: clip;
+  font-size: var(--font-size-5);
+
+  @media (--xs-n-above) {
+    font-size: var(--font-size-6);
+  }
+  @media (--sm-n-above) {
+    font-size: var(--font-size-7);
+  }
+  @media (--md-n-above) {
+    font-size: var(--font-size-fluid-3);
   }
 
-  [data-theme="light"] & {
-    stroke: var(--indigo-7);
-  }
+  background: var(--gradient-2) fixed;
+  background-size: var(--size-relative-13) var(--size-relative-11);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 
-  [data-theme="light"] a:hover & {
-    stroke: var(--indigo-8);
-  }
-}
-
-.op-icon-o {
-  stroke: var(--indigo-4);
-  a:hover & {
-    stroke: var(--indigo-3);
-  }
-
-  [data-theme="light"] & {
-    stroke: var(--indigo-5);
-  }
-  [data-theme="light"] a:hover & {
-    stroke: var(--indigo-6);
-  }
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  /* todo: why isnt --firefoxONLY working here? */
-  @supports not (-moz-appearance: none) {
-    background: var(--brand-bg-gradient) fixed;
+  [data-theme="dark"] & {
+    background: var(--gradient-4) fixed;
+    background-size: var(--size-relative-13) var(--size-relative-11);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
