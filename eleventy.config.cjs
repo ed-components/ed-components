@@ -1,4 +1,9 @@
 module.exports = (eleventyConfig) => {
+  // ignore design files
+  eleventyConfig.ignores.add("design/*");
+  eleventyConfig.watchIgnores.add("design/*");
+
+  // turns README.md into index.html
   let data = {
     layout: "page.njk",
     permalink: "{{ page.filePathStem | replace('README', '') }}/index.html",

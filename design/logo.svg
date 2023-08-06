@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+    <style>
+        .e-shape {
+            font-size: 150px;
+            font-family: "Noto Sans";
+            font-weight: 400;
+            fill: var(--violet-5, #845ef7);
+        }
+
+        .d-shape {
+            font-size: 150px;
+            font-family: "Noto Sans";
+            font-weight: 400;
+            fill: var(--blue-5, #339af0);
+        }
+
+        .c-shape {
+            stroke: var(--indigo-5, #5c7cfa);
+            fill: none;
+        }
+
+    </style>
+    <mask id="c-mask">
+        <!-- Tous les pixels blancs sont visibles -->
+        <rect x="0" y="0" width="200" height="200" fill="white" />
+
+        <!-- Tous les pixels noirs sont invisibles -->
+        <rect x="100" y="40" width="200" height="120" fill="black" />
+    </mask>
+    <circle class="c-shape" cx="102" cy="100" r="85" stroke-width="9" mask="url(#c-mask)" />
+    <text class="d-shape" x="89" y="157">d</text>
+    <text class="e-shape" x="34" y="157">e</text>
+    <!-- <line x1="125" y1="100" x2="125" y2="50" fill="none" stroke="cyan" /> -->
+
+
+</svg>
