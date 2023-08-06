@@ -5,7 +5,7 @@ A set of web-components for education.
 ## Components
 
 - [`<ed-survey>`](./ed-survey/)
--
+- TODO ...
 
 ## Development
 
@@ -13,24 +13,24 @@ A set of web-components for education.
 
 Scaffolded with `npm init @open-wc`.
 
-# \<ed-survey>
+# \<ed-example-component>
 
 This webcomponent follows the [open-wc](https://github.com/open-wc/open-wc) recommendation.
 
 ## Installation
 
 ```bash
-npm i ed-survey
+npm i ed-example-component
 ```
 
 ## Usage
 
 ```html
 <script type="module">
-  import "ed-survey/ed-survey.js";
+  import "ed-example-component/ed-example-component.js";
 </script>
 
-<ed-survey></ed-survey>
+<ed-example-component></ed-example-component>
 ```
 
 ## Linting and formatting
