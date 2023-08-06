@@ -1,6 +1,6 @@
 {
   "name": "ed-survey",
-  "description": "Webcomponent ed-survey following open-wc recommendations",
+  "description": "A webcomponent for surveys in education.",
   "license": "MIT",
   "author": "ed-survey",
   "version": "0.0.0",

@@ -2,6 +2,10 @@
 id: ed-survey
 ---
 
+# ed-survey
+
+> A webcomponent for surveys in education.
+
 ## Usage
 
 ```html

@@ -1,10 +1,11 @@
-/* eslint no-undef: 0 */
+// @ts-nocheck
 
 import md2Html from './lib/build.js'
 import './ed-progress-bar.js'
 
 const xmlns = 'http://www.w3.org/2000/svg'
 const template = document.createElement('template')
+
 template.innerHTML = `
   <style>
     article {
@@ -141,7 +142,7 @@ template.innerHTML = `
   `
 
 export class WCQuiz extends HTMLElement {
-  constructor () {
+  constructor() {
     super()
     this.attachShadow({ mode: 'open' })
     this.goodAnswers = []
@@ -149,7 +150,7 @@ export class WCQuiz extends HTMLElement {
     this.checkAnswer = this.checkAnswer.bind(this)
   }
 
-  async connectedCallback () {
+  async connectedCallback() {
     this.style.display = 'block'
 
     // Prepare content
@@ -258,25 +259,25 @@ export class WCQuiz extends HTMLElement {
     })
   }
 
-  static get observedAttributes () {
+  static get observedAttributes() {
     return ['title']
   }
 
-  get title () {
+  get title() {
     return this.getAttribute('title')
   }
 
-  set title (value) {
+  set title(value) {
     this.setAttribute('title', value)
   }
 
-  attributeChangedCallback (name, oldValue, newValue) {
+  attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue !== newValue) {
       this[name] = newValue
     }
   }
 
-  checkAnswer (evt) {
+  checkAnswer(evt) {
     const el = evt.target
     const nQue = Number(el.dataset.nque)
     const nAns = Number(el.dataset.nans)
@@ -324,7 +325,7 @@ export class WCQuiz extends HTMLElement {
     }
   }
 
-  updateBars () {
+  updateBars() {
     let score = 0
     let answered = 0
     const nAnswers = this.answers.length
@@ -348,7 +349,7 @@ export class WCQuiz extends HTMLElement {
    * @param {string} text - the text to dedent
    * @returns {string} the dedented text
    */
-  static dedentText (text) {
+  static dedentText(text) {
     const lines = text.split('\n')
 
     // remove the first line if it is an empty line

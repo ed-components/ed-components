@@ -2,7 +2,7 @@
 id: ed-quiz
 ---
 
-# <ed-quiz>
+# ed-quiz
 
 > A web component for quiz using markdown gfm checklists.
 

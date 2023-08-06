@@ -177,7 +177,7 @@ nav {
 
 /* logo */
 .edc-icon {
-  height: calc(var(--font-size-2) * 4);
+  height: calc(var(--font-size-2) * 3.3);
 }
 .edc-logo {
   display: grid;
@@ -195,11 +195,12 @@ nav {
   }
 
   & > span {
-    line-height: 0.9;
+    line-height: var(--font-lineheight-1);
     text-transform: uppercase;
-
-    &::first-letter {
-      font-weight: var(--font-weight-9);
+    font-weight: var(--font-weight-3);
+    &::first-letter,
+    &:first-of-type {
+      font-weight: var(--font-weight-7);
     }
   }
 }
@@ -208,6 +209,8 @@ nav {
 h1 {
   overflow: clip;
   font-size: var(--font-size-5);
+  font-variant-caps: small-caps;
+  padding-top: 1em;
 
   @media (--xs-n-above) {
     font-size: var(--font-size-6);
@@ -219,7 +222,7 @@ h1 {
     font-size: var(--font-size-fluid-3);
   }
 
-  background: var(--gradient-2) fixed;
+  background: var(--gradient-22) fixed;
   background-size: var(--size-relative-13) var(--size-relative-11);
   background-clip: text;
   -webkit-background-clip: text;
@@ -231,5 +234,13 @@ h1 {
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+  }
+}
+
+h1 + blockquote {
+  margin-bottom: var(--size-7);
+  & > * {
+    font-size: var(--font-size-fluid-1);
+    font-weight: var(--font-weight-3);
   }
 }
