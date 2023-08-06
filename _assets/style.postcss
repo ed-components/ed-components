@@ -10,12 +10,11 @@
 
 :root {
   --max-inline-body: calc(100vw - (var(--size-8) * 2));
-  --brand-bg-gradient: linear-gradient(
-    to bottom,
-    var(--purple-3),
-    var(--violet-3),
-    var(--indigo-3),
-    var(--cyan-3)
+  --brand-bg-gradient: conic-gradient(
+    at top right,
+    var(--violet-7),
+    var(--blue-7),
+    var(--indigo-7)
   );
 
   @media (--md-n-below) {
@@ -23,12 +22,11 @@
   }
 
   [data-theme="light"] & {
-    --brand-bg-gradient: linear-gradient(
-      to bottom,
-      var(--purple-6),
-      var(--violet-6),
-      var(--indigo-6),
-      var(--cyan-6)
+    --brand-bg-gradient: conic-gradient(
+      at top right,
+      var(--violet-1),
+      var(--blue-1),
+      var(--indigo-1)
     );
   }
 }
@@ -222,25 +220,23 @@ h1 {
     font-size: var(--font-size-fluid-3);
   }
 
-  background: var(--gradient-22) fixed;
+  background: var(--brand-bg-gradient) fixed;
   background-size: var(--size-relative-13) var(--size-relative-11);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-
-  [data-theme="dark"] & {
-    background: var(--gradient-4) fixed;
-    background-size: var(--size-relative-13) var(--size-relative-11);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
 }
 
 h1 + blockquote {
   margin-bottom: var(--size-7);
+  border-inline-start-color: var(--blue-5);
   & > * {
     font-size: var(--font-size-fluid-1);
     font-weight: var(--font-weight-3);
   }
+  background: var(--brand-bg-gradient) fixed;
+  background-size: var(--size-relative-13) var(--size-relative-11);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
