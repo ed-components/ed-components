@@ -8,7 +8,7 @@ const template = document.createElement('template')
 template.innerHTML = `
   <style>
     article {
-      font-family: var(--wc-font-sans-serif);
+      font-family: var(--font-sans, system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif);
       margin-top: 1rem;
       margin-bottom: 1rem;
       border-style: solid;
@@ -18,7 +18,6 @@ template.innerHTML = `
     }
     
     #progress {
-      background-color: var(--wc-white);
       position: sticky;
       backdrop-filter: blur(23px);
       top: 0;
@@ -84,7 +83,7 @@ template.innerHTML = `
       stroke-dashoffset: 320;
     }
     .check {
-      color: var(--wc-green, green);
+      color: var(--green-7, #37b24d);
       stroke-dasharray: 95;
       stroke-dashoffset: 95;
       fill: none;
@@ -97,15 +96,15 @@ template.innerHTML = `
       transition: stroke-dashoffset 0.3s linear;
     }
     li.good-answer input:checked + svg .check {
-      color: var(--wc-green, green);
+      color: var(--green-7, g#37b24d);
       stroke-dashoffset: 0;
     }
     li.bad-answer input:checked + svg .check  {
-      color: var(--wc-red, red);
+      color: var(--red-7, #f03e3e);
       stroke-dashoffset: 0;
     }
     .cross {
-      color: var(--wc-red, red);
+      color: var(--red-7, #f03e3e);
       fill: none;
       transition: stroke-dashoffset 0.3s linear;
     }
