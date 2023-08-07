@@ -128,8 +128,8 @@ template.innerHTML = `
   <article id="quiz">
     <section id="progress">
       <h1 id="title"></h1>
-      <wc-progress-bar id="bar-progress" label="Avancée" percent="0" color="blue" style="display: block;"></wc-progress-bar>
-      <wc-progress-bar id="bar-results" label="Réussite" percent="0" color="green" style="display: block;"></wc-progress-bar>
+      <wc-progress-bar id="bar-progress" label="Avancée" percent="0" style="display: block;background-color: var(--blue-7, #1c7ed6);"></wc-progress-bar>
+      <wc-progress-bar id="bar-results" label="Réussite" percent="0" style="display: block;background-color: var(--green-7, #37b24d);"></wc-progress-bar>
       <hr>
     </section>
     <section id="content">

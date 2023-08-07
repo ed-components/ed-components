@@ -14,7 +14,8 @@ template.innerHTML = `
       
     }
     #label {
-      padding-right: 0.3em;
+      padding-left: 0.3em;
+      padding-right:0.5em ;
       min-width: 7ch;
     }
     #progress {
@@ -55,28 +56,25 @@ template.innerHTML = `
   `
 
 export class WCProgressBar extends HTMLElement {
-  constructor () {
+  constructor() {
     super()
     // between 0 and 100
     this.percent = 0
     this.attachShadow({ mode: 'open' })
   }
 
-  connectedCallback () {
+  connectedCallback() {
     this.style.display = 'block'
     this.shadowRoot.appendChild(template.content.cloneNode(true))
     this.shadowRoot.querySelector('#label').innerHTML = this.label ? this.label : ''
-    this.shadowRoot.querySelector('#progress-bar').style.backgroundColor = this
-      .color
-      ? `var(--wc-${this.color}, ${this.color})`
-      : 'var(--wc-blue, #0d6efd)'
+    this.shadowRoot.querySelector('#progress-bar').style.backgroundColor = this.style.backgroundColor
   }
 
-  static get observedAttributes () {
-    return ['percent', 'label', 'color']
+  static get observedAttributes() {
+    return ['percent', 'label']
   }
 
-  attributeChangedCallback (name, oldValue, newValue) {
+  attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue !== newValue) {
       this[name] = newValue
     }
@@ -90,15 +88,15 @@ export class WCProgressBar extends HTMLElement {
     }
   }
 
-  get percent () {
+  get percent() {
     return this.getAttribute('percent')
   }
 
-  set percent (value) {
+  set percent(value) {
     this.setAttribute('percent', value)
   }
 
-  async updateProgress () {
+  async updateProgress() {
     const percent = this.percent
     const progress = this.shadowRoot.querySelector('#progress-bar')
     progress.innerHTML = `&nbsp;${percent}&nbsp;%`
