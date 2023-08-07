@@ -9,17 +9,12 @@
 @import "open-props/src/extra/theme.dark.switch.css";
 
 :root {
-  --max-inline-body: calc(100vw - (var(--size-8) * 2));
   --brand-bg-gradient: conic-gradient(
     at top right,
     var(--violet-7),
     var(--blue-7),
     var(--indigo-7)
   );
-
-  @media (--md-n-below) {
-    --max-inline-body: calc(100vw - (var(--size-3) * 2));
-  }
 
   [data-theme="light"] & {
     --brand-bg-gradient: conic-gradient(
@@ -32,21 +27,25 @@
 }
 
 body {
-  padding-block-start: var(--size-fluid-2);
+  /* padding-block-start: var(--size-fluid-2); */
   overflow-x: hidden;
   display: grid;
   justify-items: flex-start;
-  grid-template-columns: var(--size-8) calc(100% - 2 * var(--size-8)) var(
-      --size-8
-    );
+
+  /* There should be no more 40 to 60
+characters per line for body text. For desktop, you can use longer lines up to
+120 characters, but you will need to increase the line height. */
+
+  --content: 80ch;
+  --spacer: calc((100% - var(--content)) / 2);
+  line-height: var(--font-lineheight-5);
+  grid-template-columns:
+    var(--spacer) var(--content)
+    var(--spacer);
 
   & > * {
     grid-column: 2;
-  }
-
-  & > .place-full {
-    width: 100%;
-    grid-column: 1 / -1;
+    max-inline-size: var(--content);
   }
 
   @media (--md-n-below) {
@@ -205,7 +204,8 @@ nav {
 
 /* hero */
 h1 {
-  overflow: clip;
+  /* overflow: clip; */
+
   font-size: var(--font-size-5);
   font-variant-caps: small-caps;
   padding-top: 1em;
@@ -219,24 +219,14 @@ h1 {
   @media (--md-n-above) {
     font-size: var(--font-size-fluid-3);
   }
-
-  background: var(--brand-bg-gradient) fixed;
-  background-size: var(--size-relative-13) var(--size-relative-11);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 h1 + blockquote {
   margin-bottom: var(--size-7);
-  border-inline-start-color: var(--blue-5);
+  border-inline-start-color: var(--text-2);
+
   & > * {
     font-size: var(--font-size-fluid-1);
     font-weight: var(--font-weight-3);
   }
-  background: var(--brand-bg-gradient) fixed;
-  background-size: var(--size-relative-13) var(--size-relative-11);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }

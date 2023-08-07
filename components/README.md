@@ -1,6 +1,6 @@
 # ed-components
 
-A set of web-components for education.
+> A set of web-components for education.
 
 ## Components
 
