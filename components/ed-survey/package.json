@@ -2,7 +2,7 @@
   "name": "ed-survey",
   "description": "A webcomponent for surveys in education.",
   "license": "MIT",
-  "author": "ed-survey",
+  "author": "Benjamin Abel",
   "version": "0.0.0",
   "type": "module",
   "main": "dist/index.js",

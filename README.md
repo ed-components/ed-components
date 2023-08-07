@@ -28,4 +28,5 @@ The website is build using eleventy. Each `README.md` file is turned into a `htm
 
 ## TODO
 
-- [ ] Share lit librairies between components js files in the website(Currently builded with esbuild).
+- [ ] Share lit librairies between components js files in the website(Currently bundled with esbuild). OR use vanilla web-components without lit.
+- [ ] Doc implement search with [Pagefind](https://pagefind.app/)

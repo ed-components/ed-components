@@ -8,7 +8,7 @@
     "build": "npx concurrently -n w: npm:build:*",
     "watch:css": "postcss \"_assets/style.postcss\" --verbose --base . --dir . --ext .css --config postcss.config.cjs --watch",
     "watch:html": "npx @11ty/eleventy --serve",
-    "watch:js": "for comp in components/ed-*/;do comp=$(basename $comp) && echo $comp && esbuild components/$comp/src/$comp.ts --watch --bundle --outdir=_site/js;done",
+    "watch:js": "for comp in components/ed-*/;do comp=$(basename $comp) && esbuild components/$comp/src/$comp.ts --watch=forever --bundle --outdir=_site/js & echo $comp;done",
     "start": "npx concurrently -n w: npm:watch:*"
   },
   "devDependencies": {

@@ -1,11 +1,3 @@
----
-id: ed-quiz
----
-
-# ed-quiz
-
-> A web component for quiz using markdown gfm checklists.
-
 ## Installation
 
 _Installation_

@@ -7,15 +7,7 @@ module.exports = (eleventyConfig) => {
   let data = {
     layout: "page.njk",
     permalink: "{{ page.filePathStem | replace('README', '') }}/index.html",
-    eleventyComputed: {
-      defaultTitle: (data) => {
-        if (data.id) {
-          return data.css_only ? `.${data.id}` : `<${data.id}>`;
-        }
-
-        return "Ed components: A collection of accessible, customizable, web components for education";
-      },
-    },
+    defaultTitle: "Ed components: A collection of accessible, customizable, web components for education"
   };
 
   for (let p in data) {
