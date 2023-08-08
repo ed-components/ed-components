@@ -7,6 +7,9 @@
 const template = document.createElement('template')
 template.innerHTML = `
   <style>
+    :host {
+      display: block;
+    }
     #wrapper {
       display: flex;
       font: bold 1.1em var(--wc-font-sans-serif, sans-serif);
@@ -64,7 +67,6 @@ export class WCProgressBar extends HTMLElement {
   }
 
   connectedCallback() {
-    this.style.display = 'block'
     this.shadowRoot.appendChild(template.content.cloneNode(true))
     this.shadowRoot.querySelector('#label').innerHTML = this.label ? this.label : ''
     this.shadowRoot.querySelector('#progress-bar').style.backgroundColor = this.style.backgroundColor

@@ -1,13 +1,8 @@
-import { html, css, LitElement } from 'lit';
-import { property } from 'lit/decorators.js';
-
-// This component implements a likert interaction activitie as defined in xapi spec
-// ie, An interaction which asks the learner to select from a discrete set of choices on a scale
-// see https://github.com/adlnet/xAPI-Spec/blob/master/xAPI-Data.md#interaction-activities
-export class EdSmiley extends LitElement {
-  static styles = css`
+const template = document.createElement('template');
+template.innerHTML = `
+  <style>
     :host {
-      dispaly: block;
+      display: block;
     }
     div {
       display: flex;
@@ -18,27 +13,68 @@ export class EdSmiley extends LitElement {
       border-radius: var(--font-size-fluid-2);
       border: none;
     }
+  </style>
+  <div>
+    <button alt="CONFUSED FACE" data-value="1">&#128533;</button>
+    <button alt="NEUTRAL FACE" data-value="2">&#128528;</button>
+    <button alt="GRINNING FACE" data-value="3">&#128512;</button>
+  </div>
   `;
 
-  @property({ attribute: true }) readonly = false;
-
-  @property({ reflect: true }) value = -1;
-
-  render() {
-    return html`
-      <div @click="${this._clickHandler}" @keyup="${this._clickHandler}">
-        <button alt="CONFUSED FACE" data-value="1">&#128533;</button>
-        <button alt="NEUTRAL FACE" data-value="2">&#128528;</button>
-        <button alt="GRINNING FACE" data-value="3">&#128512;</button>
-      </div>
-    `;
+export class EdSmiley extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
   }
 
-  private _clickHandler(e: Event) {
-    this.value =
-      e.target === e.currentTarget
-        ? -1
-        : Number((e.target as HTMLDivElement).dataset.value!);
+  connectedCallback() {
+    this.shadowRoot.appendChild(template.content.cloneNode(true));
+    this.shadowRoot.querySelector('div').addEventListener('click', this._clickHandler.bind(this));
+    // FIX called multiple times
+    // this.shadowRoot.querySelector('div').addEventListener('keyup', this._clickHandler, {
+    //   once: true,
+    // })
+  }
+
+  static get observedAttributes() {
+    // store rating value between 1 and 3
+    return ['value', 'readonly'];
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+
+    if (oldValue !== newValue) {
+      this[name] = newValue;
+    }
+
+  }
+
+  get value() {
+    return this.getAttribute('value');
+  }
+
+  set value(value) {
+    this.setAttribute('value', value);
+  }
+
+  get readonly() {
+    return this.hasAttribute('readonly');
+  }
+
+  set readonly(readonly) {
+    if (readonly) {
+      this.setAttribute('readonly', '');
+    } else {
+      this.removeAttribute('readonly');
+    }
+  }
+
+  private _clickHandler(evt: Event) {
+    const value = (evt.target as HTMLDivElement).dataset.value
+    if (value) {
+      this.value = value
+      this.readonly = true
+    }
   }
 }
 
