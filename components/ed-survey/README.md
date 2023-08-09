@@ -7,14 +7,6 @@
 <ed-survey type="rating">
   <p>Do you prefer <strong>rating</strong> surveys?</p>
 </ed-survey>
-// TODO don't work on demo
-<script>
-  document.querySelectorAll('ed-survey').forEach(el =>
-    el.addEventListener('edEvent', e => {
-      console.log(e.detail);
-    })
-  );
-</script>
 ```
 
 ## Credits

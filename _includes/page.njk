@@ -22,5 +22,18 @@
         {% endif %}
         <script src="/global.js" type="module"></script>
         <script src="/theme-toggle.js"></script>
+        {% if isComponent %}
+            <script>
+            // Demo of edEvents
+            window.onload = function() {
+            document.querySelectorAll("{{ id }}").forEach(el => {
+                el.addEventListener('edEvent', e => {
+                console.log(e.detail);
+                })
+            }
+            );
+            }
+            </script>
+        {% endif %}
     </body>
 </html>
