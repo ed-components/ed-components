@@ -18,6 +18,10 @@ export class EdSurvey extends HTMLElement {
       display: flex;
       justify-content: space-evenly;
     }
+    .question {
+      font-size: var(--font-size-fluid-2, max(1.5rem,min(6vw,2.5rem)));
+      font-weight: var(--font-weight-6, 600);
+    }
     </style>
     <p class="question" aria-label="question"></p>
     <div></div>
