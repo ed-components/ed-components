@@ -1,5 +1,5 @@
 /* eslint no-undef: 0 */
-/** @module WCProgressBar
+/** @module EdProgressBar
  *  Source: bootstrap 5
  *
  */
@@ -9,12 +9,12 @@ template.innerHTML = `
   <style>
     :host {
       display: block;
+      border-radius: 0.3em;
     }
     #wrapper {
       display: flex;
-      font: bold 1.1em var(--wc-font-sans-serif, sans-serif);
-      margin: 0.3em 0;
-      
+      font: bold 1.1em var(--font-sans-serif, sans-serif);
+      margin: 0.3em 0;      
     }
     #label {
       padding-left: 0.3em;
@@ -58,7 +58,7 @@ template.innerHTML = `
   </div>
   `
 
-export class WCProgressBar extends HTMLElement {
+export class EdProgressBar extends HTMLElement {
   constructor() {
     super()
     // between 0 and 100
@@ -107,4 +107,4 @@ export class WCProgressBar extends HTMLElement {
   }
 }
 
-customElements.define('wc-progress-bar', WCProgressBar)
+customElements.define('ed-progress-bar', EdProgressBar)

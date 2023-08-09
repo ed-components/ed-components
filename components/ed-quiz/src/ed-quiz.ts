@@ -1,10 +1,10 @@
 // @ts-nocheck
 
-import md2Html from './lib/build.js'
-import './ed-progress-bar.js'
+import md2Html from "./lib/build.js";
+import "./ed-progress-bar.js";
 
-const xmlns = 'http://www.w3.org/2000/svg'
-const template = document.createElement('template')
+const xmlns = "http://www.w3.org/2000/svg";
+const template = document.createElement("template");
 
 template.innerHTML = `
   <style>
@@ -128,8 +128,8 @@ template.innerHTML = `
   <article id="quiz">
     <section id="progress">
       <h1 id="title"></h1>
-      <wc-progress-bar id="bar-progress" label="Avancée" percent="0" style="display: block;background-color: var(--blue-7, #1c7ed6);"></wc-progress-bar>
-      <wc-progress-bar id="bar-results" label="Réussite" percent="0" style="display: block;background-color: var(--green-7, #37b24d);"></wc-progress-bar>
+      <ed-progress-bar id="bar-progress" label="Avancée" percent="0" style="display: block;background-color: var(--blue-7, #1c7ed6);"></ed-progress-bar>
+      <ed-progress-bar id="bar-results" label="Réussite" percent="0" style="display: block;background-color: var(--green-7, #37b24d);"></ed-progress-bar>
       <hr>
     </section>
     <section id="content">
@@ -139,207 +139,209 @@ template.innerHTML = `
     <h2>Résultat&nbsp;<span id="note"></span></h2>
     </section>
   </article>
-  `
+  `;
 
-export class WCQuiz extends HTMLElement {
+export class EdQuiz extends HTMLElement {
   constructor() {
-    super()
-    this.attachShadow({ mode: 'open' })
-    this.goodAnswers = []
-    this.answers = []
-    this.checkAnswer = this.checkAnswer.bind(this)
+    super();
+    this.attachShadow({ mode: "open" });
+    this.goodAnswers = [];
+    this.answers = [];
+    this.checkAnswer = this.checkAnswer.bind(this);
   }
 
   async connectedCallback() {
-    this.style.display = 'block'
+    this.style.display = "block";
 
     // Prepare content
-    let contents = WCQuiz.dedentText(this.textContent)
-    contents = await md2Html(contents)
+    let contents = EdQuiz.dedentText(this.textContent);
+    contents = await md2Html(contents);
 
     // work on the DocumentFragment content before mounting it
-    const fragment = template.content
+    const fragment = template.content;
 
-    fragment.querySelector('#content').innerHTML = contents.trim()
-    fragment.querySelector('#title').innerHTML = this.title
+    fragment.querySelector("#content").innerHTML = contents.trim();
+    fragment.querySelector("#title").innerHTML = this.title
       ? this.title
-      : 'Quiz'
+      : "Quiz";
 
     // prepare html
     // retrieve goodAnswers
-    let nQue = 0
-    fragment.querySelectorAll('ol > li').forEach((q) => {
-      let nAns = 0
-      nQue++
-      q.className = 'question'
-      q.id = `quest-${nQue}`
-      q.dataset.nque = nQue
-      q.querySelectorAll('ul > li').forEach((a) => {
-        nAns++
-        a.className = 'answer'
-        a.dataset.nque = nQue
-        a.dataset.nans = nAns
+    let nQue = 0;
+    fragment.querySelectorAll("ol > li").forEach((q) => {
+      let nAns = 0;
+      nQue++;
+      q.className = "question";
+      q.id = `quest-${nQue}`;
+      q.dataset.nque = nQue;
+      q.querySelectorAll("ul > li").forEach((a) => {
+        nAns++;
+        a.className = "answer";
+        a.dataset.nque = nQue;
+        a.dataset.nans = nAns;
 
         // handle answers
-        const input = a.querySelector('input')
-        input.removeAttribute('disabled')
+        const input = a.querySelector("input");
+        input.removeAttribute("disabled");
         // is it a good answer?
         if (input.checked) {
-          this.goodAnswers.push(nAns)
-          input.removeAttribute('checked')
+          this.goodAnswers.push(nAns);
+          input.removeAttribute("checked");
           try {
             if (this.goodAnswers.length !== nQue) {
-              throw new Error("md-quizz error there's must be only one valid answer per question")
+              throw new Error(
+                "md-quizz error there's must be only one valid answer per question"
+              );
             }
           } catch (error) {
-            console.error(error)
+            console.error(error);
             // TODO render checked answers without interaction with message on screen
           }
         }
         // append svg after input
-        const svgInput = document.createElementNS(xmlns, 'svg')
+        const svgInput = document.createElementNS(xmlns, "svg");
 
-        svgInput.setAttributeNS(null, 'viewBox', '0 0 100 100')
-        svgInput.setAttributeNS(null, 'stroke-linecap', 'round')
+        svgInput.setAttributeNS(null, "viewBox", "0 0 100 100");
+        svgInput.setAttributeNS(null, "stroke-linecap", "round");
 
         // <path class="box" d="M82,89H18c-3.87,0-7-3.13-7-7V18c0-3.87,3.13-7,7-7h64c3.87,0,7,3.13,7,7v64C89,85.87,85.87,89,82,89z"/>
-        const box = document.createElementNS(xmlns, 'path')
-        box.setAttributeNS(null, 'class', 'box')
+        const box = document.createElementNS(xmlns, "path");
+        box.setAttributeNS(null, "class", "box");
         box.setAttributeNS(
           null,
-          'd',
-          'M82,89H18c-3.87,0-7-3.13-7-7V18c0-3.87,3.13-7,7-7h64c3.87,0,7,3.13,7,7v64C89,85.87,85.87,89,82,89z'
-        )
-        box.setAttributeNS(null, 'fill', 'none')
-        box.setAttributeNS(null, 'stroke', 'currentColor')
-        box.setAttributeNS(null, 'stroke-width', '9px')
-        svgInput.appendChild(box)
+          "d",
+          "M82,89H18c-3.87,0-7-3.13-7-7V18c0-3.87,3.13-7,7-7h64c3.87,0,7,3.13,7,7v64C89,85.87,85.87,89,82,89z"
+        );
+        box.setAttributeNS(null, "fill", "none");
+        box.setAttributeNS(null, "stroke", "currentColor");
+        box.setAttributeNS(null, "stroke-width", "9px");
+        svgInput.appendChild(box);
         // <polyline class="check" points="25.5,53.5 39.5,67.5 72.5,34.5 "/>
-        const check = document.createElementNS(xmlns, 'polyline')
-        check.setAttributeNS(null, 'class', 'check')
-        check.setAttributeNS(null, 'points', '20,53.5 40,75 80,25')
-        check.setAttributeNS(null, 'fill', 'currentColor')
-        check.setAttributeNS(null, 'stroke', 'currentColor')
-        check.setAttributeNS(null, 'stroke-width', 13)
+        const check = document.createElementNS(xmlns, "polyline");
+        check.setAttributeNS(null, "class", "check");
+        check.setAttributeNS(null, "points", "20,53.5 40,75 80,25");
+        check.setAttributeNS(null, "fill", "currentColor");
+        check.setAttributeNS(null, "stroke", "currentColor");
+        check.setAttributeNS(null, "stroke-width", 13);
         // console.log(check.getTotalLength())
         // check.setAttributeNS(null, 'stroke-dashoffset', 0)
-        svgInput.appendChild(check)
+        svgInput.appendChild(check);
         // <path class="cross" d="M10,90L90,10M10,10L90,90 " fill="none" stroke="currentColor" stroke-width="7px"></path>
-        const cross = document.createElementNS(xmlns, 'path')
-        cross.setAttributeNS(null, 'class', 'cross')
-        cross.setAttributeNS(null, 'd', 'M10,90L90,10M10,10L90,90')
-        cross.setAttributeNS(null, 'fill', 'currentColor')
-        cross.setAttributeNS(null, 'stroke', 'currentColor')
-        cross.setAttributeNS(null, 'stroke-width', 13)
-        const crossPathLength = cross.getTotalLength()
-        cross.setAttributeNS(null, 'stroke-dasharray', crossPathLength)
-        cross.setAttributeNS(null, 'stroke-dashoffset', crossPathLength)
-        svgInput.appendChild(cross)
-        input.insertAdjacentElement('afterend', svgInput)
-      })
-    })
+        const cross = document.createElementNS(xmlns, "path");
+        cross.setAttributeNS(null, "class", "cross");
+        cross.setAttributeNS(null, "d", "M10,90L90,10M10,10L90,90");
+        cross.setAttributeNS(null, "fill", "currentColor");
+        cross.setAttributeNS(null, "stroke", "currentColor");
+        cross.setAttributeNS(null, "stroke-width", 13);
+        const crossPathLength = cross.getTotalLength();
+        cross.setAttributeNS(null, "stroke-dasharray", crossPathLength);
+        cross.setAttributeNS(null, "stroke-dashoffset", crossPathLength);
+        svgInput.appendChild(cross);
+        input.insertAdjacentElement("afterend", svgInput);
+      });
+    });
 
     // mount template
-    this.shadowRoot.appendChild(fragment.cloneNode(true))
+    this.shadowRoot.appendChild(fragment.cloneNode(true));
 
     // create answers array
-    this.answers = this.goodAnswers.map(() => -1)
+    this.answers = this.goodAnswers.map(() => -1);
 
     // add event listener to check response
-    this.shadowRoot.querySelectorAll('li.answer').forEach((ans) => {
-      const nQue = ans.dataset.nque
-      const nAns = ans.dataset.nans
-      ans.querySelectorAll('input').forEach((input) => {
-        input.dataset.nque = nQue
-        input.dataset.nans = nAns
+    this.shadowRoot.querySelectorAll("li.answer").forEach((ans) => {
+      const nQue = ans.dataset.nque;
+      const nAns = ans.dataset.nans;
+      ans.querySelectorAll("input").forEach((input) => {
+        input.dataset.nque = nQue;
+        input.dataset.nans = nAns;
         // get a reference of the function
         // see https://stackoverflow.com/a/22870717
-        input.addEventListener('click', this.checkAnswer)
-      })
-    })
+        input.addEventListener("click", this.checkAnswer);
+      });
+    });
   }
 
   static get observedAttributes() {
-    return ['title']
+    return ["title"];
   }
 
   get title() {
-    return this.getAttribute('title')
+    return this.getAttribute("title");
   }
 
   set title(value) {
-    this.setAttribute('title', value)
+    this.setAttribute("title", value);
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue !== newValue) {
-      this[name] = newValue
+      this[name] = newValue;
     }
   }
 
   checkAnswer(evt) {
-    const el = evt.target
-    const nQue = Number(el.dataset.nque)
-    const nAns = Number(el.dataset.nans)
-    this.answers[nQue - 1] = nAns
+    const el = evt.target;
+    const nQue = Number(el.dataset.nque);
+    const nAns = Number(el.dataset.nans);
+    this.answers[nQue - 1] = nAns;
 
     // Update progress bars
-    this.updateBars()
+    this.updateBars();
     // Update checks
     // disables all inputs
     this.shadowRoot.querySelectorAll(`#quest-${nQue} li`).forEach((li, i) => {
-      const input = li.querySelector('input')
+      const input = li.querySelector("input");
 
-      input.setAttribute('disabled', '')
+      input.setAttribute("disabled", "");
       // remove event listener
-      input.removeEventListener('click', this.checkAnswer)
+      input.removeEventListener("click", this.checkAnswer);
 
       // marque la bonne réponse
-      const goodAnswer = this.goodAnswers[nQue - 1]
+      const goodAnswer = this.goodAnswers[nQue - 1];
       if (i === goodAnswer - 1) {
         // la bonne réponse a été cochée
         // li.querySelector("svg").setAttribute("class", "good-answer")
-        li.setAttribute('class', 'answer good-answer')
+        li.setAttribute("class", "answer good-answer");
         // la bonne réponse n'a pas été cochée
         if (i !== nAns - 1) {
-          const cross = li.querySelector('.cross')
-          cross.setAttribute('stroke-dashoffset', 0)
-          el.parentNode.setAttribute('class', 'answer bad-answer')
+          const cross = li.querySelector(".cross");
+          cross.setAttribute("stroke-dashoffset", 0);
+          el.parentNode.setAttribute("class", "answer bad-answer");
         }
       }
-    })
+    });
     // is it finished?
     if (this.answers.indexOf(-1) < 0) {
-      const note = this.shadowRoot.querySelector('#note')
+      const note = this.shadowRoot.querySelector("#note");
       // retrieve results from progress bar
       const result = Math.round(
-        this.shadowRoot.querySelector('#bar-results').percent / 5
-      )
-      note.innerHTML = `${result}/20`
+        this.shadowRoot.querySelector("#bar-results").percent / 5
+      );
+      note.innerHTML = `${result}/20`;
       // Recadre la fenêtre sur le résultat
       note.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-        inline: 'center'
-      })
+        behavior: "smooth",
+        block: "start",
+        inline: "center",
+      });
     }
   }
 
   updateBars() {
-    let score = 0
-    let answered = 0
-    const nAnswers = this.answers.length
+    let score = 0;
+    let answered = 0;
+    const nAnswers = this.answers.length;
     for (let i = 0; i < nAnswers; i++) {
-      const ans = this.answers[i]
-      score += ans === this.goodAnswers[i]
-      answered += ans !== -1 ? 1 : 0
+      const ans = this.answers[i];
+      score += ans === this.goodAnswers[i];
+      answered += ans !== -1 ? 1 : 0;
     }
-    this.shadowRoot.querySelector('#bar-progress').percent = Math.round(
+    this.shadowRoot.querySelector("#bar-progress").percent = Math.round(
       (100 * answered) / nAnswers
-    )
-    this.shadowRoot.querySelector('#bar-results').percent = Math.round(
+    );
+    this.shadowRoot.querySelector("#bar-results").percent = Math.round(
       (100 * score) / nAnswers
-    )
+    );
   }
 
   /**
@@ -350,44 +352,44 @@ export class WCQuiz extends HTMLElement {
    * @returns {string} the dedented text
    */
   static dedentText(text) {
-    const lines = text.split('\n')
+    const lines = text.split("\n");
 
     // remove the first line if it is an empty line
-    if (lines[0] === '') lines.splice(0, 1)
+    if (lines[0] === "") lines.splice(0, 1);
 
-    const initline = lines[0]
-    let fwdPad = 0
-    const usingTabs = initline[0] === '\t'
-    const checkChar = usingTabs ? '\t' : ' '
+    const initline = lines[0];
+    let fwdPad = 0;
+    const usingTabs = initline[0] === "\t";
+    const checkChar = usingTabs ? "\t" : " ";
 
     while (true) {
       if (initline[fwdPad] === checkChar) {
-        fwdPad += 1
+        fwdPad += 1;
       } else {
-        break
+        break;
       }
     }
 
-    const fixedLines = []
+    const fixedLines = [];
 
     for (const line of lines) {
-      let fixedLine = line
+      let fixedLine = line;
       for (let i = 0; i < fwdPad; i++) {
         if (fixedLine[0] === checkChar) {
-          fixedLine = fixedLine.substring(1)
+          fixedLine = fixedLine.substring(1);
         } else {
-          break
+          break;
         }
       }
-      fixedLines.push(fixedLine)
+      fixedLines.push(fixedLine);
     }
 
-    if (fixedLines[fixedLines.length - 1] === '') {
-      fixedLines.splice(fixedLines.length - 1, 1)
+    if (fixedLines[fixedLines.length - 1] === "") {
+      fixedLines.splice(fixedLines.length - 1, 1);
     }
 
-    return fixedLines.join('\n')
+    return fixedLines.join("\n");
   }
 }
 
-customElements.define('ed-quiz', WCQuiz)
+customElements.define("ed-quiz", EdQuiz);

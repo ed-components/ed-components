@@ -1,17 +1,17 @@
 // Website scripts
 //import "./index.js";
-import "https://prismjs.com/prism.js";
+import "./prism.js";
 
 function renderDemos() {
   for (let code of document.querySelectorAll(
     "pre > code.language-html, pre.language-html > code"
   )) {
-    let pre = code.parentNode;
-
+    const pre = code.parentNode;
+    pre.classList.add("demo")
     if (!pre.previousElementSibling.matches(".demo")) {
-      code.parentNode.insertAdjacentHTML(
+      pre.insertAdjacentHTML(
         "beforebegin",
-        `<p class="demo">${code.textContent}</p>`
+        `<div class="demo">${code.textContent}</div>`
       );
     }
   }

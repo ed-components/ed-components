@@ -12,23 +12,21 @@
   "main": "index.js",
   "repository": "https://framagit.org/lyceum/design",
   "scripts": {
-    "server": "npx live-server --no-browser --port=5500 dev",
     "lint": "standard src/ed-quiz.js src/lib/md2html.js",
-    "format": "standard --fix src/ed-quiz.js src/lib/md2html.js ",
+    "format": "../../node_modules/.bin/prettier -w src/ed-quiz.ts src/lib/md2html.js ",
     "build": "npm-run-all build:parser build:component",
     "build:parser": "esbuild  ./src/lib/md2html.js --bundle --format=esm --minify --sourcemap --outfile=src/lib/build.js",
     "build:component": "esbuild ./src/ed-quiz.js --bundle --format=esm --minify --outfile=index.js",
     "watch:parser": "esbuild  ./src/lib/md2html.js --watch --bundle --format=esm --minify --sourcemap --outfile=src/lib/build.js",
     "watch:component": "esbuild ./src/ed-quiz.js --watch --bundle --format=esm --outfile=./dev/ed-quiz.js",
-    "start": "npm-run-all --parallel server format watch:parser watch:component",
+    "start": "npm-run-all --parallel format watch:parser watch:component",
     "package": "npx rimraf package && npm pack | tail -n 1 | xargs tar -xf",
     "preversion": "npm run lint",
     "postversion": "git push --follow-tags"
   },
   "devDependencies": {
     "esbuild": "^0.18.18",
-    "npm-run-all": "^4.1.5",
-    "standard": "^16.0.3"
+    "npm-run-all": "^4.1.5"
   },
   "standard": {
     "ignore": [

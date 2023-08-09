@@ -1,4 +1,5 @@
-@import url("https://prismjs.com/themes/prism-solarizedlight.min.css");
+@import "prismjs/themes/prism-solarizedlight.min.css";
+
 /* the props */
 @import "open-props/open-props.min.css";
 
@@ -228,5 +229,15 @@ h1 + blockquote {
   & > * {
     font-size: var(--font-size-fluid-1);
     font-weight: var(--font-weight-3);
+  }
+}
+
+/* ed-components demos */
+.demo {
+  border: var(--border-size-3) solid var(--gray-7);
+  width: 100%;
+  border-radius: var(--radius-3);
+  &:before {
+    content: "DEMO";
   }
 }
