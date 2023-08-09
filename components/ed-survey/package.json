@@ -22,7 +22,7 @@
     "test:watch": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wtr --watch\""
   },
   "dependencies": {
-    "lit": "^3.0.0-pre.0"
+    "lit": "REMOVE"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.4.17",

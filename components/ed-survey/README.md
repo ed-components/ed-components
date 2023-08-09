@@ -18,7 +18,6 @@ web component written by Léa Verou under MIT. Retrieved 2023-07-08.
 
 Like [`<meter-discrete>`](../meter-discrete/), but editable. Useful to display and set ratings etc.
 
-</header>
 
 <main>
 

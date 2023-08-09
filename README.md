@@ -5,7 +5,7 @@
 
 ## White book
 
-ed-components are implemented as web-components(using lit) and can be used in
+ed-components are implemented as web-components and can be used in
 the client-side without any server.
 
 A configurable demo is provided for teachers that do not want to install
@@ -20,6 +20,8 @@ An open-source library of contents is published as a git repo.
 
 ## events
 
+Each component emits Custom EdEvents.
+
 Use https://www.xapijs.dev/
 
 ## Dev
@@ -28,5 +30,4 @@ The website is build using eleventy. Each `README.md` file is turned into a `htm
 
 ## TODO
 
-- [ ] Share lit librairies between components js files in the website(Currently bundled with esbuild). OR use vanilla web-components without lit.
-- [ ] Doc implement search with [Pagefind](https://pagefind.app/)
+- DOC implement search with [Pagefind](https://pagefind.app/)
