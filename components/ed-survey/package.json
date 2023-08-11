@@ -21,9 +21,6 @@
     "test": "tsc && wtr --coverage",
     "test:watch": "tsc && ../../node_modules/.bin/concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wtr --watch\""
   },
-  "dependencies": {
-    "lit": "REMOVE"
-  },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.4.17",
     "@open-wc/eslint-config": "^9.2.1",
@@ -36,7 +33,7 @@
     "eslint-config-prettier": "^8.3.0",
     "prettier": "^2.8.8",
     "tslib": "^2.3.1",
-    "typescript": "^4.5.2"
+    "typescript": "^5.1.6"
   },
   "customElements": "custom-elements.json",
   "eslintConfig": {

@@ -1,7 +1,7 @@
 {
   "name": "ed-quiz",
   "version": "0.1.0",
-  "description": "A web component to create quiz using markdown gfm markdown.",
+  "description": "A web component to create quiz using markdown gfm markdown's todos.",
   "keywords": [
     "quiz",
     "markdown",
@@ -12,30 +12,21 @@
   "main": "index.js",
   "repository": "https://framagit.org/lyceum/design",
   "scripts": {
-    "lint": "standard src/ed-quiz.js src/lib/md2html.js",
     "format": "../../node_modules/.bin/prettier -w src/ed-quiz.ts src/lib/md2html.js ",
     "build": "npm-run-all build:parser build:component",
     "build:parser": "esbuild  ./src/lib/md2html.js --bundle --format=esm --minify --sourcemap --outfile=src/lib/build.js",
     "build:component": "esbuild ./src/ed-quiz.js --bundle --format=esm --minify --outfile=index.js",
     "watch:parser": "esbuild  ./src/lib/md2html.js --watch --bundle --format=esm --minify --sourcemap --outfile=src/lib/build.js",
     "watch:component": "esbuild ./src/ed-quiz.js --watch --bundle --format=esm --outfile=./dev/ed-quiz.js",
-    "start": "npm-run-all --parallel format watch:parser watch:component",
-    "package": "npx rimraf package && npm pack | tail -n 1 | xargs tar -xf",
-    "preversion": "npm run lint",
-    "postversion": "git push --follow-tags"
+    "start": "npm-run-all --parallel format watch:parser watch:component"
   },
   "devDependencies": {
     "esbuild": "^0.18.18",
-    "npm-run-all": "^4.1.5"
-  },
-  "standard": {
-    "ignore": [
-      "index.js"
-    ]
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.1.6"
   },
   "dependencies": {
     "micromark": "^3.0.0",
-    "micromark-extension-frontmatter": "^1.0.0",
     "micromark-extension-gfm": "^1.0.0",
     "micromark-extension-math": "^1.0.0"
   }

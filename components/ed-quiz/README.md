@@ -94,7 +94,6 @@ Properties
 This web componenent uses `micromark` to render markdown to html in the browser _lightly_, it uses:
 
 - `micromark-extension-math` associated with kayex to render tex math to mathhml.
-- micromark-extension-frontmatter: TODO Utile ou non?
 
 ## References
 
