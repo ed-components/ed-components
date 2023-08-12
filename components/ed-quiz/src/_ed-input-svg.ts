@@ -1,4 +1,3 @@
-/* eslint no-undef: 0 */
 /** @module WCInputSvg
  *
  * Based on https://codepen.io/Foxxite/pen/LYEdOoX for svg input
@@ -7,7 +6,7 @@
  *
  */
 
-const template = document.createElement('template')
+const template = document.createElement("template");
 template.innerHTML = `
   <style>
     * {
@@ -75,34 +74,34 @@ template.innerHTML = `
     </svg>
     <slot name="text-label"></slot>
   </label>
-  `
+  `;
 
 export class WCInputSvg extends HTMLElement {
-  constructor () {
-    super()
-    this.attachShadow({ mode: 'open' })
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open" });
   }
 
-  static get observedAttributes () {
-    return ['checked', 'disabled']
+  static get observedAttributes() {
+    return ["checked", "disabled"];
   }
 
-  connectedCallback () {
-    this.style.display = 'block'
-    this.shadowRoot.appendChild(template.content.cloneNode(true))
+  connectedCallback() {
+    this.style.display = "block";
+    this.shadowRoot.appendChild(template.content.cloneNode(true));
 
-    if (!this.hasAttribute('role')) this.setAttribute('role', 'checkbox')
+    if (!this.hasAttribute("role")) this.setAttribute("role", "checkbox");
 
-    this._upgradeProperty('checked')
-    this._upgradeProperty('disabled')
-    this.addEventListener('click', this._onClick)
+    this._upgradeProperty("checked");
+    this._upgradeProperty("disabled");
+    this.addEventListener("click", this._onClick);
   }
 
-  _upgradeProperty (prop) {
+  _upgradeProperty(prop) {
     if (this.hasAttribute(prop)) {
-      const value = this[prop]
-      delete this[prop]
-      this[prop] = value
+      const value = this[prop];
+      delete this[prop];
+      this[prop] = value;
     }
   }
 
@@ -115,25 +114,25 @@ export class WCInputSvg extends HTMLElement {
    * reentrancy](/web/fundamentals/architecture/building-components/best-practices#avoid-reentrancy)
    * section for more details.
    */
-  set checked (value) {
-    const isChecked = Boolean(value)
-    if (isChecked) this.setAttribute('checked', '')
-    else this.removeAttribute('checked')
+  set checked(value) {
+    const isChecked = Boolean(value);
+    if (isChecked) this.setAttribute("checked", "");
+    else this.removeAttribute("checked");
   }
 
-  get checked () {
-    return this.hasAttribute('checked')
+  get checked() {
+    return this.hasAttribute("checked");
   }
 
-  set disabled (value) {
-    const isDisabled = Boolean(value)
+  set disabled(value) {
+    const isDisabled = Boolean(value);
     if (isDisabled) {
-      this.setAttribute('disabled', '')
-    } else this.removeAttribute('disabled')
+      this.setAttribute("disabled", "");
+    } else this.removeAttribute("disabled");
   }
 
-  get disabled () {
-    return this.hasAttribute('disabled')
+  get disabled() {
+    return this.hasAttribute("disabled");
   }
 
   /**
@@ -141,20 +140,20 @@ export class WCInputSvg extends HTMLElement {
    * `observedAttributes` array are changed. It's a good place to handle
    * side effects, like setting ARIA attributes.
    */
-  attributeChangedCallback (name, oldValue, newValue) {
-    const hasValue = newValue !== null
+  attributeChangedCallback(name: string, oldValue, newValue) {
+    const hasValue = newValue !== null;
     switch (name) {
-      case 'checked':
-        this.setAttribute('aria-checked', hasValue)
-        break
-      case 'disabled':
-        this.setAttribute('aria-disabled', hasValue)
-        break
+      case "checked":
+        this.setAttribute("aria-checked", String(hasValue));
+        break;
+      case "disabled":
+        this.setAttribute("aria-disabled", String(hasValue));
+        break;
     }
   }
 
-  _onClick (event) {
-    this._toggleChecked()
+  _onClick(event) {
+    this._toggleChecked();
   }
 
   /**
@@ -163,19 +162,19 @@ export class WCInputSvg extends HTMLElement {
    * also dispatch a change event. This event bubbles in order to mimic
    * the native behavior of `<input type=checkbox>`.
    */
-  _toggleChecked () {
-    if (this.disabled) return
-    this.checked = !this.checked
+  _toggleChecked() {
+    if (this.disabled) return;
+    this.checked = !this.checked;
     this.dispatchEvent(
-      new CustomEvent('change', {
+      new CustomEvent("change", {
         detail: {
           checked: this.checked,
-          disabled: ''
+          disabled: "",
         },
-        bubbles: true
+        bubbles: true,
       })
-    )
+    );
   }
 }
 
-customElements.define('wc-input-svg', WCInputSvg)
+customElements.define("wc-input-svg", WCInputSvg);

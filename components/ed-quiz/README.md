@@ -45,16 +45,6 @@ Properties
 
 ```html
 <ed-quiz title="My wonderful quiz">
-  --- 
-  title: My wonderful quiz
-  description: A quiz to test the web component wc-quiz.
-  progress: true
-  results: true
-  subject: Computer programming
-  level: High School
-  tags: ["quiz", "web-components", "html"]
-  ---
-
   ## `mdquiz` example
 
   ![raspberries](https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Raspberry_-_whole_%28Rubus_idaeus%29.jpg/220px-Raspberry_-_whole_%28Rubus_idaeus%29.jpg)
@@ -84,19 +74,16 @@ Properties
 </ed-quiz>
 ```
 
-
-## Special thanks
-
-- Web component architecture: https://github.com/vanillawc/wc-markdown/
-
 ## micromark-plugins
 
-This web componenent uses `micromark` to render markdown to html in the browser _lightly_, it uses:
+This web component uses `micromark` to render markdown to html in the browser _lightly_, it uses:
 
-- `micromark-extension-math` associated with kayex to render tex math to mathhml.
+- `micromark-extension-gfm` to handle the markdown tocs syntax.
+- `micromark-extension-math` associated with katex to render tex math to mathhml.
 
 ## References
 
+- Web component architecture: https://github.com/vanillawc/wc-markdown/
 - https://github.com/syntax-tree/mdast
 - https://github.com/syntax-tree/hast
 - https://webcomponents.dev/blog/all-the-ways-to-make-a-web-component/

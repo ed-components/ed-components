@@ -2,6 +2,5 @@
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "dist"
-  },
-  "include": ["src/**/*.ts", "test/**/*.test.ts", "src/nudeui/*.js"]
+  }
 }

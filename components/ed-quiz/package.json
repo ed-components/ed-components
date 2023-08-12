@@ -1,33 +1,74 @@
 {
   "name": "ed-quiz",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A web component to create quiz using markdown gfm markdown's todos.",
   "keywords": [
     "quiz",
     "markdown",
     "web-component"
   ],
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./ed-survey.js": "./dist/ed-survey.js"
+  },
   "license": "MIT",
   "author": "Benjamin Abel <dev.abel@free.fr> (lyceum.fr)",
-  "main": "index.js",
-  "repository": "https://framagit.org/lyceum/design",
+  "repository": "https://github.com/ed-components/ed-components",
   "scripts": {
-    "format": "../../node_modules/.bin/prettier -w src/ed-quiz.ts src/lib/md2html.js ",
-    "build": "npm-run-all build:parser build:component",
-    "build:parser": "esbuild  ./src/lib/md2html.js --bundle --format=esm --minify --sourcemap --outfile=src/lib/build.js",
-    "build:component": "esbuild ./src/ed-quiz.js --bundle --format=esm --minify --outfile=index.js",
-    "watch:parser": "esbuild  ./src/lib/md2html.js --watch --bundle --format=esm --minify --sourcemap --outfile=src/lib/build.js",
-    "watch:component": "esbuild ./src/ed-quiz.js --watch --bundle --format=esm --outfile=./dev/ed-quiz.js",
-    "start": "npm-run-all --parallel format watch:parser watch:component"
+    "analyze": "cem analyze --litelement",
+    "start": "tsc && tsc --watch --preserveWatchOutput",
+    "build": "tsc && npm run analyze -- --exclude dist",
+    "prepublish": "tsc && npm run analyze -- --exclude dist",
+    "lint": "eslint --ext .ts,.html . --ignore-path .gitignore && prettier \"**/*.ts\" --check --ignore-path .gitignore",
+    "format": "prettier \"**/*.{cjs,html,js,json,md,ts}\" --ignore-path ./.eslintignore --write",
+    "test": "tsc && wtr --coverage",
+    "test:watch": "tsc && ../../node_modules/.bin/concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wtr --watch\""
   },
   "devDependencies": {
-    "esbuild": "^0.18.18",
-    "npm-run-all": "^4.1.5",
+    "@custom-elements-manifest/analyzer": "^0.4.17",
+    "@open-wc/eslint-config": "^9.2.1",
+    "@open-wc/testing": "^3.1.6",
+    "@types/jest": "^29.5.3",
+    "@typescript-eslint/eslint-plugin": "^5.48.0",
+    "@typescript-eslint/parser": "^5.48.0",
+    "@web/test-runner": "^0.14.0",
+    "eslint": "^8.31.0",
+    "eslint-config-prettier": "^8.3.0",
+    "prettier": "^2.8.8",
+    "tslib": "^2.3.1",
     "typescript": "^5.1.6"
   },
+  "customElements": "custom-elements.json",
+  "eslintConfig": {
+    "parser": "@typescript-eslint/parser",
+    "extends": [
+      "@open-wc",
+      "prettier"
+    ],
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "rules": {
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": [
+        "error"
+      ],
+      "import/no-unresolved": "off",
+      "import/extensions": [
+        "error",
+        "always",
+        {
+          "ignorePackages": true
+        }
+      ]
+    }
+  },
   "dependencies": {
-    "micromark": "^3.0.0",
-    "micromark-extension-gfm": "^1.0.0",
-    "micromark-extension-math": "^1.0.0"
+    "micromark": "^4.0.0",
+    "micromark-extension-gfm": "^3.0.0",
+    "micromark-extension-math": "^3.0.0"
   }
 }

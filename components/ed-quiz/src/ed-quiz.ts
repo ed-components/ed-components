@@ -1,7 +1,7 @@
 // @ts-nocheck
 
-import md2Html from "./lib/build.js";
-import "./ed-progress-bar.js";
+import md2Html from "./_md2html.js";
+import "./_ed-progress-bar.js";
 
 const xmlns = "http://www.w3.org/2000/svg";
 const template = document.createElement("template");
@@ -155,7 +155,8 @@ export class EdQuiz extends HTMLElement {
 
     // Prepare content
     let contents = EdQuiz.dedentText(this.textContent);
-    contents = await md2Html(contents);
+    contents = md2Html(contents);
+    console.log(contents);
 
     // work on the DocumentFragment content before mounting it
     const fragment = template.content;
