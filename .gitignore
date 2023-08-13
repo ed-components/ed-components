@@ -6,5 +6,4 @@ dist-ssr
 *.local
 .env
 .cache
-.11ty-vite
 _site/
