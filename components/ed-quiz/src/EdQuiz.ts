@@ -135,7 +135,7 @@ template.innerHTML = `
     <section id="content">
     </section>
     <section id="results">
-    <a href="#results"><hr></a>
+    <a href="#results" aria-label="Results"><hr></a>
     <h2>Résultat&nbsp;<span id="note"></span></h2>
     </section>
   </article>
@@ -353,6 +353,7 @@ export class EdQuiz extends HTMLElement {
    * @returns {string} the dedented text
    */
   static dedentText(text) {
+    if (text.length === 0) return text;
     const lines = text.split("\n");
 
     // remove the first line if it is an empty line

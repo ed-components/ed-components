@@ -29,11 +29,12 @@ export class EdSurvey extends HTMLElement {
   }
 
   connectedCallback() {
-    this.shadowRoot.querySelector('p').innerHTML = this.question
-    const div = this.shadowRoot.querySelector('div')
-    div.innerHTML = this.type === 'rating'
-      ? `<nd-rating max="5" value="3"> </nd-rating>`
-      : `<ed-smiley></ed-smiley>`
+    this.shadowRoot.querySelector('p').innerHTML = this.question;
+    const div = this.shadowRoot.querySelector('div');
+    div.innerHTML =
+      this.type === 'rating'
+        ? `<nd-rating max="5" value="3"> </nd-rating>`
+        : `<ed-smiley></ed-smiley>`;
     div.addEventListener('click', this._handleResponse.bind(this));
   }
 
@@ -42,10 +43,10 @@ export class EdSurvey extends HTMLElement {
   }
 
   set question(question: string) {
-    this.setAttribute('question', question)
+    this.setAttribute('question', question);
   }
   get question() {
-    return this.getAttribute('question') ?? "How are you today"
+    return this.getAttribute('question') ?? 'How are you today';
   }
   static get observedAttributes() {
     return ['type', 'question'];

@@ -1,1 +1,1 @@
-export { EdQuiz } from './EdQuiz.js';
+export { EdQuiz } from "./EdQuiz.js";

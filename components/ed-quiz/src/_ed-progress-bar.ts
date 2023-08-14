@@ -70,7 +70,12 @@ export class EdProgressBar extends HTMLElement {
     this.shadowRoot.querySelector("#label").innerHTML = this.label
       ? this.label
       : "";
-    const progress: HTMLElement = this.shadowRoot.querySelector("#progress-bar");
+
+    const progress: HTMLElement =
+      this.shadowRoot.querySelector("#progress-bar");
+    progress.ariaLabel = this.label
+      ? this.label
+      : "";
     progress.style.backgroundColor = this.style.backgroundColor;
   }
 
@@ -110,7 +115,8 @@ export class EdProgressBar extends HTMLElement {
 
   async updateProgress() {
     const percent = this.percent;
-    const progress: HTMLElement = this.shadowRoot.querySelector("#progress-bar");
+    const progress: HTMLElement =
+      this.shadowRoot.querySelector("#progress-bar");
     progress.innerHTML = `&nbsp;${percent}&nbsp;%`;
     progress.style.width = `${percent}%`;
     progress.setAttribute("aria-valuenow", percent);

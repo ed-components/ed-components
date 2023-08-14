@@ -29,7 +29,9 @@ export class EdSmiley extends HTMLElement {
 
   connectedCallback() {
     this.shadowRoot.appendChild(template.content.cloneNode(true));
-    this.shadowRoot.querySelector('div').addEventListener('click', this._clickHandler.bind(this));
+    this.shadowRoot
+      .querySelector('div')
+      .addEventListener('click', this._clickHandler.bind(this));
     // FIX called multiple times
     // this.shadowRoot.querySelector('div').addEventListener('keyup', this._clickHandler, {
     //   once: true,
@@ -42,11 +44,9 @@ export class EdSmiley extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-
     if (oldValue !== newValue) {
       this[name] = newValue;
     }
-
   }
 
   get value() {
@@ -70,10 +70,10 @@ export class EdSmiley extends HTMLElement {
   }
 
   private _clickHandler(evt: Event) {
-    const value = (evt.target as HTMLDivElement).dataset.value
+    const value = (evt.target as HTMLDivElement).dataset.value;
     if (value) {
-      this.value = value
-      this.readonly = true
+      this.value = value;
+      this.readonly = true;
     }
   }
 }

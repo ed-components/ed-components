@@ -63,5 +63,8 @@
   "prettier": {
     "singleQuote": true,
     "arrowParens": "avoid"
+  },
+  "dependencies": {
+    "@web/dev-server-esbuild": "^0.4.1"
   }
 }

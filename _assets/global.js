@@ -8,8 +8,8 @@ function renderDemos() {
   )) {
     const pre = code.parentNode;
     // render only demos
-    if (code.textContent.startsWith('<ed-')) {
-      pre.classList.add("demo")
+    if (code.textContent.startsWith("<ed-")) {
+      pre.classList.add("demo");
       if (!pre.previousElementSibling.matches(".demo")) {
         pre.insertAdjacentHTML(
           "beforebegin",
