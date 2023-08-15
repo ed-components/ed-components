@@ -24,21 +24,16 @@
     "prepublish": "tsc && npm run analyze -- --exclude dist",
     "lint": "eslint --ext .ts,.html . --ignore-path .gitignore && prettier \"**/*.ts\" --check --ignore-path .gitignore",
     "format": "prettier \"**/*.{cjs,html,js,json,md,ts}\" --ignore-path ./.eslintignore --write",
-    "test": "tsc && wtr --coverage",
-    "test:watch": "tsc --watch & wtr --watch"
+    "test": "tsc && cd .. && npm run test -- --group ed-quiz",
+    "test:watch": "tsc && tsc --watch & cd .. && npm run test -- --watch --group ed-quiz"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.4.17",
     "@open-wc/eslint-config": "^9.2.1",
     "@open-wc/testing": "^3.1.6",
-    "@rollup/plugin-commonjs": "^25.0.4",
-    "@rollup/plugin-node-resolve": "^15.1.0",
-    "@rollup/plugin-replace": "^5.0.2",
     "@types/jest": "^29.5.3",
     "@typescript-eslint/eslint-plugin": "^5.48.0",
     "@typescript-eslint/parser": "^5.48.0",
-    "@web/dev-server-rollup": "^0.5.2",
-    "@web/test-runner": "^0.17.0",
     "eslint": "^8.31.0",
     "eslint-config-prettier": "^8.3.0",
     "prettier": "^2.8.8",
@@ -71,7 +66,6 @@
     }
   },
   "dependencies": {
-    "@web/dev-server-esbuild": "^0.4.1",
     "micromark": "^4.0.0",
     "micromark-extension-gfm": "^3.0.0",
     "micromark-extension-math": "^3.0.0"

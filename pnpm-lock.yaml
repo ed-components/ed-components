@@ -55,11 +55,32 @@ importers:
         specifier: ^1.29.0
         version: 1.29.0
 
-  components/ed-quiz:
-    dependencies:
+  components:
+    devDependencies:
+      '@rollup/plugin-commonjs':
+        specifier: ^25.0.4
+        version: 25.0.4
+      '@rollup/plugin-node-resolve':
+        specifier: ^15.1.0
+        version: 15.1.0(rollup@3.28.0)
+      '@rollup/plugin-replace':
+        specifier: ^5.0.2
+        version: 5.0.2
       '@web/dev-server-esbuild':
         specifier: ^0.4.1
         version: 0.4.1
+      '@web/dev-server-rollup':
+        specifier: ^0.5.2
+        version: 0.5.2
+      '@web/test-runner':
+        specifier: ^0.17.0
+        version: 0.17.0
+      plugin-commonjs:
+        specifier: "link:\e[200~@rollup/plugin-commonjs"
+        version: "link:\e[200~@rollup/plugin-commonjs"
+
+  components/ed-quiz:
+    dependencies:
       micromark:
         specifier: ^4.0.0
         version: 4.0.0
@@ -79,15 +100,6 @@ importers:
       '@open-wc/testing':
         specifier: ^3.1.6
         version: 3.1.6
-      '@rollup/plugin-commonjs':
-        specifier: ^25.0.4
-        version: 25.0.4
-      '@rollup/plugin-node-resolve':
-        specifier: ^15.1.0
-        version: 15.1.0(rollup@3.28.0)
-      '@rollup/plugin-replace':
-        specifier: ^5.0.2
-        version: 5.0.2
       '@types/jest':
         specifier: ^29.5.3
         version: 29.5.3
@@ -97,12 +109,6 @@ importers:
       '@typescript-eslint/parser':
         specifier: ^5.48.0
         version: 5.48.0(eslint@8.31.0)(typescript@5.1.6)
-      '@web/dev-server-rollup':
-        specifier: ^0.5.2
-        version: 0.5.2
-      '@web/test-runner':
-        specifier: ^0.17.0
-        version: 0.17.0(typescript@5.1.6)
       eslint:
         specifier: ^8.31.0
         version: 8.31.0
@@ -679,7 +685,6 @@ packages:
     cpu: [arm64]
     os: [android]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/android-arm64@0.18.17:
@@ -697,7 +702,6 @@ packages:
     cpu: [arm]
     os: [android]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/android-arm@0.18.17:
@@ -715,7 +719,6 @@ packages:
     cpu: [x64]
     os: [android]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/android-x64@0.18.17:
@@ -733,7 +736,6 @@ packages:
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/darwin-arm64@0.18.17:
@@ -751,7 +753,6 @@ packages:
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/darwin-x64@0.18.17:
@@ -769,7 +770,6 @@ packages:
     cpu: [arm64]
     os: [freebsd]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/freebsd-arm64@0.18.17:
@@ -787,7 +787,6 @@ packages:
     cpu: [x64]
     os: [freebsd]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/freebsd-x64@0.18.17:
@@ -805,7 +804,6 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/linux-arm64@0.18.17:
@@ -823,7 +821,6 @@ packages:
     cpu: [arm]
     os: [linux]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/linux-arm@0.18.17:
@@ -841,7 +838,6 @@ packages:
     cpu: [ia32]
     os: [linux]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/linux-ia32@0.18.17:
@@ -859,7 +855,6 @@ packages:
     cpu: [loong64]
     os: [linux]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/linux-loong64@0.18.17:
@@ -877,7 +872,6 @@ packages:
     cpu: [mips64el]
     os: [linux]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/linux-mips64el@0.18.17:
@@ -895,7 +889,6 @@ packages:
     cpu: [ppc64]
     os: [linux]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/linux-ppc64@0.18.17:
@@ -913,7 +906,6 @@ packages:
     cpu: [riscv64]
     os: [linux]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/linux-riscv64@0.18.17:
@@ -931,7 +923,6 @@ packages:
     cpu: [s390x]
     os: [linux]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/linux-s390x@0.18.17:
@@ -949,7 +940,6 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/linux-x64@0.18.17:
@@ -967,7 +957,6 @@ packages:
     cpu: [x64]
     os: [netbsd]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/netbsd-x64@0.18.17:
@@ -985,7 +974,6 @@ packages:
     cpu: [x64]
     os: [openbsd]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/openbsd-x64@0.18.17:
@@ -1003,7 +991,6 @@ packages:
     cpu: [x64]
     os: [sunos]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/sunos-x64@0.18.17:
@@ -1021,7 +1008,6 @@ packages:
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/win32-arm64@0.18.17:
@@ -1039,7 +1025,6 @@ packages:
     cpu: [ia32]
     os: [win32]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/win32-ia32@0.18.17:
@@ -1057,7 +1042,6 @@ packages:
     cpu: [x64]
     os: [win32]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/win32-x64@0.18.17:
@@ -1170,7 +1154,6 @@ packages:
 
   /@mdn/browser-compat-data@4.2.1:
     resolution: {integrity: sha512-EWUguj2kd7ldmrF9F+vI5hUOralPd+sdsUnYbRy33vZTuZkduC1shE9TtEMEjAQwyfyMb4ole5KtjF8MsnQOlA==}
-    dev: false
 
   /@nodelib/fs.scandir@2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -1864,7 +1847,6 @@ packages:
       - bufferutil
       - supports-color
       - utf-8-validate
-    dev: false
 
   /@web/dev-server-rollup@0.5.2:
     resolution: {integrity: sha512-R1heFIOmbExKJn2auDcOcF0EPoLQotZF1HE8Bpqq4TfLRkc7w+JClLdwkOMr/+Ip608cRw8VMkc7teYDFkvSXw==}
@@ -2059,6 +2041,35 @@ packages:
     transitivePeerDependencies:
       - bufferutil
       - supports-color
+      - utf-8-validate
+    dev: true
+
+  /@web/test-runner@0.17.0:
+    resolution: {integrity: sha512-wt2auPsy8ZChqqiCrRdS4DInCAUnEOYZfpPV9Shx/6/UKqhg8MTgPJQ53wDRsCjzxxgZLhVeBpGKP3jmZriFxw==}
+    engines: {node: '>=16.0.0'}
+    hasBin: true
+    dependencies:
+      '@web/browser-logs': 0.3.3
+      '@web/config-loader': 0.2.1
+      '@web/dev-server': 0.3.0
+      '@web/test-runner-chrome': 0.14.0(typescript@5.1.6)
+      '@web/test-runner-commands': 0.8.0
+      '@web/test-runner-core': 0.11.3
+      '@web/test-runner-mocha': 0.8.1
+      camelcase: 6.3.0
+      command-line-args: 5.2.1
+      command-line-usage: 7.0.1
+      convert-source-map: 2.0.0
+      diff: 5.1.0
+      globby: 11.1.0
+      nanocolors: 0.2.13
+      portfinder: 1.0.32
+      source-map: 0.7.4
+    transitivePeerDependencies:
+      - bufferutil
+      - encoding
+      - supports-color
+      - typescript
       - utf-8-validate
     dev: true
 
@@ -3301,7 +3312,6 @@ packages:
       '@esbuild/win32-arm64': 0.17.19
       '@esbuild/win32-ia32': 0.17.19
       '@esbuild/win32-x64': 0.17.19
-    dev: false
 
   /esbuild@0.18.17:
     resolution: {integrity: sha512-1GJtYnUxsJreHYA0Y+iQz2UEykonY66HNWOb0yXYZi9/kNrORUEHVg87eQsCtqh59PEJ5YVZJO98JHznMJSWjg==}
@@ -6823,6 +6833,7 @@ packages:
   /source-map@0.6.1:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
+    requiresBuild: true
     dev: true
 
   /source-map@0.7.4:
@@ -7173,7 +7184,6 @@ packages:
 
   /ua-parser-js@1.0.35:
     resolution: {integrity: sha512-fKnGuqmTBnIE+/KXSzCn4db8RTigUzw1AN0DmdU6hJovUTbYJKyqj+8Mt1c4VfRDnOVJnENmfYkIPZ946UrSAA==}
-    dev: false
 
   /uc.micro@1.0.6:
     resolution: {integrity: sha512-8Y75pvTYkLJW2hWQHXxoqRgV7qb9B+9vFEtidML+7koHUFapnVJAZ6cKs+Qjz5Aw3aZWHMC6u0wJE3At+nSGwA==}

@@ -1,5 +1,13 @@
 // Largerly inspired from https://github.com/modernweb-dev/web/issues/1954#issuecomment-1285280464
 
+import fs from 'fs';
+
+// group tests by component
+const packages = fs
+  .readdirSync('.')
+  .filter(dir => fs.statSync(`${dir}`).isDirectory() && dir.startsWith('ed-'));
+
+
 // import { playwrightLauncher } from '@web/test-runner-playwright';
 import { esbuildPlugin } from "@web/dev-server-esbuild";
 import { fromRollup } from "@web/dev-server-rollup";
@@ -10,11 +18,13 @@ import rollupNodeResolve from "@rollup/plugin-node-resolve";
 const nodeResolve = fromRollup(rollupNodeResolve);
 const replace = fromRollup(rollupReplace);
 const commonjs = fromRollup(rollupCommonjs);
-const filteredLogs = ["Running in dev mode", "lit-html is in dev mode"];
 
 export default /** @type {import("@web/test-runner").TestRunnerConfig} */ ({
   /** Test files to run */
-  files: ["dist/test/**/*.test.js"],
+  groups: packages.map(pkg => ({
+    name: pkg,
+    files: `${pkg}/dist/test/**/*.test.js`,
+  })),
 
   coverageConfig: {
     include: ["**"],
@@ -33,7 +43,7 @@ export default /** @type {import("@web/test-runner").TestRunnerConfig} */ ({
     for (const arg of log.args) {
       if (
         typeof arg === "string" &&
-        filteredLogs.some((l) => arg.includes(l))
+        arg.startsWith("Lit is in dev mode. Not recommended for production!")
       ) {
         return false;
       }

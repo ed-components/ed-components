@@ -1,0 +1,22 @@
+{
+  "private": "true",
+  "name": "components",
+  "version": "1.0.0",
+  "description": "> A set of web-components for education.",
+  "main": "web-test-runner.config.js",
+  "scripts": {
+    "test": "wtr --coverage",
+    "test:watch": "wtr --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.4",
+    "@rollup/plugin-node-resolve": "^15.1.0",
+    "@rollup/plugin-replace": "^5.0.2",
+    "@web/dev-server-esbuild": "^0.4.1",
+    "@web/dev-server-rollup": "^0.5.2",
+    "@web/test-runner": "^0.17.0"
+  }
+}
