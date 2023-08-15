@@ -18,8 +18,8 @@
     "prepublish": "tsc && npm run analyze -- --exclude dist",
     "lint": "eslint --ext .ts,.html . --ignore-path .gitignore && prettier \"**/*.ts\" --check --ignore-path .gitignore",
     "format": "prettier \"**/*.{cjs,html,js,json,md,ts}\" --ignore-path ./.eslintignore --write",
-    "test": "tsc && cd .. && npm run test -- --group $npm_package_name",
-    "test:watch": "tsc && tsc --watch & cd .. && npm run test -- --watch --group $npm_package_name"
+    "test": "cd .. && npm run test -- --group $npm_package_name",
+    "test:watch": "cd .. && npm run test -- --watch --group $npm_package_name"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.4.17",

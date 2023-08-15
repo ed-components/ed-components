@@ -23,7 +23,7 @@ export default /** @type {import("@web/test-runner").TestRunnerConfig} */ ({
   /** Test files to run */
   groups: packages.map(pkg => ({
     name: pkg,
-    files: `${pkg}/dist/test/**/*.test.js`,
+    files: `${pkg}/test/**/*.test.ts`,
   })),
 
   coverageConfig: {
@@ -54,7 +54,7 @@ export default /** @type {import("@web/test-runner").TestRunnerConfig} */ ({
   /** Compile JS for older browsers. Requires @web/dev-server-esbuild plugin */
   // esbuildTarget: 'auto',
   plugins: [
-    esbuildPlugin(),
+    esbuildPlugin({ ts: true }),
 
     commonjs({
       include: ["**/node_modules/debug/**/*", "**/node_modules/ms/**/*"],

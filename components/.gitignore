@@ -1,7 +1,2 @@
 ## testing
 coverage/
-
-# build
-/dist/
-
-custom-elements.json
