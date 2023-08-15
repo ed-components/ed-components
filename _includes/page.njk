@@ -24,15 +24,18 @@
         <script src="/theme-toggle.js"></script>
         {% if isComponent %}
             <script>
-            // Demo of edEvents
-            window.onload = function() {
-            document.querySelectorAll("{{ id }}").forEach(el => {
-                el.addEventListener('edEvent', e => {
-                console.log(e.detail);
-                })
-            }
-            );
-            }
+                // Demo of edEvents
+                window.addEventListener(
+                "load",
+                function () {
+                    document.querySelectorAll("{{ id }}").forEach((el) => {
+                    el.addEventListener("edEvent", (e) => {
+                        console.log(e.detail);
+                    });
+                    });
+                },
+                false
+                );    
             </script>
         {% endif %}
     </body>

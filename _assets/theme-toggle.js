@@ -27,7 +27,7 @@ const theme = {
 // set early so no page flashes
 reflectPreference();
 
-window.onload = () => {
+window.addEventListener('load', () => {
   // set on load so screen readers can see latest value on the button
   reflectPreference();
 
@@ -36,7 +36,8 @@ window.onload = () => {
 
     setPreference();
   });
-};
+}, false);
+
 
 window
   .matchMedia("(prefers-color-scheme: dark)")
