@@ -156,7 +156,6 @@ export class EdQuiz extends HTMLElement {
     // Prepare content
     let contents = EdQuiz.dedentText(this.textContent);
     contents = md2Html(contents);
-    console.log(contents);
 
     // work on the DocumentFragment content before mounting it
     const fragment = template.content;

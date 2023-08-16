@@ -23,14 +23,21 @@
         <script src="/global.js" type="module"></script>
         <script src="/theme-toggle.js"></script>
         {% if isComponent %}
-            <script>
+            <script type="module">
+                import Toast from '/toast.js'
                 // Demo of edEvents
                 window.addEventListener(
                 "load",
                 function () {
                     document.querySelectorAll("{{ id }}").forEach((el) => {
                     el.addEventListener("edEvent", (e) => {
-                        console.log(e.detail);
+                    const evt = e.detail
+                        console.log(evt);
+                        let out = ''
+                        for (var key of Object.keys(evt)) {
+                            out += `${key}: ${evt[key]}\n`
+                        }
+                        Toast(out)
                     });
                     });
                 },
