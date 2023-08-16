@@ -15,6 +15,9 @@ importers:
       '@11ty/eleventy':
         specifier: ^2.0.1
         version: 2.0.1
+      '@11ty/eleventy-plugin-syntaxhighlight':
+        specifier: ^5.0.0
+        version: 5.0.0
       '@web/test-runner':
         specifier: ^0.17.0
         version: 0.17.0(typescript@5.1.6)
@@ -194,6 +197,12 @@ packages:
       - bufferutil
       - supports-color
       - utf-8-validate
+    dev: true
+
+  /@11ty/eleventy-plugin-syntaxhighlight@5.0.0:
+    resolution: {integrity: sha512-y9BUmP1GofmbJgxM1+ky/UpFCpD8JSOeLeKItUs0WApgnrHk9haHziW7lS86lbArX5SiCVo4zTTw9x53gvRCaA==}
+    dependencies:
+      prismjs: 1.29.0
     dev: true
 
   /@11ty/eleventy-utils@1.0.1:

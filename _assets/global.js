@@ -1,6 +1,4 @@
 // Website scripts
-//import "./index.js";
-import "./prism.js";
 
 function renderDemos() {
   for (let code of document.querySelectorAll(

@@ -1,12 +1,13 @@
 // Largerly inspired from https://github.com/modernweb-dev/web/issues/1954#issuecomment-1285280464
 
-import fs from 'fs';
+import fs from "fs";
 
 // group tests by component
 const packages = fs
-  .readdirSync('.')
-  .filter(dir => fs.statSync(`${dir}`).isDirectory() && dir.startsWith('ed-'));
-
+  .readdirSync(".")
+  .filter(
+    (dir) => fs.statSync(`${dir}`).isDirectory() && dir.startsWith("ed-")
+  );
 
 // import { playwrightLauncher } from '@web/test-runner-playwright';
 import { esbuildPlugin } from "@web/dev-server-esbuild";
@@ -21,7 +22,7 @@ const commonjs = fromRollup(rollupCommonjs);
 
 export default /** @type {import("@web/test-runner").TestRunnerConfig} */ ({
   /** Test files to run */
-  groups: packages.map(pkg => ({
+  groups: packages.map((pkg) => ({
     name: pkg,
     files: `${pkg}/test/**/*.test.ts`,
   })),

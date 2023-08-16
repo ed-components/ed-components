@@ -73,9 +73,7 @@ export class EdProgressBar extends HTMLElement {
 
     const progress: HTMLElement =
       this.shadowRoot.querySelector("#progress-bar");
-    progress.ariaLabel = this.label
-      ? this.label
-      : "";
+    progress.ariaLabel = this.label ? this.label : "";
     progress.style.backgroundColor = this.style.backgroundColor;
   }
 

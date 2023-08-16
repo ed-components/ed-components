@@ -1,8 +1,13 @@
-module.exports = (eleventyConfig) => {
+const syntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
+
+module.exports = function (eleventyConfig) {
   // ignore design files
   eleventyConfig.ignores.add("design/*");
   eleventyConfig.watchIgnores.add("design/*");
   eleventyConfig.addWatchTarget("./components/**/*.ts");
+
+  // prismjs plugin
+  eleventyConfig.addPlugin(syntaxHighlight);
 
   // turns README.md into index.html
   let data = {
