@@ -67,13 +67,11 @@ export class EdProgressBar extends HTMLElement {
 
   connectedCallback() {
     this.shadowRoot.appendChild(template.content.cloneNode(true));
-    this.shadowRoot.querySelector("#label").innerHTML = this.label
-      ? this.label
-      : "";
+    this.shadowRoot.querySelector("#label").innerHTML = this.label;
 
     const progress: HTMLElement =
       this.shadowRoot.querySelector("#progress-bar");
-    progress.ariaLabel = this.label ? this.label : "";
+    progress.ariaLabel = this.label;
     progress.style.backgroundColor = this.style.backgroundColor;
   }
 
@@ -81,7 +79,7 @@ export class EdProgressBar extends HTMLElement {
     return ["percent", "label"];
   }
 
-  attributeChangedCallback(name, oldValue, newValue) {
+  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     if (oldValue !== newValue) {
       this[name] = newValue;
     }

@@ -61,10 +61,12 @@ export class EdSurvey extends HTMLElement {
         bubbles: true,
         detail: {
           date: new Date().toISOString(),
-          verb: 'RESPONDED',
+          url: window.location.toString(),
+          edc: this.constructor.name,
           type: this.type,
-          choice: value,
           question: this.question,
+          verb: 'RESPONDED',
+          choice: value,
         },
       })
     );

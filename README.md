@@ -20,13 +20,28 @@ An open-source library of contents is published as a git repo.
 
 ## events
 
-Each component emits Custom EdEvents.
+Use https://www.xapijs.dev/ verbs.
 
-Use https://www.xapijs.dev/
+Each component emits Custom `EdEvents` that can be accessed in the `details` attribute.
 
-## Dev
+
+```
+{
+  "date": "2023-08-17T13:58:11.038Z",
+  "url": "http://localhost:8080/components/ed-quiz/",
+  "edc": "_EdQuiz",
+  "title": "Quiz",
+  "verb": "RESPONDED",
+  "question": 2,
+  "answer": 2
+}
+```
+
+## Documentation
 
 The website is build using eleventy. Each `README.md` file is turned into a `html` page.
+
+Each `html` source code starting with `<ed-` is turned into a interactive demo.
 
 ## TODO
 

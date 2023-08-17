@@ -41,7 +41,48 @@ Properties
 
 ### Basic Usage
 
-<!-- description -->
+The `ed-quiz` element accepts [gfm markdown](https://github.github.com/gfm/) for
+it's content. Each
+[task-list](https://github.github.com/gfm/#task-list-items-extension-) is turned
+into a single choice question.
+
+
+```html
+<ed-quiz>
+  ## `mdquiz` example
+
+  Note that there is **only one true answer per question**.
+
+  1. This image shows:
+
+     ![a fruit example](https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Garden_strawberry_%28Fragaria_%C3%97_ananassa%29_halved.jpg/320px-Garden_strawberry_%28Fragaria_%C3%97_ananassa%29_halved.jpg)
+
+      - [ ] a raspberry
+      - [x] a strawberry.
+
+  2. Another QCM
+
+      - [ ] First _false_ answer
+      - [x] Second **true** answer
+      - [ ] Third _false_ answer
+      - [ ] LONG ANSWER: Third _false_ answer Lorem ipsum dolor sit amet,
+        consectetur adipisicing elit. Laboriosam, accusamus. Iste beatae
+        necessitatibus quibusdam odit quas nobis rerum nesciunt harum modi
+        exercitationem reprehenderit, quisquam tenetur sint maxime consequuntur?
+        Adipisci, fuga.
+  
+  3. Some inline maths $\eta = \frac{m}{G_m}$, and display mode:
+
+      $$
+      L = \frac{1}{2} \rho v^2 S C_L
+      $$
+
+      - [x] true
+      - [ ] false
+</ed-quiz>
+```
+
+You can customize quiz `title` attribute(default Quiz).
 
 ```html
 <ed-quiz title="My wonderful quiz">
@@ -56,14 +97,14 @@ Properties
       - [x] `True`
       - [ ] `False`
 
-  1. Another QCM
+  2. Another QCM
 
       - [ ] First _false_ answer
       - [x] Second **true** answer
       - [ ] Third _false_ answer
       - [ ] LONG ANSWER: Third _false_ answer Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam, accusamus. Iste beatae necessitatibus quibusdam odit quas nobis rerum nesciunt harum modi exercitationem reprehenderit, quisquam tenetur sint maxime consequuntur? Adipisci, fuga.
   
-  1. Some inline maths $\eta = \frac{m}{G_m}$, and display mode:
+  3. Some inline maths $\eta = \frac{m}{G_m}$, and display mode:
 
       $$
       L = \frac{1}{2} \rho v^2 S C_L

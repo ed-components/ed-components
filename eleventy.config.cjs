@@ -5,6 +5,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.ignores.add("design/*");
   eleventyConfig.watchIgnores.add("design/*");
   eleventyConfig.addWatchTarget("./components/**/*.ts");
+  eleventyConfig.addWatchTarget("./**/README.md");
 
   // prismjs plugin
   eleventyConfig.addPlugin(syntaxHighlight);
@@ -40,7 +41,7 @@ module.exports = function (eleventyConfig) {
     templateFormats: ["md", "njk"],
     dir: {
       input: ".",
-      // output: ".",
+      // output: "_site",
     },
   };
 };

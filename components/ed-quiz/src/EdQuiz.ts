@@ -145,6 +145,7 @@ export class EdQuiz extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+    this.title = this.title ? this.title : "Quiz";
     this.goodAnswers = [];
     this.answers = [];
     this.checkAnswer = this.checkAnswer.bind(this);
@@ -161,9 +162,7 @@ export class EdQuiz extends HTMLElement {
     const fragment = template.content;
 
     fragment.querySelector("#content").innerHTML = contents.trim();
-    fragment.querySelector("#title").innerHTML = this.title
-      ? this.title
-      : "Quiz";
+    fragment.querySelector("#title").innerHTML = this.title;
 
     // prepare html
     // retrieve goodAnswers
@@ -257,6 +256,7 @@ export class EdQuiz extends HTMLElement {
         // get a reference of the function
         // see https://stackoverflow.com/a/22870717
         input.addEventListener("click", this.checkAnswer);
+        input.addEventListener('click', this._handleResponse.bind(this));
       });
     });
   }
@@ -390,5 +390,27 @@ export class EdQuiz extends HTMLElement {
     }
 
     return fixedLines.join("\n");
+  }
+
+  private _handleResponse(evt: Event) {
+    const el = evt.target as HTMLInputElement;
+    const nQue = Number(el.dataset.nque);
+    const nAns = Number(el.dataset.nans);
+    // CustomEvent
+    this.dispatchEvent(
+      new CustomEvent('edEvent', {
+        bubbles: true,
+        detail: {
+          date: new Date().toISOString(),
+          url: window.location.toString(),
+          edc: this.constructor.name,
+          title: this.title,
+          verb: 'RESPONDED',
+          question: nQue,
+          answer: nAns
+        },
+      })
+    );
+    el.setAttribute('readonly', '');
   }
 }
