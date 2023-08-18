@@ -1,7 +1,7 @@
 {
   "name": "ed-quiz",
   "version": "0.2.0",
-  "description": "A web component to create quiz using markdown gfm markdown's todos.",
+  "description": "A web component to create quiz using markdown gfm markdown's task-list.",
   "keywords": [
     "quiz",
     "markdown",
