@@ -19,9 +19,9 @@
   "repository": "https://github.com/ed-components/ed-components",
   "scripts": {
     "analyze": "cem analyze --globs \"src/Ed*.ts\"",
-    "start": "tsc && tsc --watch --preserveWatchOutput",
-    "build": "tsc && npm run analyze -- --exclude dist",
-    "prepublish": "tsc && npm run analyze -- --exclude dist",
+    "start": "tsc && ../../node_modules/.bin/concurrently -k \"tsc --watch --preserveWatchOutput\" \"npm run analyze -- --watch\"",
+    "build": "tsc && npm run analyze",
+    "prepublish": "tsc && npm run analyze",
     "lint": "eslint --ext .ts,.html . --ignore-path .gitignore && prettier \"**/*.ts\" --check --ignore-path .gitignore",
     "format": "prettier \"**/*.{cjs,html,js,json,md,ts}\" --ignore-path ./.eslintignore --write",
     "test": "cd .. && npm run test -- --group $npm_package_name",

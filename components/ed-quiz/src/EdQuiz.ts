@@ -155,7 +155,7 @@ export class EdQuiz extends HTMLElement {
     this.style.display = "block";
 
     // Prepare content
-    let contents = EdQuiz.dedentText(this.textContent);
+    let contents = dedentText(this.textContent);
     contents = md2Html(contents);
 
     // work on the DocumentFragment content before mounting it
@@ -351,7 +351,7 @@ export class EdQuiz extends HTMLElement {
    * @param {string} text - the text to dedent
    * @returns {string} the dedented text
    */
-  static dedentText(text) {
+  private _dedentText(text: string) {
     if (text.length === 0) return text;
     const lines = text.split("\n");
 
