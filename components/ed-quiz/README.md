@@ -6,6 +6,8 @@ _Installation_
 npm i ed-quiz
 ```
 
+
+
 _Import from NPM_
 
 ```html

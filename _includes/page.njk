@@ -17,6 +17,11 @@
             </blockquote>
         {% endif %}
         {{ content | safe }}
+        {% if isComponent %}
+            <h2>API</h2>
+            <p>Generated with <a href="https://github.com/open-wc/custom-elements-manifest/tree/master/packages/to-markdown"><code>@custom-elements-manifest</code></a></p>
+            {{ htmlAPI | safe }}
+        {% endif %}
         {% if id %}
             <script src="/js/{{ id }}.js" type="module"></script>
         {% endif %}

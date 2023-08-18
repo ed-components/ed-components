@@ -8,7 +8,7 @@
 ed-components are implemented as web-components and can be used in
 the client-side without any server.
 
-A configurable demo is provided for teachers that do not want to install
+A playground is provided for teachers that do not want to install
 anything. Fill a form and submit it to get a shareable url with the form data
 encoded in the url.
 
@@ -41,7 +41,7 @@ Each component emits Custom `EdEvents` that can be accessed in the `details` att
 
 The website is build using eleventy. Each `README.md` file is turned into a `html` page.
 
-Each `html` source code starting with `<ed-` is turned into a interactive demo.
+Each `html` source code starting with `<ed-` is turned into an interactive demo.
 
 ## TODO
 

@@ -12,7 +12,7 @@
     "./ed-survey.js": "./dist/ed-survey.js"
   },
   "scripts": {
-    "analyze": "cem analyze --litelement",
+    "analyze": "cem analyze --globs \"src/Ed*.ts\"",
     "start": "tsc && tsc --watch --preserveWatchOutput",
     "build": "tsc && npm run analyze -- --exclude dist",
     "prepublish": "tsc && npm run analyze -- --exclude dist",
