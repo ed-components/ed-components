@@ -14,8 +14,10 @@ describe("EdQuiz", () => {
     expect(el.title).to.equal("Quiz");
   });
 
-  it('Can customize title attribute', async () => {
-    const el: EdQuiz = await fixture<EdQuiz>(html`<ed-quiz title="QCU"></ed-quiz>`);
+  it("Can customize title attribute", async () => {
+    const el: EdQuiz = await fixture<EdQuiz>(
+      html`<ed-quiz title="QCU"></ed-quiz>`,
+    );
     expect(el.title).to.equal("QCU");
   });
 

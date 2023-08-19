@@ -172,7 +172,7 @@ export class WCInputSvg extends HTMLElement {
           disabled: "",
         },
         bubbles: true,
-      })
+      }),
     );
   }
 }

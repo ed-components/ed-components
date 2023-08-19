@@ -68,7 +68,7 @@ export class EdSurvey extends HTMLElement {
           verb: 'RESPONDED',
           choice: value,
         },
-      })
+      }),
     );
     el.setAttribute('readonly', '');
   }

@@ -1,25 +1,12 @@
 {
   "name": "ed-survey",
   "description": "A webcomponent for surveys in education.",
-  "license": "MIT",
-  "author": "Benjamin Abel",
   "version": "0.0.0",
-  "type": "module",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "exports": {
-    ".": "./dist/index.js",
-    "./ed-survey.js": "./dist/ed-survey.js"
-  },
-  "scripts": {
-    "analyze": "cem analyze --globs \"src/Ed*.ts\"",
-    "start": "tsc && ../../node_modules/.bin/concurrently -k \"tsc --watch --preserveWatchOutput\" \"npm run analyze -- --watch\"",
-    "build": "tsc && npm run analyze",
-    "prepublish": "tsc && npm run analyze",
-    "lint": "eslint --ext .ts,.html . --ignore-path .gitignore && prettier \"**/*.ts\" --check --ignore-path .gitignore",
-    "format": "prettier \"**/*.{cjs,html,js,json,md,ts}\" --ignore-path ./.eslintignore --write",
-    "test": "cd .. && npm run test -- --group $npm_package_name",
-    "test:watch": "cd .. && npm run test -- --watch --group $npm_package_name"
+  "author": "Benjamin Abel",
+  "customElements": "custom-elements.json",
+  "dependencies": {
+    "@rollup/plugin-commonjs": "^25.0.4",
+    "@rollup/plugin-replace": "^5.0.2"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.4.17",
@@ -33,11 +20,9 @@
     "@web/test-runner": "^0.17.0",
     "eslint": "^8.31.0",
     "eslint-config-prettier": "^8.3.0",
-    "prettier": "^2.8.8",
     "tslib": "^2.3.1",
     "typescript": "^5.1.6"
   },
-  "customElements": "custom-elements.json",
   "eslintConfig": {
     "parser": "@typescript-eslint/parser",
     "extends": [
@@ -62,12 +47,21 @@
       ]
     }
   },
-  "prettier": {
-    "singleQuote": true,
-    "arrowParens": "avoid"
+  "exports": {
+    ".": "./dist/index.js",
+    "./ed-survey.js": "./dist/ed-survey.js"
   },
-  "dependencies": {
-    "@rollup/plugin-commonjs": "^25.0.4",
-    "@rollup/plugin-replace": "^5.0.2"
-  }
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "scripts": {
+    "analyze": "cem analyze --globs \"src/Ed*.ts\"",
+    "build": "tsc && npm run analyze",
+    "lint": "eslint --ext .ts,.html . --ignore-path .gitignore && prettier \"**/*.ts\" --check --ignore-path .gitignore",
+    "prepublish": "tsc && npm run analyze",
+    "start": "tsc && ../../node_modules/.bin/concurrently -k \"tsc --watch --preserveWatchOutput\" \"npm run analyze -- --watch\"",
+    "test": "cd .. && npm run test -- --group $npm_package_name",
+    "test:watch": "cd .. && npm run test -- --watch --group $npm_package_name"
+  },
+  "type": "module"
 }

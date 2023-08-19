@@ -31,14 +31,22 @@ module.exports = {
         return;
       }
       const manifest = JSON.parse(
-        fs.readFileSync(`./components/${id}/custom-elements.json`, "utf-8")
+        fs.readFileSync(`./components/${id}/custom-elements.json`, "utf-8"),
       );
+
       // TODO render html with 11ty
       const html = md.render(
         customElementsManifestToMarkdown(manifest, {
           headingOffset: 3,
-          omitDeclarations: ["super-class", "mixins", "variables", "functions", "exports"],
-        })
+          omitDeclarations: [
+            "super-class",
+            "fields",
+            "mixins",
+            "variables",
+            "functions",
+            "exports",
+          ],
+        }),
       );
       return html;
     },

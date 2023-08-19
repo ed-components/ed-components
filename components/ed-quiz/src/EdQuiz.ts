@@ -189,7 +189,7 @@ export class EdQuiz extends HTMLElement {
           try {
             if (this.goodAnswers.length !== nQue) {
               throw new Error(
-                "md-quizz error there's must be only one valid answer per question"
+                "md-quizz error there's must be only one valid answer per question",
               );
             }
           } catch (error) {
@@ -209,7 +209,7 @@ export class EdQuiz extends HTMLElement {
         box.setAttributeNS(
           null,
           "d",
-          "M82,89H18c-3.87,0-7-3.13-7-7V18c0-3.87,3.13-7,7-7h64c3.87,0,7,3.13,7,7v64C89,85.87,85.87,89,82,89z"
+          "M82,89H18c-3.87,0-7-3.13-7-7V18c0-3.87,3.13-7,7-7h64c3.87,0,7,3.13,7,7v64C89,85.87,85.87,89,82,89z",
         );
         box.setAttributeNS(null, "fill", "none");
         box.setAttributeNS(null, "stroke", "currentColor");
@@ -256,7 +256,7 @@ export class EdQuiz extends HTMLElement {
         // get a reference of the function
         // see https://stackoverflow.com/a/22870717
         input.addEventListener("click", this.checkAnswer);
-        input.addEventListener('click', this._handleResponse.bind(this));
+        input.addEventListener("click", this._handleResponse.bind(this));
       });
     });
   }
@@ -315,7 +315,7 @@ export class EdQuiz extends HTMLElement {
       const note = this.shadowRoot.querySelector("#note");
       // retrieve results from progress bar
       const result = Math.round(
-        this.shadowRoot.querySelector("#bar-results").percent / 5
+        this.shadowRoot.querySelector("#bar-results").percent / 5,
       );
       note.innerHTML = `${result}/20`;
       // Recadre la fenêtre sur le résultat
@@ -337,10 +337,10 @@ export class EdQuiz extends HTMLElement {
       answered += ans !== -1 ? 1 : 0;
     }
     this.shadowRoot.querySelector("#bar-progress").percent = Math.round(
-      (100 * answered) / nAnswers
+      (100 * answered) / nAnswers,
     );
     this.shadowRoot.querySelector("#bar-results").percent = Math.round(
-      (100 * score) / nAnswers
+      (100 * score) / nAnswers,
     );
   }
 
@@ -407,19 +407,19 @@ export class EdQuiz extends HTMLElement {
     // CustomEvent
 
     this.dispatchEvent(
-      new CustomEvent('edEvent', {
+      new CustomEvent("edEvent", {
         bubbles: true,
         detail: {
           date: new Date().toISOString(),
           url: window.location.toString(),
           edc: this.constructor.name,
           title: this.title,
-          verb: 'RESPONDED',
+          verb: "RESPONDED",
           question: nQue,
-          answer: nAns
+          answer: nAns,
         },
-      })
+      }),
     );
-    el.setAttribute('readonly', '');
+    el.setAttribute("readonly", "");
   }
 }

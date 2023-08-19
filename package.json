@@ -1,15 +1,11 @@
 {
-  "private": true,
-  "scripts": {
-    "format": "prettier --write \"**/*.{js,mjs,cjs,ts}\"",
-    "build:css": "postcss \"_assets/style.postcss\" --base . --dir . --ext .css --config postcss.config.cjs",
-    "build:html": "npx @11ty/eleventy",
-    "build:js": "for comp in components/ed-*/;do comp=$(basename $comp) && echo $comp && esbuild components/$comp/src/$comp.ts --bundle --minify --outdir=_site/js;done",
-    "build": "npx concurrently -n w: npm:build:*",
-    "watch:css": "postcss \"_assets/style.postcss\" --verbose --base . --dir . --ext .css --config postcss.config.cjs --watch",
-    "watch:html": "npx @11ty/eleventy --serve",
-    "watch:js": "for comp in components/ed-*/;do comp=$(basename $comp) && esbuild components/$comp/src/$comp.ts --watch=forever --bundle --outdir=_site/js & echo $comp;done",
-    "start": "npx concurrently -n w: npm:watch:*"
+  "dependencies": {
+    "@rollup/plugin-commonjs": "^25.0.4",
+    "@rollup/plugin-replace": "^5.0.2",
+    "@web/dev-server-esbuild": "^0.4.1",
+    "@web/dev-server-rollup": "^0.5.2",
+    "prettier": "^3.0.2",
+    "typescript": "^5.1.6"
   },
   "devDependencies": {
     "@11ty/eleventy": "^2.0.1",
@@ -26,13 +22,19 @@
     "postcss-import": "^15.1.0",
     "postcss-nesting": "^12.0.0",
     "postcss-preset-env": "^9.1.0",
-    "prettier": "^2.5.1",
-    "prismjs": "^1.29.0"
+    "prismjs": "^1.29.0",
+    "syncpack": "^11.2.1"
   },
-  "dependencies": {
-    "@rollup/plugin-commonjs": "^25.0.4",
-    "@rollup/plugin-replace": "^5.0.2",
-    "@web/dev-server-esbuild": "^0.4.1",
-    "@web/dev-server-rollup": "^0.5.2"
+  "private": true,
+  "scripts": {
+    "build": "npx concurrently -n w: npm:build:*",
+    "build:css": "postcss \"_assets/style.postcss\" --base . --dir . --ext .css --config postcss.config.cjs",
+    "build:html": "npx @11ty/eleventy",
+    "build:js": "for comp in components/ed-*/;do comp=$(basename $comp) && echo $comp && esbuild components/$comp/src/$comp.ts --bundle --minify --outdir=_site/js;done",
+    "format": "prettier --write \"**/*.{js,mjs,cjs,ts}\" && syncpack format",
+    "start": "npx concurrently -n w: npm:watch:*",
+    "watch:css": "postcss \"_assets/style.postcss\" --verbose --base . --dir . --ext .css --config postcss.config.cjs --watch",
+    "watch:html": "npx @11ty/eleventy --serve",
+    "watch:js": "for comp in components/ed-*/;do comp=$(basename $comp) && esbuild components/$comp/src/$comp.ts --watch=forever --bundle --outdir=_site/js & echo $comp;done"
   }
 }

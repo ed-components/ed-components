@@ -10,7 +10,7 @@ describe('EdSurvey', () => {
     expect(
       el.shadowRoot
         ?.querySelector('ed-smiley')
-        .shadowRoot.querySelectorAll('button').length
+        .shadowRoot.querySelectorAll('button').length,
     ).to.equal(3);
   });
 

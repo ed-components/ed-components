@@ -39,7 +39,7 @@ window.addEventListener(
       setPreference();
     });
   },
-  false
+  false,
 );
 
 window
