@@ -30,6 +30,9 @@
     "prismjs": "^1.29.0"
   },
   "dependencies": {
-    "@web/dev-server-esbuild": "^0.4.1"
+    "@rollup/plugin-commonjs": "^25.0.4",
+    "@rollup/plugin-replace": "^5.0.2",
+    "@web/dev-server-esbuild": "^0.4.1",
+    "@web/dev-server-rollup": "^0.5.2"
   }
 }

@@ -1,7 +1,9 @@
 const path = require("path");
-const fs = require('fs')
-const {customElementsManifestToMarkdown} = require('@custom-elements-manifest/to-markdown');
-var md = require('markdown-it')();
+const fs = require("fs");
+const {
+  customElementsManifestToMarkdown,
+} = require("@custom-elements-manifest/to-markdown");
+var md = require("markdown-it")();
 
 module.exports = {
   eleventyComputed: {
@@ -26,12 +28,19 @@ module.exports = {
     // https://github.com/open-wc/custom-elements-manifest/blob/master/packages/to-markdown/README.md
     htmlAPI: ({ isComponent, id }) => {
       if (!isComponent) {
-        return
+        return;
       }
-      const manifest = JSON.parse(fs.readFileSync(`./components/${id}/custom-elements.json`, 'utf-8'));
+      const manifest = JSON.parse(
+        fs.readFileSync(`./components/${id}/custom-elements.json`, "utf-8")
+      );
       // TODO render html with 11ty
-      const html = md.render(customElementsManifestToMarkdown(manifest, {headingOffset: 3}));
-      return html 
-    }
+      const html = md.render(
+        customElementsManifestToMarkdown(manifest, {
+          headingOffset: 3,
+          omitDeclarations: ["super-class", "mixins", "variables", "functions", "exports"],
+        })
+      );
+      return html;
+    },
   },
 };

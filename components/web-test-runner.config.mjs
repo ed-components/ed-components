@@ -14,9 +14,7 @@ import { esbuildPlugin } from "@web/dev-server-esbuild";
 import { fromRollup } from "@web/dev-server-rollup";
 import rollupCommonjs from "@rollup/plugin-commonjs";
 import rollupReplace from "@rollup/plugin-replace";
-import rollupNodeResolve from "@rollup/plugin-node-resolve";
 
-const nodeResolve = fromRollup(rollupNodeResolve);
 const replace = fromRollup(rollupReplace);
 const commonjs = fromRollup(rollupCommonjs);
 

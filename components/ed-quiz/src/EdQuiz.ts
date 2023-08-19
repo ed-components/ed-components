@@ -155,7 +155,7 @@ export class EdQuiz extends HTMLElement {
     this.style.display = "block";
 
     // Prepare content
-    let contents = dedentText(this.textContent);
+    let contents = this._dedentText(this.textContent);
     contents = md2Html(contents);
 
     // work on the DocumentFragment content before mounting it
@@ -392,11 +392,20 @@ export class EdQuiz extends HTMLElement {
     return fixedLines.join("\n");
   }
 
+  /**
+   * Dispatch event on user response
+   *
+   * @private
+   * @param {Event} evt
+   * @memberof EdQuiz
+   * @fires {EdEvent} edEvent containing user answers in details field
+   */
   private _handleResponse(evt: Event) {
     const el = evt.target as HTMLInputElement;
     const nQue = Number(el.dataset.nque);
     const nAns = Number(el.dataset.nans);
     // CustomEvent
+
     this.dispatchEvent(
       new CustomEvent('edEvent', {
         bubbles: true,
