@@ -1,4 +1,3 @@
-// @ts-nocheck
 /** @module md2html
  *
  * Convert tag content to markdown with micromark
@@ -10,7 +9,7 @@ import { micromark } from "micromark";
 import { gfm, gfmHtml } from "micromark-extension-gfm";
 import { math, mathHtml } from "micromark-extension-math";
 
-export default function md2html(md) {
+export default function md2html(md: string) {
   return micromark(md, {
     allowDangerousHtml: true,
     extensions: [gfm(), math()],

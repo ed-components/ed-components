@@ -4,19 +4,21 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": ["@typescript-eslint"],
-  "ignorePatterns": ["**/dist/**"],
+  "plugins": ["@typescript-eslint", "wc"],
+  "ignorePatterns": ["**/dist/**", "**/nudeui/**"],
   "extends": [
     "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
     "@open-wc",
+    "plugin:wc/best-practice",
+    "plugin:@typescript-eslint/recommended",
     "prettier"
   ],
 
   "rules": {
-    "@typescript-eslint/ban-ts-comment": 1
+    "@typescript-eslint/ban-ts-comment": 1,
+    "import/no-unresolved": "off",
+    "import/extensions": "off"
   },
-
   "env": {
     "browser": true,
     "es2021": true

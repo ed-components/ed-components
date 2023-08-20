@@ -7,7 +7,6 @@ import './_EdSmiley.js';
 export class EdSurvey extends HTMLElement {
   constructor() {
     super();
-    this.question = this.innerHTML ? this.innerHTML : 'How are you today?';
     this.attachShadow({ mode: 'open' });
     this.shadowRoot.innerHTML = `
     <style>
@@ -29,6 +28,7 @@ export class EdSurvey extends HTMLElement {
   }
 
   connectedCallback() {
+    this.question = this.innerHTML ? this.innerHTML : 'How are you today?';
     this.shadowRoot.querySelector('p').innerHTML = this.question;
     const div = this.shadowRoot.querySelector('div');
     div.innerHTML =

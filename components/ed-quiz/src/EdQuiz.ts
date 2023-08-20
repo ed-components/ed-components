@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import md2Html from "./_md2html.js";
 import "./_ed-progress-bar.js";
 
@@ -145,7 +143,6 @@ export class EdQuiz extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
-    this.title = this.title ? this.title : "Quiz";
     this.goodAnswers = [];
     this.answers = [];
     this.checkAnswer = this.checkAnswer.bind(this);
@@ -154,8 +151,10 @@ export class EdQuiz extends HTMLElement {
   async connectedCallback() {
     this.style.display = "block";
 
+    this.title = this.title ? this.title : "Quiz";
+
     // Prepare content
-    let contents = this._dedentText(this.textContent);
+    let contents = EdQuiz._dedentText(this.textContent);
     contents = md2Html(contents);
 
     // work on the DocumentFragment content before mounting it
@@ -167,17 +166,17 @@ export class EdQuiz extends HTMLElement {
     // prepare html
     // retrieve goodAnswers
     let nQue = 0;
-    fragment.querySelectorAll("ol > li").forEach((q) => {
+    fragment.querySelectorAll("ol > li").forEach((q: HTMLElement) => {
       let nAns = 0;
-      nQue++;
+      nQue += 1;
       q.className = "question";
       q.id = `quest-${nQue}`;
-      q.dataset.nque = nQue;
-      q.querySelectorAll("ul > li").forEach((a) => {
-        nAns++;
+      q.dataset.nque = String(nQue);
+      q.querySelectorAll("ul > li").forEach((a: HTMLLIElement) => {
+        nAns += 1;
         a.className = "answer";
-        a.dataset.nque = nQue;
-        a.dataset.nans = nAns;
+        a.dataset.nque = String(nQue);
+        a.dataset.nans = String(nAns);
 
         // handle answers
         const input = a.querySelector("input");
@@ -221,7 +220,7 @@ export class EdQuiz extends HTMLElement {
         check.setAttributeNS(null, "points", "20,53.5 40,75 80,25");
         check.setAttributeNS(null, "fill", "currentColor");
         check.setAttributeNS(null, "stroke", "currentColor");
-        check.setAttributeNS(null, "stroke-width", 13);
+        check.setAttributeNS(null, "stroke-width", "13");
         // console.log(check.getTotalLength())
         // check.setAttributeNS(null, 'stroke-dashoffset', 0)
         svgInput.appendChild(check);
@@ -231,8 +230,8 @@ export class EdQuiz extends HTMLElement {
         cross.setAttributeNS(null, "d", "M10,90L90,10M10,10L90,90");
         cross.setAttributeNS(null, "fill", "currentColor");
         cross.setAttributeNS(null, "stroke", "currentColor");
-        cross.setAttributeNS(null, "stroke-width", 13);
-        const crossPathLength = cross.getTotalLength();
+        cross.setAttributeNS(null, "stroke-width", "13");
+        const crossPathLength = String(cross.getTotalLength());
         cross.setAttributeNS(null, "stroke-dasharray", crossPathLength);
         cross.setAttributeNS(null, "stroke-dashoffset", crossPathLength);
         svgInput.appendChild(cross);
@@ -247,10 +246,10 @@ export class EdQuiz extends HTMLElement {
     this.answers = this.goodAnswers.map(() => -1);
 
     // add event listener to check response
-    this.shadowRoot.querySelectorAll("li.answer").forEach((ans) => {
+    this.shadowRoot.querySelectorAll("li.answer").forEach((ans: HTMLLIElement) => {
       const nQue = ans.dataset.nque;
       const nAns = ans.dataset.nans;
-      ans.querySelectorAll("input").forEach((input) => {
+      ans.querySelectorAll("input").forEach((input: HTMLElement) => {
         input.dataset.nque = nQue;
         input.dataset.nans = nAns;
         // get a reference of the function
@@ -305,7 +304,7 @@ export class EdQuiz extends HTMLElement {
         // la bonne réponse n'a pas été cochée
         if (i !== nAns - 1) {
           const cross = li.querySelector(".cross");
-          cross.setAttribute("stroke-dashoffset", 0);
+          cross.setAttribute("stroke-dashoffset", "0");
           el.parentNode.setAttribute("class", "answer bad-answer");
         }
       }
@@ -330,18 +329,20 @@ export class EdQuiz extends HTMLElement {
   updateBars() {
     let score = 0;
     let answered = 0;
-    const nAnswers = this.answers.length;
-    for (let i = 0; i < nAnswers; i++) {
-      const ans = this.answers[i];
-      score += ans === this.goodAnswers[i];
+    this.answers.forEach((ans, i) => {
+      score += ans === this.goodAnswers[i] ? 1 : 0;
       answered += ans !== -1 ? 1 : 0;
-    }
-    this.shadowRoot.querySelector("#bar-progress").percent = Math.round(
+    })
+    const nAnswers = this.answers.length;
+
+    const progressBar: HTMLElement = this.shadowRoot.querySelector("#bar-progress")
+    progressBar.setAttribute("percent", String(Math.round(
       (100 * answered) / nAnswers,
-    );
-    this.shadowRoot.querySelector("#bar-results").percent = Math.round(
+    )));
+    const resultBar: HTMLElement = this.shadowRoot.querySelector("#bar-results")
+    resultBar.setAttribute("percent", String(Math.round(
       (100 * score) / nAnswers,
-    );
+    )))
   }
 
   /**
@@ -351,7 +352,7 @@ export class EdQuiz extends HTMLElement {
    * @param {string} text - the text to dedent
    * @returns {string} the dedented text
    */
-  private _dedentText(text: string) {
+  private static _dedentText(text: string) {
     if (text.length === 0) return text;
     const lines = text.split("\n");
 
