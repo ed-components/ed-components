@@ -13,40 +13,11 @@
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.4.17",
-    "@open-wc/eslint-config": "^9.2.1",
     "@open-wc/testing": "^3.1.6",
     "@types/jest": "^29.5.3",
-    "@typescript-eslint/eslint-plugin": "^5.48.0",
-    "@typescript-eslint/parser": "^5.48.0",
     "@web/dev-server-rollup": "^0.5.2",
-    "eslint": "^8.31.0",
-    "eslint-config-prettier": "^8.3.0",
     "tslib": "^2.3.1",
     "typescript": "^5.1.6"
-  },
-  "eslintConfig": {
-    "parser": "@typescript-eslint/parser",
-    "extends": [
-      "@open-wc",
-      "prettier"
-    ],
-    "plugins": [
-      "@typescript-eslint"
-    ],
-    "rules": {
-      "no-unused-vars": "off",
-      "@typescript-eslint/no-unused-vars": [
-        "error"
-      ],
-      "import/no-unresolved": "off",
-      "import/extensions": [
-        "error",
-        "always",
-        {
-          "ignorePackages": true
-        }
-      ]
-    }
   },
   "exports": {
     ".": "./dist/index.js",

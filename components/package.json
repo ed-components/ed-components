@@ -2,13 +2,24 @@
   "private": "true",
   "name": "components",
   "version": "1.0.0",
-  "description": "> A set of web-components for education.",
+  "description": "A set of web-components for education.",
   "main": "web-test-runner.config.js",
   "scripts": {
     "test": "wtr --coverage",
-    "test:watch": "wtr --watch"
+    "test:watch": "wtr --watch",
+    "lint": "eslint --ext .js,.ts --ignore-path .gitignore ."
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@open-wc/eslint-config": "^9.2.1",
+    "@typescript-eslint/eslint-plugin": "^5.48.0",
+    "@typescript-eslint/parser": "^5.48.0",
+    "eslint": "^8.31.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-lit": "^1.9.1",
+    "eslint-plugin-lit-a11y": "^4.1.0",
+    "eslint-plugin-wc": "^1.5.0"
+  }
 }

@@ -45,9 +45,11 @@ export class EdSurvey extends HTMLElement {
   set question(question: string) {
     this.setAttribute('question', question);
   }
+
   get question() {
     return this.getAttribute('question') ?? 'How are you today';
   }
+
   static get observedAttributes() {
     return ['type', 'question'];
   }

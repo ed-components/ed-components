@@ -10,6 +10,13 @@
 
 ## Development
 
+### Linting with es lint
+
+Linting config has been moved to the `components` root folder.
+```sh
+npm lint
+```
+
 ### Testing with [Web Test Runner](https://modern-web.dev/docs/test-runner/)
 
 All components are tested from the `components` directory.

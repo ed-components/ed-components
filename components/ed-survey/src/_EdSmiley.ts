@@ -70,7 +70,7 @@ export class EdSmiley extends HTMLElement {
   }
 
   private _clickHandler(evt: Event) {
-    const value = (evt.target as HTMLDivElement).dataset.value;
+    const {value} = (evt.target as HTMLDivElement).dataset;
     if (value) {
       this.value = value;
       this.readonly = true;

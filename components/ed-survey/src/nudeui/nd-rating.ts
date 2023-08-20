@@ -28,7 +28,7 @@ export class NudeRating extends MeterDiscrete {
   }
 
   set value(value) {
-    let oldValue = super.value;
+    const oldValue = super.value;
     super.value = value;
 
     this[internals].setFormValue(value);
@@ -63,18 +63,18 @@ export class NudeRating extends MeterDiscrete {
   edit() {
     // Code adapted from Mavo: https://github.com/mavoweb/mavo/blob/master/src/elements.js#L378
     let { min = 0, max, step } = this;
-    let range = max - min;
+    const range = max - min;
 
     step = step ?? (range > 1 ? 1 : range / 100);
 
-    let value = this.value;
+    let {value} = this;
 
-    let handlers = {
+    const handlers = {
       mousemove: evt => {
         // Change property as mouse moves
-        let { left, width } = this.getBoundingClientRect();
-        let offset = evt.offsetX / width;
-        let newValue = quantize(min + range * offset, step);
+        const { left, width } = this.getBoundingClientRect();
+        const offset = evt.offsetX / width;
+        const newValue = quantize(min + range * offset, step);
 
         this.value = newValue;
       },
@@ -83,7 +83,7 @@ export class NudeRating extends MeterDiscrete {
         // Return to actual value
         this.value = value;
 
-        for (let event in handlers) {
+        for (const event in handlers) {
           this.removeEventListener(event, handlers[event]);
         }
       },
@@ -98,7 +98,7 @@ export class NudeRating extends MeterDiscrete {
       keydown: evt => {
         // Edit with arrow keys
         if (['ArrowLeft', 'ArrowRight'].includes(evt.key)) {
-          let increment =
+          const increment =
             step *
             (evt.key === 'ArrowRight' ? 1 : -1) *
             (evt.shiftKey ? 10 : 1);
@@ -116,7 +116,7 @@ export class NudeRating extends MeterDiscrete {
 
     handlers.blur = handlers.mouseleave;
 
-    for (let event in handlers) {
+    for (const event in handlers) {
       this.addEventListener(event, handlers[event]);
     }
   }

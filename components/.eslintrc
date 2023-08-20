@@ -1,0 +1,24 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": ["@typescript-eslint"],
+  "ignorePatterns": ["**/dist/**"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "@open-wc",
+    "prettier"
+  ],
+
+  "rules": {
+    "@typescript-eslint/ban-ts-comment": 1
+  },
+
+  "env": {
+    "browser": true,
+    "es2021": true
+  }
+}

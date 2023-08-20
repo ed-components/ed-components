@@ -3,3 +3,6 @@ coverage/
 
 # manifest
 custom-elements.json
+
+## build
+**/dist/

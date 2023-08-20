@@ -71,7 +71,7 @@ export default class MeterDiscrete extends HTMLElement {
 
     value = +value;
 
-    let step = this.step;
+    const {step} = this;
 
     if (step !== null) {
       // Quantize by step
@@ -90,7 +90,7 @@ export default class MeterDiscrete extends HTMLElement {
   }
 
   get #iconURL() {
-    let isURL = this.icon.includes('.');
+    const isURL = this.icon.includes('.');
 
     return isURL ? this.icon : emojiToImage(this.icon);
   }
@@ -101,14 +101,14 @@ export default class MeterDiscrete extends HTMLElement {
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (!name || name === 'max') {
-      let max = this.max;
+      const {max} = this;
       this.style.setProperty('aspect-ratio', `${max} / 1`);
       this.style.setProperty('--max', max);
       this[internals].ariaValueMax = max;
     }
 
     if (!name || name === 'value') {
-      let value = this.value;
+      const {value} = this;
       this.style.setProperty('--value', value);
       this[internals].ariaValueNow = value;
     }
