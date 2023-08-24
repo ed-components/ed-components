@@ -3,6 +3,7 @@
   "description": "A webcomponent for surveys in education.",
   "version": "0.0.0",
   "author": "Benjamin Abel",
+  "type": "module",
   "customElements": "custom-elements.json",
   "dependencies": {
     "@rollup/plugin-commonjs": "^25.0.4",
@@ -32,6 +33,5 @@
     "start": "tsc && ../../node_modules/.bin/concurrently -k \"tsc --watch --preserveWatchOutput\" \"npm run analyze -- --watch\"",
     "test": "cd .. && npm run test -- --group $npm_package_name",
     "test:watch": "cd .. && npm run test -- --watch --group $npm_package_name"
-  },
-  "type": "module"
+  }
 }

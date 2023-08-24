@@ -1,5 +1,5 @@
 import md2Html from "./_md2html.js";
-import "./_ed-progress-bar.js";
+import { EdProgressBar } from "./_ed-progress-bar.js";
 
 const xmlns = "http://www.w3.org/2000/svg";
 const template = document.createElement("template");
@@ -140,6 +140,10 @@ template.innerHTML = `
   `;
 
 export class EdQuiz extends HTMLElement {
+  goodAnswers: Array<number>
+
+  answers: Array<number>
+
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
@@ -246,18 +250,20 @@ export class EdQuiz extends HTMLElement {
     this.answers = this.goodAnswers.map(() => -1);
 
     // add event listener to check response
-    this.shadowRoot.querySelectorAll("li.answer").forEach((ans: HTMLLIElement) => {
-      const nQue = ans.dataset.nque;
-      const nAns = ans.dataset.nans;
-      ans.querySelectorAll("input").forEach((input: HTMLElement) => {
-        input.dataset.nque = nQue;
-        input.dataset.nans = nAns;
-        // get a reference of the function
-        // see https://stackoverflow.com/a/22870717
-        input.addEventListener("click", this.checkAnswer);
-        input.addEventListener("click", this._handleResponse.bind(this));
+    this.shadowRoot
+      .querySelectorAll("li.answer")
+      .forEach((ans: HTMLLIElement) => {
+        const nQue = ans.dataset.nque;
+        const nAns = ans.dataset.nans;
+        ans.querySelectorAll("input").forEach((input: HTMLElement) => {
+          input.dataset.nque = nQue;
+          input.dataset.nans = nAns;
+          // get a reference of the function
+          // see https://stackoverflow.com/a/22870717
+          input.addEventListener("click", this.checkAnswer);
+          input.addEventListener("click", this._handleResponse.bind(this));
+        });
       });
-    });
   }
 
   static get observedAttributes() {
@@ -296,7 +302,7 @@ export class EdQuiz extends HTMLElement {
       input.removeEventListener("click", this.checkAnswer);
 
       // marque la bonne réponse
-      const goodAnswer = this.goodAnswers[nQue - 1];
+      const goodAnswer = Number(this.goodAnswers[nQue - 1]);
       if (i === goodAnswer - 1) {
         // la bonne réponse a été cochée
         // li.querySelector("svg").setAttribute("class", "good-answer")
@@ -313,8 +319,9 @@ export class EdQuiz extends HTMLElement {
     if (this.answers.indexOf(-1) < 0) {
       const note = this.shadowRoot.querySelector("#note");
       // retrieve results from progress bar
+      const resultBar: EdProgressBar = this.shadowRoot.querySelector("#bar-results")
       const result = Math.round(
-        this.shadowRoot.querySelector("#bar-results").percent / 5,
+        Number(resultBar.percent) / 5
       );
       note.innerHTML = `${result}/20`;
       // Recadre la fenêtre sur le résultat
@@ -332,17 +339,21 @@ export class EdQuiz extends HTMLElement {
     this.answers.forEach((ans, i) => {
       score += ans === this.goodAnswers[i] ? 1 : 0;
       answered += ans !== -1 ? 1 : 0;
-    })
+    });
     const nAnswers = this.answers.length;
 
-    const progressBar: HTMLElement = this.shadowRoot.querySelector("#bar-progress")
-    progressBar.setAttribute("percent", String(Math.round(
-      (100 * answered) / nAnswers,
-    )));
-    const resultBar: HTMLElement = this.shadowRoot.querySelector("#bar-results")
-    resultBar.setAttribute("percent", String(Math.round(
-      (100 * score) / nAnswers,
-    )))
+    const progressBar: HTMLElement =
+      this.shadowRoot.querySelector("#bar-progress");
+    progressBar.setAttribute(
+      "percent",
+      String(Math.round((100 * answered) / nAnswers)),
+    );
+    const resultBar: HTMLElement =
+      this.shadowRoot.querySelector("#bar-results");
+    resultBar.setAttribute(
+      "percent",
+      String(Math.round((100 * score) / nAnswers)),
+    );
   }
 
   /**

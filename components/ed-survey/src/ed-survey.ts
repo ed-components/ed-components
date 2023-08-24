@@ -1,3 +1,3 @@
-import { EdSurvey } from './EdSurvey.js';
+import { EdSurvey } from "./EdSurvey.js";
 
-window.customElements.define('ed-survey', EdSurvey);
+window.customElements.define("ed-survey", EdSurvey);

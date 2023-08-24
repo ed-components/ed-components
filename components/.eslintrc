@@ -15,7 +15,7 @@
   ],
 
   "rules": {
-    "@typescript-eslint/ban-ts-comment": 1,
+    "@typescript-eslint/ban-ts-comment": "warn",
     "import/no-unresolved": "off",
     "import/extensions": "off"
   },

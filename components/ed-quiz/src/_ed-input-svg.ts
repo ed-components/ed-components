@@ -97,6 +97,10 @@ export class WCInputSvg extends HTMLElement {
     this.addEventListener("click", this._onClick);
   }
 
+  disconnectedCallback() {
+    this.removeEventListener("click", this._onClick);
+  }
+
   _upgradeProperty(prop) {
     if (this.hasAttribute(prop)) {
       const value = this[prop];
@@ -140,7 +144,7 @@ export class WCInputSvg extends HTMLElement {
    * `observedAttributes` array are changed. It's a good place to handle
    * side effects, like setting ARIA attributes.
    */
-  attributeChangedCallback(name: string, oldValue, newValue) {
+  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     const hasValue = newValue !== null;
     switch (name) {
       case "checked":
@@ -149,10 +153,15 @@ export class WCInputSvg extends HTMLElement {
       case "disabled":
         this.setAttribute("aria-disabled", String(hasValue));
         break;
+      default:
+        if (oldValue !== newValue) {
+          this[name] = newValue;
+        }
+        break;
     }
   }
 
-  _onClick(event) {
+  _onClick() {
     this._toggleChecked();
   }
 

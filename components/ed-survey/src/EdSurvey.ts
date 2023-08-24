@@ -1,5 +1,5 @@
-import './nudeui/nd-rating.js';
-import './_EdSmiley.js';
+import "./nudeui/nd-rating.js";
+import "./_EdSmiley.js";
 
 // This component implements a likert interaction activitie as defined in xapi spec
 // ie, An interaction which asks the learner to select from a discrete set of choices on a scale
@@ -7,7 +7,7 @@ import './_EdSmiley.js';
 export class EdSurvey extends HTMLElement {
   constructor() {
     super();
-    this.attachShadow({ mode: 'open' });
+    this.attachShadow({ mode: "open" });
     this.shadowRoot.innerHTML = `
     <style>
     :host {
@@ -28,38 +28,38 @@ export class EdSurvey extends HTMLElement {
   }
 
   connectedCallback() {
-    this.question = this.innerHTML ? this.innerHTML : 'How are you today?';
-    this.shadowRoot.querySelector('p').innerHTML = this.question;
-    const div = this.shadowRoot.querySelector('div');
+    this.question = this.innerHTML ? this.innerHTML : "How are you today?";
+    this.shadowRoot.querySelector("p").innerHTML = this.question;
+    const div = this.shadowRoot.querySelector("div");
     div.innerHTML =
-      this.type === 'rating'
+      this.type === "rating"
         ? `<nd-rating max="5" value="3"> </nd-rating>`
         : `<ed-smiley></ed-smiley>`;
-    div.addEventListener('click', this._handleResponse.bind(this));
+    div.addEventListener("click", this._handleResponse.bind(this));
   }
 
   get type() {
-    return this.getAttribute('type') ?? 'smiley';
+    return this.getAttribute("type") ?? "smiley";
   }
 
   set question(question: string) {
-    this.setAttribute('question', question);
+    this.setAttribute("question", question);
   }
 
   get question() {
-    return this.getAttribute('question') ?? 'How are you today';
+    return this.getAttribute("question") ?? "How are you today";
   }
 
   static get observedAttributes() {
-    return ['type', 'question'];
+    return ["type", "question"];
   }
 
   private _handleResponse(evt: Event) {
     const el = evt.target as HTMLInputElement;
-    const value = el.getAttribute('value');
+    const value = el.getAttribute("value");
     // CustomEvent
     this.dispatchEvent(
-      new CustomEvent('edEvent', {
+      new CustomEvent("edEvent", {
         bubbles: true,
         detail: {
           date: new Date().toISOString(),
@@ -67,11 +67,11 @@ export class EdSurvey extends HTMLElement {
           edc: this.constructor.name,
           type: this.type,
           question: this.question,
-          verb: 'RESPONDED',
+          verb: "RESPONDED",
           choice: value,
         },
       }),
     );
-    el.setAttribute('readonly', '');
+    el.setAttribute("readonly", "");
   }
 }

@@ -1,25 +1,25 @@
 // @ts-nocheck
 // from https://github.com/LeaVerou/nudeui licence MIT
-import MeterDiscrete, { internals } from './meter-discrete';
+import MeterDiscrete, { internals } from "./meter-discrete";
 
 export class NudeRating extends MeterDiscrete {
   constructor() {
     super();
 
-    if (!this.hasAttribute('tabindex')) {
+    if (!this.hasAttribute("tabindex")) {
       this.tabIndex = 0;
     }
   }
 
   get readonly() {
-    return this.hasAttribute('readonly');
+    return this.hasAttribute("readonly");
   }
 
   set readonly(readonly) {
     if (readonly) {
-      this.setAttribute('readonly', '');
+      this.setAttribute("readonly", "");
     } else {
-      this.removeAttribute('readonly');
+      this.removeAttribute("readonly");
     }
   }
 
@@ -35,14 +35,14 @@ export class NudeRating extends MeterDiscrete {
   }
 
   static get observedAttributes() {
-    return [...super.observedAttributes, 'readonly'];
+    return [...super.observedAttributes, "readonly"];
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
     super.attributeChangedCallback(name, oldValue, newValue);
 
-    if (name === 'readonly' || (!name && !this.readonly)) {
-      if (name === 'readonly' && newValue !== null) {
+    if (name === "readonly" || (!name && !this.readonly)) {
+      if (name === "readonly" && newValue !== null) {
         this.#endEditing();
       } else {
         this.#startEditing();
@@ -51,13 +51,13 @@ export class NudeRating extends MeterDiscrete {
   }
 
   #startEditing() {
-    this.addEventListener('mouseenter', this.edit);
-    this.addEventListener('focus', this.edit);
+    this.addEventListener("mouseenter", this.edit);
+    this.addEventListener("focus", this.edit);
   }
 
   #endEditing() {
-    this.removeEventListener('mouseenter', this.edit);
-    this.removeEventListener('focus', this.edit);
+    this.removeEventListener("mouseenter", this.edit);
+    this.removeEventListener("focus", this.edit);
   }
 
   edit() {
@@ -67,10 +67,10 @@ export class NudeRating extends MeterDiscrete {
 
     step = step ?? (range > 1 ? 1 : range / 100);
 
-    let {value} = this;
+    let { value } = this;
 
     const handlers = {
-      mousemove: evt => {
+      mousemove: (evt) => {
         // Change property as mouse moves
         const { left, width } = this.getBoundingClientRect();
         const offset = evt.offsetX / width;
@@ -79,7 +79,7 @@ export class NudeRating extends MeterDiscrete {
         this.value = newValue;
       },
 
-      mouseleave: evt => {
+      mouseleave: (evt) => {
         // Return to actual value
         this.value = value;
 
@@ -88,26 +88,26 @@ export class NudeRating extends MeterDiscrete {
         }
       },
 
-      click: evt => {
+      click: (evt) => {
         // Register change
         value = this.value;
 
-        this.dispatchEvent(new InputEvent('input', { bubbles: true }));
+        this.dispatchEvent(new InputEvent("input", { bubbles: true }));
       },
 
-      keydown: evt => {
+      keydown: (evt) => {
         // Edit with arrow keys
-        if (['ArrowLeft', 'ArrowRight'].includes(evt.key)) {
+        if (["ArrowLeft", "ArrowRight"].includes(evt.key)) {
           const increment =
             step *
-            (evt.key === 'ArrowRight' ? 1 : -1) *
+            (evt.key === "ArrowRight" ? 1 : -1) *
             (evt.shiftKey ? 10 : 1);
           let newValue = this.value + increment;
           newValue = Math.max(min, Math.min(newValue, max));
 
           this.value = newValue;
 
-          this.dispatchEvent(new InputEvent('input', { bubbles: true }));
+          this.dispatchEvent(new InputEvent("input", { bubbles: true }));
 
           evt.preventDefault();
         }
@@ -133,4 +133,4 @@ function quantize(value, step) {
 }
 
 // @ts-ignore
-customElements.define('nd-rating', NudeRating);
+customElements.define("nd-rating", NudeRating);

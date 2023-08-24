@@ -1,4 +1,4 @@
-const template = document.createElement('template');
+const template = document.createElement("template");
 template.innerHTML = `
   <style>
     :host {
@@ -24,14 +24,14 @@ template.innerHTML = `
 export class EdSmiley extends HTMLElement {
   constructor() {
     super();
-    this.attachShadow({ mode: 'open' });
+    this.attachShadow({ mode: "open" });
   }
 
   connectedCallback() {
     this.shadowRoot.appendChild(template.content.cloneNode(true));
     this.shadowRoot
-      .querySelector('div')
-      .addEventListener('click', this._clickHandler.bind(this));
+      .querySelector("div")
+      .addEventListener("click", this._clickHandler.bind(this));
     // FIX called multiple times
     // this.shadowRoot.querySelector('div').addEventListener('keyup', this._clickHandler, {
     //   once: true,
@@ -40,7 +40,7 @@ export class EdSmiley extends HTMLElement {
 
   static get observedAttributes() {
     // store rating value between 1 and 3
-    return ['value', 'readonly'];
+    return ["value", "readonly"];
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -50,27 +50,27 @@ export class EdSmiley extends HTMLElement {
   }
 
   get value() {
-    return this.getAttribute('value');
+    return this.getAttribute("value");
   }
 
   set value(value) {
-    this.setAttribute('value', value);
+    this.setAttribute("value", value);
   }
 
   get readonly() {
-    return this.hasAttribute('readonly');
+    return this.hasAttribute("readonly");
   }
 
   set readonly(readonly) {
     if (readonly) {
-      this.setAttribute('readonly', '');
+      this.setAttribute("readonly", "");
     } else {
-      this.removeAttribute('readonly');
+      this.removeAttribute("readonly");
     }
   }
 
   private _clickHandler(evt: Event) {
-    const {value} = (evt.target as HTMLDivElement).dataset;
+    const { value } = (evt.target as HTMLDivElement).dataset;
     if (value) {
       this.value = value;
       this.readonly = true;
@@ -78,4 +78,4 @@ export class EdSmiley extends HTMLElement {
   }
 }
 
-customElements.define('ed-smiley', EdSmiley);
+customElements.define("ed-smiley", EdSmiley);

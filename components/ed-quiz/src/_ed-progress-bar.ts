@@ -110,7 +110,7 @@ export class EdProgressBar extends HTMLElement {
   }
 
   async updateProgress() {
-    const {percent} = this;
+    const { percent } = this;
     const progress: HTMLElement =
       this.shadowRoot.querySelector("#progress-bar");
     progress.innerHTML = `&nbsp;${percent}&nbsp;%`;

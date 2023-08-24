@@ -1,7 +1,7 @@
 // @ts-nocheck
 // from https://github.com/LeaVerou/nudeui licence MIT
 
-export const internals = Symbol('internals');
+export const internals = Symbol("internals");
 
 export default class MeterDiscrete extends HTMLElement {
   #internals;
@@ -9,7 +9,7 @@ export default class MeterDiscrete extends HTMLElement {
   constructor() {
     super();
 
-    this.attachShadow({ mode: 'open' });
+    this.attachShadow({ mode: "open" });
     this.shadowRoot.innerHTML = `
 		<style>
 			:host {
@@ -39,12 +39,12 @@ export default class MeterDiscrete extends HTMLElement {
 		<div id=value part=value></div><div id=inactive part="inactive"></div>`;
 
     this[internals] = this.attachInternals?.() ?? {};
-    this[internals].role = 'meter';
+    this[internals].role = "meter";
     this[internals].ariaValueMin = this.min;
   }
 
   get icon() {
-    return this.getAttribute('icon') ?? '⭐️';
+    return this.getAttribute("icon") ?? "⭐️";
   }
 
   // So it can be handled like a <meter>
@@ -53,17 +53,17 @@ export default class MeterDiscrete extends HTMLElement {
   }
 
   get max() {
-    return +this.getAttribute('max') || 5;
+    return +this.getAttribute("max") || 5;
   }
 
   set max(max) {
     if (max) {
-      this.setAttribute('max', max);
+      this.setAttribute("max", max);
     }
   }
 
   get value() {
-    let value = this.getAttribute('value');
+    let value = this.getAttribute("value");
 
     if (value === null) {
       return null;
@@ -71,7 +71,7 @@ export default class MeterDiscrete extends HTMLElement {
 
     value = +value;
 
-    const {step} = this;
+    const { step } = this;
 
     if (step !== null) {
       // Quantize by step
@@ -82,39 +82,39 @@ export default class MeterDiscrete extends HTMLElement {
   }
 
   set value(value) {
-    this.setAttribute('value', value);
+    this.setAttribute("value", value);
   }
 
   get step() {
-    return this.hasAttribute('step') ? +this.getAttribute('step') : null;
+    return this.hasAttribute("step") ? +this.getAttribute("step") : null;
   }
 
   get #iconURL() {
-    const isURL = this.icon.includes('.');
+    const isURL = this.icon.includes(".");
 
     return isURL ? this.icon : emojiToImage(this.icon);
   }
 
   static get observedAttributes() {
-    return ['value', 'max', 'icon'];
+    return ["value", "max", "icon"];
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    if (!name || name === 'max') {
-      const {max} = this;
-      this.style.setProperty('aspect-ratio', `${max} / 1`);
-      this.style.setProperty('--max', max);
+    if (!name || name === "max") {
+      const { max } = this;
+      this.style.setProperty("aspect-ratio", `${max} / 1`);
+      this.style.setProperty("--max", max);
       this[internals].ariaValueMax = max;
     }
 
-    if (!name || name === 'value') {
-      const {value} = this;
-      this.style.setProperty('--value', value);
+    if (!name || name === "value") {
+      const { value } = this;
+      this.style.setProperty("--value", value);
       this[internals].ariaValueNow = value;
     }
 
-    if (!name || name === 'icon') {
-      this.style.setProperty('--icon-image', `url('${this.#iconURL}')`);
+    if (!name || name === "icon") {
+      this.style.setProperty("--icon-image", `url('${this.#iconURL}')`);
     }
   }
 
@@ -135,4 +135,4 @@ function quantize(value, step) {
   return Math.round(value / step) * step;
 }
 
-customElements.define('meter-discrete', MeterDiscrete);
+customElements.define("meter-discrete", MeterDiscrete);
