@@ -5,7 +5,7 @@ const config = {
   versionGroups: [
     {
       dependencies: ["typescript"],
-      packages: ["components/**"],
+      packages: ["**ed-*"],
       pinVersion: "^5.1.6",
     },
   ],
