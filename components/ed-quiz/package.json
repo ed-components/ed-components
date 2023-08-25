@@ -38,7 +38,7 @@
     "build": "tsc && npm run analyze",
     "lint": "eslint --ext .ts,.html . --ignore-path .gitignore",
     "prepublish": "tsc && npm run analyze",
-    "start": "tsc && ../../node_modules/.bin/concurrently -k \"tsc --watch --preserveWatchOutput\" \"npm run analyze -- --watch\"",
+    "start": "tsc && ../../node_modules/.bin/concurrently -n $npm_package_name: -k \"tsc --watch --preserveWatchOutput\" \"npm run analyze -- --watch\"",
     "test": "cd .. && npm run test -- --group $npm_package_name",
     "test:watch": "cd .. && npm run test -- --watch --group $npm_package_name"
   }

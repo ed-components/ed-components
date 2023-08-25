@@ -333,7 +333,13 @@ export class EdQuiz extends HTMLElement {
     }
   }
 
-  updateBars() {
+  /**
+   * Update progress and score bars
+   *
+   * @private
+   * @memberof EdQuiz
+   */
+  private updateBars() {
     let score = 0;
     let answered = 0;
     this.answers.forEach((ans, i) => {
