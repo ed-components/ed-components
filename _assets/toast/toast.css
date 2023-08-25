@@ -2,14 +2,14 @@
 
 .gui-toast-group {
   position: fixed;
-  z-index: 1;
+  z-index: var("--layer-important");
   inset-block-end: 0;
   inset-inline: 0;
   padding-block-end: 5vh;
 
   display: grid;
   justify-items: center;
-  justify-content: center;
+  justify-content: right;
   gap: 1vh;
 
   /* optimizations */
@@ -33,7 +33,9 @@
 
   will-change: transform;
   /* TODO not clear for me! */
-  animation: fade-in 0.3s ease, slide-in 0.3s ease var(--_duration),
+  animation:
+    fade-in 0.3s ease,
+    slide-in 0.3s ease var(--_duration),
     fade-out var(--_duration) ease var(--_duration);
 
   @media (--dark) {
@@ -44,6 +46,11 @@
   @media (--motionOK) {
     --_travel-distance: 5vh;
   }
+}
+
+.gui-toast-title {
+  display: block;
+  text-align: center;
 }
 
 @keyframes fade-in {

@@ -344,12 +344,11 @@ export class EdQuiz extends HTMLElement {
 
     const progressBar: HTMLElement =
       this.shadowRoot.querySelector("#bar-progress");
-    console.log(progressBar);
     progressBar.setAttribute(
       "percent",
       String(Math.round((100 * answered) / nAnswers)),
     );
-    progressBar.percent = 50;
+
     const resultBar: HTMLElement =
       this.shadowRoot.querySelector("#bar-results");
     resultBar.setAttribute(

@@ -8,10 +8,16 @@ const init = () => {
   return node;
 };
 
-const createToast = (text) => {
-  const node = document.createElement("output");
+const createToast = (text, title) => {
+  const node = document.createElement("div");
+  const titleNode = document.createElement("strong");
+  titleNode.classList.add("gui-toast-title");
+  titleNode.innerText = title;
+  node.appendChild(titleNode)
+  const outputNode = document.createElement("output");
+  outputNode.innerText = text;
+  node.appendChild(outputNode)
 
-  node.innerText = text;
   node.classList.add("gui-toast");
   node.setAttribute("role", "status");
   node.setAttribute("aria-live", "polite");
@@ -29,8 +35,8 @@ const addToast = (toast) => {
     : Toaster.appendChild(toast);
 };
 
-const Toast = (text) => {
-  let toast = createToast(text);
+const Toast = (text, title) => {
+  let toast = createToast(text, title);
   addToast(toast);
 
   return new Promise(async (resolve, reject) => {
