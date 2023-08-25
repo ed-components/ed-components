@@ -1,4 +1,5 @@
 {
+  "private": "true",
   "name": "components",
   "description": "A set of web-components for education.",
   "version": "1.0.0",
@@ -15,8 +16,6 @@
     "eslint-plugin-wc": "^1.5.0"
   },
   "license": "ISC",
-  "main": "web-test-runner.config.js",
-  "private": "true",
   "scripts": {
     "lint": "eslint --ext .js,.ts --ignore-path .gitignore .",
     "test": "wtr --coverage",

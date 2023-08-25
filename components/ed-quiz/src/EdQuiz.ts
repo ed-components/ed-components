@@ -140,9 +140,9 @@ template.innerHTML = `
   `;
 
 export class EdQuiz extends HTMLElement {
-  goodAnswers: Array<number>
+  goodAnswers: Array<number>;
 
-  answers: Array<number>
+  answers: Array<number>;
 
   constructor() {
     super();
@@ -319,10 +319,9 @@ export class EdQuiz extends HTMLElement {
     if (this.answers.indexOf(-1) < 0) {
       const note = this.shadowRoot.querySelector("#note");
       // retrieve results from progress bar
-      const resultBar: EdProgressBar = this.shadowRoot.querySelector("#bar-results")
-      const result = Math.round(
-        Number(resultBar.percent) / 5
-      );
+      const resultBar: EdProgressBar =
+        this.shadowRoot.querySelector("#bar-results");
+      const result = Math.round(Number(resultBar.percent) / 5);
       note.innerHTML = `${result}/20`;
       // Recadre la fenêtre sur le résultat
       note.scrollIntoView({

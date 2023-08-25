@@ -1,16 +1,13 @@
 {
-  "dependencies": {
-    "@rollup/plugin-commonjs": "^25.0.4",
-    "@rollup/plugin-replace": "^5.0.2",
-    "@web/dev-server-esbuild": "^0.4.1",
-    "@web/dev-server-rollup": "^0.5.2",
-    "prettier": "^3.0.2",
-    "typescript": "^5.1.6"
-  },
+  "private": true,
   "devDependencies": {
     "@11ty/eleventy": "^2.0.1",
     "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.0",
     "@custom-elements-manifest/to-markdown": "^0.1.0",
+    "@rollup/plugin-commonjs": "^25.0.4",
+    "@rollup/plugin-replace": "^5.0.2",
+    "@web/dev-server-esbuild": "^0.4.1",
+    "@web/dev-server-rollup": "^0.5.2",
     "@web/test-runner": "^0.17.0",
     "concurrently": "^8.2.0",
     "cssnano": "^6.0.1",
@@ -22,10 +19,10 @@
     "postcss-import": "^15.1.0",
     "postcss-nesting": "^12.0.0",
     "postcss-preset-env": "^9.1.0",
+    "prettier": "^3.0.2",
     "prismjs": "^1.29.0",
     "syncpack": "^11.2.1"
   },
-  "private": true,
   "scripts": {
     "build": "npx concurrently -n w: npm:build:*",
     "build:css": "postcss \"_assets/style.postcss\" --base . --dir . --ext .css --config postcss.config.cjs",

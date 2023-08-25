@@ -2,7 +2,15 @@
 
 /** @type {import("syncpack").RcFile} */
 const config = {
-  sortFirst: ["name", "description", "version", "author", "keywords", "type"],
+  sortFirst: [
+    "private",
+    "name",
+    "description",
+    "version",
+    "author",
+    "keywords",
+    "type",
+  ],
   versionGroups: [
     {
       dependencies: ["typescript"],
