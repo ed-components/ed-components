@@ -1,5 +1,6 @@
 import md2Html from "./_md2html.js";
-import { EdProgressBar } from "./_ed-progress-bar.js";
+import "./_ed-progress-bar.js";
+import { EdProgressBar } from "./_EdProgressBar.js";
 
 const xmlns = "http://www.w3.org/2000/svg";
 const template = document.createElement("template");
@@ -126,8 +127,8 @@ template.innerHTML = `
   <article id="quiz">
     <section id="progress">
       <h1 id="title"></h1>
-      <ed-progress-bar id="bar-progress" label="Avancée" percent="0" style="display: block;background-color: var(--blue-7, #1c7ed6);"></ed-progress-bar>
-      <ed-progress-bar id="bar-results" label="Réussite" percent="0" style="display: block;background-color: var(--green-7, #37b24d);"></ed-progress-bar>
+      <ed-progress-bar id="bar-progress" label="Avancée" percent="0" style="background-color: var(--blue-7, #1c7ed6);"></ed-progress-bar>
+      <ed-progress-bar id="bar-results" label="Réussite" percent="0" style="background-color: var(--green-7, #37b24d);"></ed-progress-bar>
       <hr>
     </section>
     <section id="content">
@@ -343,10 +344,12 @@ export class EdQuiz extends HTMLElement {
 
     const progressBar: HTMLElement =
       this.shadowRoot.querySelector("#bar-progress");
+    console.log(progressBar);
     progressBar.setAttribute(
       "percent",
       String(Math.round((100 * answered) / nAnswers)),
     );
+    progressBar.percent = 50;
     const resultBar: HTMLElement =
       this.shadowRoot.querySelector("#bar-results");
     resultBar.setAttribute(
