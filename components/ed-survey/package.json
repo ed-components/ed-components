@@ -2,16 +2,18 @@
   "name": "ed-survey",
   "description": "A webcomponent for surveys in education.",
   "version": "0.0.0",
-  "author": "Benjamin Abel",
+  "author": "Benjamin Abel <dev.abel@free.fr> (lyceum.fr)",
+  "keywords": [
+    "survey",
+    "web-component"
+  ],
   "type": "module",
   "customElements": "custom-elements.json",
-  "dependencies": {
-    "@rollup/plugin-commonjs": "^25.0.4",
-    "@rollup/plugin-replace": "^5.0.2"
-  },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.4.17",
     "@open-wc/testing": "^3.1.6",
+    "@rollup/plugin-commonjs": "^25.0.4",
+    "@rollup/plugin-replace": "^5.0.2",
     "@types/jest": "^29.5.3",
     "@web/dev-server-esbuild": "^0.4.1",
     "@web/dev-server-rollup": "^0.5.2",

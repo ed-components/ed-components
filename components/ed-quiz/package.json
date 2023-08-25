@@ -11,8 +11,6 @@
   "type": "module",
   "customElements": "custom-elements.json",
   "dependencies": {
-    "@rollup/plugin-commonjs": "^25.0.4",
-    "@rollup/plugin-replace": "^5.0.2",
     "micromark": "^4.0.0",
     "micromark-extension-gfm": "^3.0.0",
     "micromark-extension-math": "^3.0.0"
@@ -20,6 +18,8 @@
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.4.17",
     "@open-wc/testing": "^3.1.6",
+    "@rollup/plugin-commonjs": "^25.0.4",
+    "@rollup/plugin-replace": "^5.0.2",
     "@types/jest": "^29.5.3",
     "@web/dev-server-rollup": "^0.5.2",
     "tslib": "^2.3.1",
@@ -27,7 +27,7 @@
   },
   "exports": {
     ".": "./dist/index.js",
-    "./ed-survey.js": "./dist/ed-survey.js"
+    "./ed-survey.js": "./dist/ed-quiz.js"
   },
   "license": "MIT",
   "main": "dist/index.js",
