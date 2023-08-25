@@ -21,7 +21,7 @@ template.innerHTML = `
       min-width: 7ch;
     }
     #progress {
-            background-color: rgb(192, 192, 192);
+            background-color: var(--gray-6, #868e96);
             border-radius: 0.25em;
             display: flex;
             font-size: .75rem;
@@ -37,7 +37,6 @@ template.innerHTML = `
             flex-direction: column;
             font-size: .75rem;
             justify-content: center;
-            color: #fff;
             text-align: center;
             white-space: nowrap;
             transition: width .6s ease;
