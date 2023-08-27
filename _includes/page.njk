@@ -16,11 +16,12 @@
                 <p>{{ npmPackage.description }}</p>
             </blockquote>
         {% endif %}
-        {{ content | safe }}
+        
+        {# Include tab layout for components: doc, api, playground #}
         {% if isComponent %}
-            <h2>API</h2>
-            <p>Generated with <a href="https://github.com/open-wc/custom-elements-manifest/tree/master/packages/to-markdown"><code>@custom-elements-manifest</code></a></p>
-            {{ htmlAPI | safe }}
+            {% include "_tabs.njk" %}
+        {% else %}
+            {{ content | safe }}
         {% endif %}
         {% if id %}
             <script src="/js/{{ id }}.js" type="module"></script>
@@ -29,8 +30,8 @@
         <script src="/theme-toggle.js"></script>
         {% if isComponent %}
             <script type="module">
+                // Demo of edEvents as toasts
                 import Toast from '/toast.js'
-                // Demo of edEvents
                 window.addEventListener(
                 "load",
                 function () {
@@ -42,12 +43,14 @@
                         for (var key of Object.keys(evt)) {
                             out += `${key}: ${evt[key]}\n`
                         }
-                        Toast(out, 'ED-EVENT FIRED')
+                        Toast(out, '⚡ ED-EVENT FIRED ⚡')
                     });
                     });
                 },
                 false
-                );    
+                );
+                // tabs for api
+                import '/tabs.js'
             </script>
         {% endif %}
     </body>

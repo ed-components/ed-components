@@ -2,7 +2,7 @@
 
 .gui-toast-group {
   position: fixed;
-  z-index: var("--layer-important");
+  z-index: var(--layer-important);
   inset-block-end: 0;
   inset-inline: 0;
   padding-block-end: 5vh;
@@ -38,7 +38,7 @@
     slide-in 0.3s ease var(--_duration),
     fade-out var(--_duration) ease var(--_duration);
 
-  @media (--dark) {
+  [data-theme="light"] & {
     color: white;
     --_bg-lightness: 20%;
   }

@@ -6,11 +6,15 @@
 @import "open-props/src/extra/normalize.css";
 @import "open-props/src/extra/theme.light.switch.css";
 @import "open-props/src/extra/theme.dark.switch.css";
+@import "open-props/src/props.blue-hsl.css";
 
 @import "./prism-themes.css";
 @import "./toast/toast.css";
+@import "./tabs/tabs.css";
 
 :root {
+  --brand: var(--blue-5);
+  --brand-hsl: var(--blue-5-hsl);
   --brand-bg-gradient: conic-gradient(
     at top right,
     var(--violet-7),
@@ -141,7 +145,8 @@ nav {
   stroke: var(--nav-icon);
   stroke-width: 2px;
   transform-origin: center center;
-  transition: transform 0.5s var(--ease-elastic-4),
+  transition:
+    transform 0.5s var(--ease-elastic-4),
     opacity var(--_opacity-dur) var(--ease-3);
 
   :hover > svg > & {

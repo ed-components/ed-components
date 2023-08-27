@@ -1,0 +1,24 @@
+<snap-tabs>
+        <header class="scroll-snap-x"> 
+          <nav>
+            <a active href="#start">Get started</a>
+            <a href="#api">API</a>
+            <a href="#playground">Playground</a>
+          </nav>
+          <span class="snap-indicator"></span>
+        </header>
+        <section class="scroll-snap-x">
+          <article id="start">
+            {# generated from readme.md #}
+            {{ content | safe }}
+          </article>
+          <article id="api">
+            <h2>API</h2>
+            <p>Generated with <a href="https://github.com/open-wc/custom-elements-manifest/tree/master/packages/to-markdown"><code>@custom-elements-manifest</code></a></p>
+            {{ htmlAPI | safe }}
+          </article>
+          <article id="playground">
+            <h2>TODO</h2>
+          </article>
+        </section>
+      </snap-tabs> 
