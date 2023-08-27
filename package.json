@@ -28,10 +28,12 @@
     "build:css": "postcss \"_assets/style.postcss\" --base . --dir . --ext .css --config postcss.config.cjs",
     "build:html": "npx @11ty/eleventy",
     "build:js": "for comp in components/ed-*/;do comp=$(basename $comp) && echo $comp && esbuild components/$comp/src/$comp.ts --bundle --minify --outdir=_site/js;done",
+    "build:manifest": "pnpm -r analyze",
     "format": "prettier --write \"**/*.{js,mjs,cjs,ts}\" && syncpack format",
     "start": "npx concurrently -n w: npm:watch:*",
     "watch:css": "postcss \"_assets/style.postcss\" --verbose --base . --dir . --ext .css --config postcss.config.cjs --watch",
     "watch:html": "npx @11ty/eleventy --serve",
-    "watch:js": "for comp in components/ed-*/;do comp=$(basename $comp) && esbuild components/$comp/src/$comp.ts --watch=forever --bundle --outdir=_site/js & echo $comp;done"
+    "watch:js": "for comp in components/ed-*/;do comp=$(basename $comp) && esbuild components/$comp/src/$comp.ts --watch=forever --bundle --outdir=_site/js & echo $comp;done",
+    "watch:manifest": "pnpm -r analyze -- --watch"
   }
 }
