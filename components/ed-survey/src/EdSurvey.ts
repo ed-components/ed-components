@@ -31,10 +31,14 @@ export class EdSurvey extends HTMLElement {
     this.question = this.innerHTML ? this.innerHTML : "How are you today?";
     this.shadowRoot.querySelector("p").innerHTML = this.question;
     const div = this.shadowRoot.querySelector("div");
+    const { choice, readonly } = this;
     div.innerHTML =
       this.type === "rating"
-        ? `<nd-rating max="5" value="3"> </nd-rating>`
-        : `<ed-smiley></ed-smiley>`;
+        ? `<nd-rating max="5" value="${choice}"></nd-rating>`
+        : `<ed-smiley value="${choice}"></ed-smiley>`;
+    if (readonly) {
+      div.firstChild.setAttribue("readonly", "");
+    }
     div.addEventListener("click", this._handleResponse.bind(this));
   }
 
@@ -50,13 +54,32 @@ export class EdSurvey extends HTMLElement {
     return this.getAttribute("question") ?? "How are you today";
   }
 
+  set choice(choice: string) {
+    this.setAttribute("choice", choice);
+  }
+
+  get choice() {
+    return this.getAttribute("choice");
+  }
+
+  get readonly() {
+    return this.hasAttribute("readonly");
+  }
+
+  set readonly(readonly) {
+    if (readonly) {
+      this.setAttribute("readonly", "");
+    } else {
+      this.removeAttribute("readonly");
+    }
+  }
+
   static get observedAttributes() {
-    return ["type", "question"];
+    return ["type", "question", "choice", "readonly"];
   }
 
   private _handleResponse(evt: Event) {
     const el = evt.target as HTMLInputElement;
-    const value = el.getAttribute("value");
     // CustomEvent
     this.dispatchEvent(
       new CustomEvent("edEvent", {
@@ -68,10 +91,10 @@ export class EdSurvey extends HTMLElement {
           type: this.type,
           question: this.question,
           verb: "RESPONDED",
-          choice: value,
+          choice: el.getAttribute("value"),
         },
       }),
     );
-    el.setAttribute("readonly", "");
+    this.setAttribute("readonly", "");
   }
 }

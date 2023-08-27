@@ -382,26 +382,14 @@ export class EdQuiz extends HTMLElement {
     const usingTabs = initline[0] === "\t";
     const checkChar = usingTabs ? "\t" : " ";
 
-    while (true) {
-      if (initline[fwdPad] === checkChar) {
-        fwdPad += 1;
-      } else {
-        break;
-      }
+    while (initline[fwdPad] === checkChar) {
+      fwdPad += 1;
     }
 
     const fixedLines = [];
 
     for (const line of lines) {
-      let fixedLine = line;
-      for (let i = 0; i < fwdPad; i++) {
-        if (fixedLine[0] === checkChar) {
-          fixedLine = fixedLine.substring(1);
-        } else {
-          break;
-        }
-      }
-      fixedLines.push(fixedLine);
+      fixedLines.push(line.substring(fwdPad));
     }
 
     if (fixedLines[fixedLines.length - 1] === "") {
