@@ -4,6 +4,7 @@ import "./_EdSmiley.js";
 // This component implements a likert interaction activitie as defined in xapi spec
 // ie, An interaction which asks the learner to select from a discrete set of choices on a scale
 // see https://github.com/adlnet/xAPI-Spec/blob/master/xAPI-Data.md#interaction-activities
+
 export class EdSurvey extends HTMLElement {
   constructor() {
     super();
@@ -79,15 +80,21 @@ export class EdSurvey extends HTMLElement {
   }
 
   private _handleResponse(evt: Event) {
+    // TODO handle a default base interface(date, url)
+
+    // TODO get unique identifier of html element ie id or // dompath:
+    // https://stackoverflow.com/a/69104350
+
     const el = evt.target as HTMLInputElement;
+    const url = this.ownerDocument.location as Location;
     // CustomEvent
     this.dispatchEvent(
       new CustomEvent("edEvent", {
         bubbles: true,
         detail: {
           date: new Date().toISOString(),
-          url: window.location.toString(),
-          edc: this.constructor.name,
+          url: url.host + url.pathname,
+          tag: this.tagName,
           type: this.type,
           question: this.question,
           verb: "RESPONDED",

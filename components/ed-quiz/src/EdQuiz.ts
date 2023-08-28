@@ -411,15 +411,15 @@ export class EdQuiz extends HTMLElement {
     const el = evt.target as HTMLInputElement;
     const nQue = Number(el.dataset.nque);
     const nAns = Number(el.dataset.nans);
+    const url = this.ownerDocument.location as Location;
     // CustomEvent
-
     this.dispatchEvent(
       new CustomEvent("edEvent", {
         bubbles: true,
         detail: {
           date: new Date().toISOString(),
-          url: window.location.toString(),
-          edc: this.constructor.name,
+          url: url.host + url.pathname,
+          tag: this.tagName,
           title: this.title,
           verb: "RESPONDED",
           question: nQue,
