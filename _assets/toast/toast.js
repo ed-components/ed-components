@@ -13,10 +13,10 @@ const createToast = (text, title) => {
   const titleNode = document.createElement("strong");
   titleNode.classList.add("gui-toast-title");
   titleNode.innerText = title;
-  node.appendChild(titleNode)
+  node.appendChild(titleNode);
   const outputNode = document.createElement("output");
   outputNode.innerText = text;
-  node.appendChild(outputNode)
+  node.appendChild(outputNode);
 
   node.classList.add("gui-toast");
   node.setAttribute("role", "status");

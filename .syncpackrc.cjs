@@ -15,7 +15,7 @@ const config = {
     {
       dependencies: ["typescript"],
       packages: ["**ed-*"],
-      pinVersion: "^5.1.6",
+      pinVersion: "^5.2.2",
     },
   ],
 };
