@@ -257,15 +257,17 @@ pre[class*="language-"] {
 
 /* playground forms */
 
-form > fieldset,
-div {
-  display: grid;
-  grid-gap: 1em;
-  padding: 1em;
-  grid-template-columns: 1fr 2fr;
-  border-color: var(--brand);
-  legend {
-    color: var(--brand);
+#playground {
+  & fieldset,
+  div {
+    display: grid;
+    grid-gap: 1em;
+    padding: 1em;
+    grid-template-columns: 1fr 2fr;
+    border-color: var(--brand);
+    legend {
+      color: var(--brand);
+    }
   }
 }
 
