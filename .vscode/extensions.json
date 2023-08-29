@@ -2,6 +2,7 @@
   "recommendations": [
     "csstools.postcss",
     "vunguyentuan.vscode-postcss",
-    "eseom.nunjucks-template"
+    "eseom.nunjucks-template",
+    "oouo-diogo-perdigao.docthis"
   ]
 }

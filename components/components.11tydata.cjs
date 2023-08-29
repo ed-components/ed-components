@@ -1,4 +1,4 @@
-const path = require("path");
+const path = require("node:path");
 const fs = require("fs");
 const {
   customElementsManifestToMarkdown,
@@ -23,17 +23,23 @@ module.exports = {
       return require(path.join(__dirname, data.id, "package.json"));
     },
     title: ({ isComponent, id }) => (isComponent ? `<${id}> component` : id),
-
-    // generate markdown from jsdoc using custom element manifest
-    // https://github.com/open-wc/custom-elements-manifest/blob/master/packages/to-markdown/README.md
-    htmlAPI: ({ isComponent, id }) => {
+    // Retriev data from the custom-elements
+    manifest: ({ isComponent, id }) => {
       if (!isComponent) {
         return;
       }
       const manifest = JSON.parse(
         fs.readFileSync(`./components/${id}/custom-elements.json`, "utf-8"),
       );
-
+      console.log(manifest.modules[0].declarations[0].members)
+      return manifest
+    },
+    // generate markdown from jsdoc using custom element manifest
+    // https://github.com/open-wc/custom-elements-manifest/blob/master/packages/to-markdown/README.md
+    htmlAPI: ({ isComponent, manifest }) => {
+      if (!isComponent) {
+        return;
+      }
       // TODO render html with 11ty
       const html = md.render(
         customElementsManifestToMarkdown(manifest, {

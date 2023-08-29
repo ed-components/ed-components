@@ -7,6 +7,8 @@
 @import "open-props/src/extra/theme.light.switch.css";
 @import "open-props/src/extra/theme.dark.switch.css";
 @import "open-props/src/props.blue-hsl.css";
+/* TODO buttons exists on themes variations */
+@import "open-props/src/extra/buttons.css";
 
 @import "./prism-themes.postcss";
 @import "./toast/toast.postcss";
@@ -251,4 +253,22 @@ h1 + blockquote {
 pre[class*="language-"] {
   width: 100%;
   overflow-x: scroll;
+}
+
+/* playground forms */
+
+form > fieldset,
+div {
+  display: grid;
+  grid-gap: 1em;
+  padding: 1em;
+  grid-template-columns: 1fr 2fr;
+  border-color: var(--brand);
+  legend {
+    color: var(--brand);
+  }
+}
+
+#innerHTML {
+  font-family: var(--font-mono);
 }

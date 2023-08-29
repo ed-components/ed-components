@@ -1,0 +1,48 @@
+<h2>Playground for &lt;{{ npmPackage.name }}&gt; component</h2>
+<hr/>
+<h3>Settings</h3>
+<form id="settings">
+    <fieldset id="attributes">
+        <legend>Attributes</legend>
+        {% for attr in manifest.modules[0].declarations[0].attributes %}
+                <label for="{{attr.name}}">{{attr.name | upper }}</label>
+                <input name="{{attr.name}}" id="{{attr.name}}" />
+        {% else %}
+        <p>The list of attribues of this component could not be retrieved.</p>
+        {% endfor %}
+    </fieldset>
+    <fieldset id="content">
+        <legend>Content</legend>
+        <label for="innerHTML">innerHTML</label>
+        <textarea id="innerHTML" name="innerHTML" rows="8" placeholder="Enter your message here"></textarea>
+    </fieldset>
+    <div id="submit">
+        <span></span><button type="submit" method= "GET">Share</button>
+    </div>
+</form>
+<hr/>
+<h3>Live preview</h3>
+<output class="live-output" id="{{ id }}">
+    <pre>&lt;{{ id }}&gt;&lt;/{{ id }}&gt;</pre>
+    <{{ id }}></{{ id }}>
+</output>
+
+<script>
+    const form = document.querySelector("#settings");
+    const output = document.querySelector(".live-output");
+    const customElementRegistry = window.customElements;
+    form.addEventListener('keyup', evt => {
+        // create ed-component from form data
+        const formData = new FormData(form);
+        
+        let edComponent = document.createElement(output.id);
+
+        for (let [k, v] of formData.entries()) {
+            edComponent[k] = k === 'innerHTML' ? `\n${v}\n`: v;
+        }
+        output.children[0].innerText = edComponent.outerHTML
+        output.replaceChild(edComponent, output.children[1])
+        }
+    )
+
+</script>

@@ -31,6 +31,11 @@ export class EdSurvey extends HTMLElement {
   connectedCallback() {
     this.question = this.innerHTML ? this.innerHTML : "How are you today?";
     this.shadowRoot.querySelector("p").innerHTML = this.question;
+    const type: "smiley" | "survey" = "smiley";
+    /**
+     * type could be "smiley"(default) or "survey"
+     */
+    this.type = type;
     const div = this.shadowRoot.querySelector("div");
     const { choice, readonly } = this;
     div.innerHTML =
@@ -44,7 +49,11 @@ export class EdSurvey extends HTMLElement {
   }
 
   get type() {
-    return this.getAttribute("type") ?? "smiley";
+    return this.getAttribute("type");
+  }
+
+  set type(type: string) {
+    this.setAttribute("type", type);
   }
 
   set question(question: string) {
