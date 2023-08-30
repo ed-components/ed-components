@@ -22,7 +22,7 @@ module.exports = {
       }
       return require(path.join(__dirname, data.id, "package.json"));
     },
-    title: ({ isComponent, id }) => (isComponent ? `<${id}> component` : id),
+    title: ({ isComponent, id }) => (isComponent ?? `<${id}> component`),
     // Retriev data from the custom-elements
     manifest: ({ isComponent, id }) => {
       if (!isComponent) {

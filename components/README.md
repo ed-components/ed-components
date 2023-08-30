@@ -3,14 +3,13 @@
 > A set of web-components for education.
 
 ## Components
-
 - [`<ed-survey>`](./ed-survey/)
 - [`<ed-quiz>`](./ed-quiz/)
 - TODO ...
 
 ## Development
 
-### Linting with es lint
+### Linting with eslint
 
 Linting config has been moved to the `components` root folder.
 ```sh

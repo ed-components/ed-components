@@ -1,6 +1,6 @@
 {
   "private": "true",
-  "name": "components",
+  "name": "ed-components",
   "description": "A set of web-components for education.",
   "version": "1.0.0",
   "author": "",
