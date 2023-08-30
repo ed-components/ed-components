@@ -31,7 +31,7 @@ export class EdSurvey extends HTMLElement {
   connectedCallback() {
     this.question = this.innerHTML ? this.innerHTML : "How are you today?";
     this.shadowRoot.querySelector("p").innerHTML = this.question;
-    const type: "smiley" | "survey" = "smiley";
+    const type: "smiley" | "survey" = this.type ?? "smiley";
     /**
      * type could be "smiley"(default) or "survey"
      */

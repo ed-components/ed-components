@@ -31,7 +31,7 @@ module.exports = {
       const manifest = JSON.parse(
         fs.readFileSync(`./components/${id}/custom-elements.json`, "utf-8"),
       );
-      console.log(manifest.modules[0].declarations[0].members)
+      // console.log(manifest.modules[0].declarations[0].members)
       return manifest
     },
     // generate markdown from jsdoc using custom element manifest
