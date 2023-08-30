@@ -95,6 +95,11 @@ export class EdSurvey extends HTMLElement {
     // https://stackoverflow.com/a/69104350
 
     const el = evt.target as HTMLInputElement;
+    const choice = el.getAttribute("value");
+
+    // if clicked outside a real choice return
+    if (!choice) return;
+
     const url = this.ownerDocument.location as Location;
     // CustomEvent
     this.dispatchEvent(
@@ -107,7 +112,7 @@ export class EdSurvey extends HTMLElement {
           type: this.type,
           question: this.question,
           verb: "RESPONDED",
-          choice: el.getAttribute("value"),
+          choice: choice,
         },
       }),
     );
