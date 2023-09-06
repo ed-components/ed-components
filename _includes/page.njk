@@ -23,7 +23,7 @@
         {% else %}
             {{ content | safe }}
         {% endif %}
-        {% if id %}
+        {% if isComponent %}
             <script src="/js/{{ id }}.js" type="module"></script>
         {% endif %}
         <script src="/global.js" type="module"></script>
