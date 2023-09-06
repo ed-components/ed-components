@@ -46,3 +46,7 @@ Each `html` source code starting with `<ed-` is turned into an interactive demo.
 ## TODO
 
 - DOC implement search with [Pagefind](https://pagefind.app/)
+
+## References
+
+- [Open UI](https://open-ui.org/research/component-matrix/)

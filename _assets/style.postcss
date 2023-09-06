@@ -242,11 +242,32 @@ h1 + blockquote {
 
 /* ed-components demos */
 .demo {
-  border: var(--border-size-3) solid var(--gray-7);
+  border: var(--border-size-2) solid var(--brand);
   width: 100%;
-  border-radius: var(--radius-3);
-  &:before {
-    content: "DEMO";
+  border-radius: var(--radius-2);
+
+  .live {
+    background: var(--brand);
+    color: var(--gray-2);
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    font-size: var(--font-size-1);
+    font-weight: var(--font-weight-5);
+    font-family: var(--font-sans);
+    padding: 0 var(--size-2);
+    span:first-child {
+      flex: 1;
+    }
+    svg {
+      transition: color 100ms;
+      &:active {
+        color: var(--indigo-7);
+      }
+      &:hover {
+        width: 20px;
+      }
+    }
   }
 }
 

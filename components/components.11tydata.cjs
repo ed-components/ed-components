@@ -22,7 +22,7 @@ module.exports = {
       }
       return require(path.join(__dirname, data.id, "package.json"));
     },
-    title: ({ isComponent, id }) => (isComponent ?? `<${id}> component`),
+    title: ({ isComponent, id }) => isComponent ?? `<${id}> component`,
     // Retriev data from the custom-elements
     manifest: ({ isComponent, id }) => {
       if (!isComponent) {
@@ -32,7 +32,7 @@ module.exports = {
         fs.readFileSync(`./components/${id}/custom-elements.json`, "utf-8"),
       );
       // console.log(manifest.modules[0].declarations[0].members)
-      return manifest
+      return manifest;
     },
     // generate markdown from jsdoc using custom element manifest
     // https://github.com/open-wc/custom-elements-manifest/blob/master/packages/to-markdown/README.md
