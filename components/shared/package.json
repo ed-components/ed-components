@@ -1,0 +1,36 @@
+{
+  "name": "@ed-components/shared",
+  "version": "0.0.0",
+  "description": "Shared code between ed-components.",
+  "author": "Benjamin Abel <dev.abel@free.fr> (lyceum.fr)",
+  "keywords": [
+    "markdown",
+    "web-component"
+  ],
+  "type": "module",
+  "dependencies": {
+    "micromark": "^4.0.0",
+    "micromark-extension-gfm": "^3.0.0",
+    "micromark-extension-math": "^3.0.0"
+  },
+  "devDependencies": {
+    "tslib": "^2.3.1",
+    "typescript": "^5.2.2"
+  },
+  "exports": {
+    ".": "./dist/index.js",
+    "./shared.js": "./dist/shared.js"
+  },
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "repository": "https://github.com/ed-components/ed-components",
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint --ext .ts,.html . --ignore-path .gitignore",
+    "prepublish": "tsc",
+    "start": "tsc && tsc --watch --preserveWatchOutput",
+    "test": "cd .. && npm run test -- --group $npm_package_name",
+    "test:watch": "cd .. && npm run test -- --watch --group $npm_package_name"
+  }
+}

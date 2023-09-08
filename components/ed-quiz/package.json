@@ -11,9 +11,7 @@
   "type": "module",
   "customElements": "custom-elements.json",
   "dependencies": {
-    "micromark": "^4.0.0",
-    "micromark-extension-gfm": "^3.0.0",
-    "micromark-extension-math": "^3.0.0"
+    "@ed-components/shared": "workspace:*"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.4.17",

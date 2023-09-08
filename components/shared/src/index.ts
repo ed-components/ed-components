@@ -1,8 +1,8 @@
-/** @module md2html
+/** @module ytiles
  *
- * Convert tag content to markdown with micromark
+ * Convert content from markdown to html with micromark
  *
- * TODO: handle yaml metadata
+ * TODO: handle yaml metadata to populate attributes
  */
 
 import { micromark } from "micromark";

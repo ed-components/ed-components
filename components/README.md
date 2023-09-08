@@ -3,18 +3,35 @@
 > A set of web-components for education.
 
 ## Components
+
+> Not ready for production yet. These components are used for research.
+
 - [`<ed-survey>`](./ed-survey/)
 - [`<ed-quiz>`](./ed-quiz/)
-- TODO ...
+- [`<ed-num>`](./ed-num/)
+
+
+## User interface layout
+
+Ideas comes from [Edx](https://edx.readthedocs.io/projects/open-edx-building-and-running-a-course/en/open-release-ficus.master/course_components/create_problem.html#the-learner-view-of-a-problem) licensed CC-BY-SA.
+
+
+![The learner view of a problem from edx CC-BY-SA](/images/EdxAnatomyOfExercise.png)
+
+1. Problem text.
+2. Response field.
+3. Rendered answer.
+4. Submit.
+5. Attempts.
+6. Save.
+7. Reset.
+8. Show Answer.
+9. Feedback.
+    
+![Deedbacks view in edx](/images/EdxAnatomyOfExercise2.png)
+
 
 ## Development
-
-### Linting with eslint
-
-Linting config has been moved to the `components` root folder.
-```sh
-npm lint
-```
 
 ### Testing with [Web Test Runner](https://modern-web.dev/docs/test-runner/)
 
@@ -29,4 +46,3 @@ to wtr:
 ```bash
 npm run test -- --group ed-survey
 ```
-

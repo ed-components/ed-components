@@ -1,10 +1,10 @@
 {
-  "name": "ed-survey",
-  "description": "A webcomponent for surveys in education.",
+  "name": "ed-num",
+  "description": "A webcomponent for numeric answers in education.",
   "version": "0.0.0",
   "author": "Benjamin Abel <dev.abel@free.fr> (lyceum.fr)",
   "keywords": [
-    "survey",
+    "numeric",
     "web-component"
   ],
   "type": "module",
@@ -26,7 +26,7 @@
   },
   "exports": {
     ".": "./dist/index.js",
-    "./ed-survey.js": "./dist/ed-survey.js"
+    "./ed-num.js": "./dist/ed-num.js"
   },
   "license": "MIT",
   "main": "dist/index.js",

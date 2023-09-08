@@ -25,7 +25,7 @@ Use https://www.xapijs.dev/ verbs.
 Each component emits Custom `EdEvents` that can be accessed in the `details` attribute.
 
 
-```
+```json
 {
   "date": "2023-08-17T13:58:11.038Z",
   "url": "http://localhost:8080/components/ed-quiz/",
@@ -47,6 +47,21 @@ Each `html` source code starting with `<ed-` is turned into an interactive demo.
 
 - DOC implement search with [Pagefind](https://pagefind.app/)
 
-## References
 
-- [Open UI](https://open-ui.org/research/component-matrix/)
+## Syntax overview
+
+Ed components are sort of cousin of
+[Open Edx Problems](https://edx.readthedocs.io/projects/open-edx-building-and-running-a-course/en/latest/exercises_tools/numerical_input.html#numerical-input-problem-olx-reference).
+
+Open edx use `olx` an xml format to describe problems. As much as possible
+`ed-components` follows the vocabulary used in `olx`, allowing in the future to
+be ablde to convert ed-components content to olx to be used in edx platforms.
+
+However, `ed-components` goal is simplicity, so information is embedded in a
+[Lightweight markup language](https://en.wikipedia.org/wiki/Lightweight_markup_language)
+based on [Markdown](https://en.wikipedia.org/wiki/Markdown).
+
+## References
+### [Open UI](https://open-ui.org/research/component-matrix/)
+
+For presentational content.

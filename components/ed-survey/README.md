@@ -2,9 +2,13 @@
 
 ```html
 <ed-survey>Do you understand what is a web-component?</ed-survey>
+```
 
+As in every ed-component, you can use Markdown as content.
+
+```html
 <ed-survey type="rating">
-  <p>Do you prefer <strong>rating</strong> surveys?</p>
+  Do you prefer **rating** surveys?</p>
 </ed-survey>
 ```
 

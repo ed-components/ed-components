@@ -1,3 +1,5 @@
+import md2Html from "@ed-components/shared";
+
 import "./nudeui/nd-rating.js";
 import "./_EdSmiley.js";
 
@@ -30,7 +32,7 @@ export class EdSurvey extends HTMLElement {
 
   connectedCallback() {
     this.question = this.innerHTML ? this.innerHTML : "How are you today?";
-    this.shadowRoot.querySelector("p").innerHTML = this.question;
+    this.shadowRoot.querySelector("p").innerHTML = md2Html(this.question);
     const type: "smiley" | "survey" = this.type ?? "smiley";
     /**
      * type could be "smiley"(default) or "survey"
