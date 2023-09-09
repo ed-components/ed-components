@@ -62,6 +62,7 @@ However, `ed-components` goal is simplicity, so information is embedded in a
 based on [Markdown](https://en.wikipedia.org/wiki/Markdown).
 
 ## References
-### [Open UI](https://open-ui.org/research/component-matrix/)
 
-For presentational content.
+- [Open UI](https://open-ui.org/research/component-matrix/) for presentational content.
+- [zoo-web-components](https://github.com/zooplus/zoo-web-components/tree/master)
+  bundle vanilla web-components with shared part.
