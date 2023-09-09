@@ -1,4 +1,4 @@
-import md2Html from "@ed-components/shared";
+import md2Html from "@ed-components/common";
 import "./_ed-progress-bar.js";
 import { EdProgressBar } from "./_EdProgressBar.js";
 

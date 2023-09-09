@@ -1,4 +1,4 @@
-import md2Html from "@ed-components/shared";
+import md2Html from "@ed-components/common";
 
 import "./nudeui/nd-rating.js";
 import "./_EdSmiley.js";

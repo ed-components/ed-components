@@ -1,4 +1,4 @@
-import md2Html from "@ed-components/shared";
+import md2Html from "@ed-components/common";
 
 /**
  * This component implements a numeric interaction activitie as defined in xapi spec

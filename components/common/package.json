@@ -1,5 +1,5 @@
 {
-  "name": "@ed-components/shared",
+  "name": "@ed-components/common",
   "version": "0.0.0",
   "description": "Shared code between ed-components.",
   "author": "Benjamin Abel <dev.abel@free.fr> (lyceum.fr)",
@@ -14,21 +14,20 @@
     "micromark-extension-math": "^3.0.0"
   },
   "devDependencies": {
-    "tslib": "^2.3.1",
+    "tslib": "^2.6.2",
     "typescript": "^5.2.2"
   },
   "exports": {
-    ".": "./dist/index.js",
-    "./shared.js": "./dist/shared.js"
+    ".": "./dist/common.js"
   },
   "license": "MIT",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "main": "dist/common.js",
+  "module": "dist/common.js",
   "repository": "https://github.com/ed-components/ed-components",
   "scripts": {
     "build": "tsc",
     "lint": "eslint --ext .ts,.html . --ignore-path .gitignore",
-    "prepublish": "tsc",
+    "prepare": "tsc",
     "start": "tsc && tsc --watch --preserveWatchOutput",
     "test": "cd .. && npm run test -- --group $npm_package_name",
     "test:watch": "cd .. && npm run test -- --watch --group $npm_package_name"

@@ -10,18 +10,18 @@
   "type": "module",
   "customElements": "custom-elements.json",
   "dependencies": {
-    "@ed-components/shared": "workspace:*"
+    "@ed-components/common": "workspace:*"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.4.17",
-    "@open-wc/testing": "^3.1.6",
+    "@open-wc/testing": "^3.2.0",
     "@rollup/plugin-commonjs": "^25.0.4",
     "@rollup/plugin-replace": "^5.0.2",
-    "@types/jest": "^29.5.3",
+    "@types/jest": "^29.5.4",
     "@web/dev-server-esbuild": "^0.4.1",
     "@web/dev-server-rollup": "^0.5.2",
-    "@web/test-runner": "^0.17.0",
-    "tslib": "^2.3.1",
+    "@web/test-runner": "^0.17.1",
+    "tslib": "^2.6.2",
     "typescript": "^5.2.2"
   },
   "exports": {
