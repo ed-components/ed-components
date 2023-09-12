@@ -3,10 +3,20 @@
 > Teach, learn, explore new possibilities in education with these web
 > components.
 
+- **Easy to write** with a
+  [Lightweight markup language](https://en.wikipedia.org/wiki/Lightweight_markup_language)
+  based on [Markdown](https://en.wikipedia.org/wiki/Markdown).
+- **Easy to use**, it can be used without any server with a simple Web browser.
+- **Easy to share, save and reuse** with a file based approach, no server required.
+
 ## White book
 
 ed-components are implemented as web-components and can be used in
 the client-side without any server.
+
+ed-components could be integrated in any LMS or CMS with server-side hydration
+and server-side grading thanks to
+[DOM Events](https://developer.mozilla.org/en-US/docs/Web/API/Event).
 
 A playground is provided for teachers that do not want to install
 anything. Fill a form and submit it to get a shareable url with the form data
@@ -14,7 +24,7 @@ encoded in the url.
 
 ed-components emit events in order to be used in server apps.
 
-ed-components can be exported to various formats using [pandoc]()
+ed-components can be exported to various formats using [pandoc](https://pandoc.org/).
 
 An open-source library of contents is published as a git repo.
 
@@ -54,15 +64,27 @@ Ed components are sort of cousin of
 [Open Edx Problems](https://edx.readthedocs.io/projects/open-edx-building-and-running-a-course/en/latest/exercises_tools/numerical_input.html#numerical-input-problem-olx-reference).
 
 Open edx use `olx` an xml format to describe problems. As much as possible
-`ed-components` follows the vocabulary used in `olx`, allowing in the future to
-be ablde to convert ed-components content to olx to be used in edx platforms.
+`ed-components` follows the vocabulary used in `olx`, enabling an easy
+conversion of ed-components content to olx to be used in edx platforms.
 
 However, `ed-components` goal is simplicity, so information is embedded in a
 [Lightweight markup language](https://en.wikipedia.org/wiki/Lightweight_markup_language)
 based on [Markdown](https://en.wikipedia.org/wiki/Markdown).
+
+Also, as `ed-components` can be used in the client-side,
+[script](https://edx.readthedocs.io/projects/open-edx-building-and-running-a-course/en/latest/exercises_tools/custom_python.html#)
+programmatic graders should use javascript instead of python.
 
 ## References
 
 - [Open UI](https://open-ui.org/research/component-matrix/) for presentational content.
 - [zoo-web-components](https://github.com/zooplus/zoo-web-components/tree/master)
   bundle vanilla web-components with shared part.
+
+## Roadmap
+
+1. Split quiz component into a single choice question `<ed-sc??>` and the
+   wrapper that would enable multiple questions of any kind in his content with
+   progress and result.
+2. `ed-speech` component.
+3. Try `bun` instead of pnpm.
