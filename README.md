@@ -53,11 +53,6 @@ The website is build using eleventy. Each `README.md` file is turned into a `htm
 
 Each `html` source code starting with `<ed-` is turned into an interactive demo.
 
-## TODO
-
-- DOC implement search with [Pagefind](https://pagefind.app/)
-
-
 ## Syntax overview
 
 Ed components are sort of cousin of
@@ -87,4 +82,5 @@ programmatic graders should use javascript instead of python.
    wrapper that would enable multiple questions of any kind in his content with
    progress and result.
 2. `ed-speech` component.
-3. Try `bun` instead of pnpm.
+3. Docs: implement search with [Pagefind](https://pagefind.app/)
+4. DEV: Try `bun` instead of pnpm.
