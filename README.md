@@ -30,7 +30,7 @@ An open-source library of contents is published as a git repo.
 
 ## events
 
-Use https://www.xapijs.dev/ verbs.
+Use https://www.xapijs.dev/ verbs, see <https://doc.xapi.fr/profiles/xapi/taxonomy/verbs>
 
 Each component emits Custom `EdEvents` that can be accessed in the `details` attribute.
 

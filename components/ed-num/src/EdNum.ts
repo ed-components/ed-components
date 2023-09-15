@@ -1,10 +1,13 @@
 import md2Html from "@ed-components/common";
 
 /**
- * This component implements a numeric interaction activitie as defined in xapi spec
- * ie, an interaction which requires a numeric response from the learner.
+ * This component implements a choice interaction activitie as defined in xapi spec
+ * ie, an interaction with a number of possible choices from which the learner
+   can select. This includes interactions in which the learner can select only
+   one answer from the list and those where the learner can select multiple TODO NOT FOR NOW
+   items.
  * see https://github.com/adlnet/xAPI-Spec/blob/master/xAPI-Data.md#interaction-activities
- *
+ * 
  * @export
  * @class EdNum
  * @extends {HTMLElement}
