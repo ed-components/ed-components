@@ -11,7 +11,7 @@
   "type": "module",
   "customElements": "custom-elements.json",
   "dependencies": {
-    "@ed-components/common": "workspace:*"
+    "@ed-components/common": "link:../common"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.4.17",
@@ -25,7 +25,7 @@
   },
   "exports": {
     ".": "./dist/index.js",
-    "./ed-survey.js": "./dist/ed-quiz.js"
+    "./ed-quiz.js": "./dist/ed-quiz.js"
   },
   "license": "MIT",
   "main": "dist/index.js",

@@ -23,24 +23,6 @@ _Import from CDN_ **TODO**
 ></script>
 ```
 
-## Usage
-
-<!--
-Attributes
-
-- title - the title that displays on the card
-- type - the content type ()
--->
-
-<!--
-
-
-Properties
-
-- title - the title that displays on the card
-- type - the content type ()
--->
-
 ### Basic Usage
 
 The `ed-quiz` element accepts [gfm markdown](https://github.github.com/gfm/) for
@@ -48,47 +30,43 @@ it's content. Each
 [task-list](https://github.github.com/gfm/#task-list-items-extension-) is turned
 into a single choice question.
 
+**Warning: Blank lines are not allowed inside chidrens of ed-quie.**
+
 
 ```html
 <ed-quiz>
-  ## `mdquiz` example
+## `mdquiz` example
 
-  Note that there is **only one true answer per question**.
 
-  <ed-sc>
-  1. This image shows:
+Note that there is **only one true answer per question**.
 
-     ![a fruit example](https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Garden_strawberry_%28Fragaria_%C3%97_ananassa%29_halved.jpg/320px-Garden_strawberry_%28Fragaria_%C3%97_ananassa%29_halved.jpg)
+<ed-num>
+How old are you?
+</ed-num>
 
-      - [ ] a raspberry
-      - [x] a strawberry.
-  
-  2. Another QCM
+<ed-survey type="rating">
+Do you like pastas.
+</ed-survey>
 
-      - [ ] First _false_ answer
-      - [x] Second **true** answer
-      - [ ] Third _false_ answer
-      - [ ] LONG ANSWER: Third _false_ answer Lorem ipsum dolor sit amet,
-        consectetur adipisicing elit. Laboriosam, accusamus. Iste beatae
-        necessitatibus quibusdam odit quas nobis rerum nesciunt harum modi
-        exercitationem reprehenderit, quisquam tenetur sint maxime consequuntur?
-        Adipisci, fuga.
-  
-  3. Some inline maths $\eta = \frac{m}{G_m}$, and display mode:
+<ed-sc>
+# WARNING BLANK LINESARE NOT ALLOWED
+1. Some inline maths $\eta = \frac{m}{G_m}$, and display mode: </br>
+   $$
+   L = \frac{1}{2} \rho v^2 S C_L
+   $$   
+   - [x] true
+   - [ ] false
+</ed-sc>    
 
-      $$
-      L = \frac{1}{2} \rho v^2 S C_L
-      $$
-
-      - [x] true
-      - [ ] false
-  <ed-sc>    
 </ed-quiz>
 ```
 
+
+
 You can customize quiz `title` attribute(default Quiz).
 
-```html
+
+<!-- ```html
 <ed-quiz title="My wonderful quiz">
   ## `mdquiz` example
 
@@ -117,7 +95,7 @@ You can customize quiz `title` attribute(default Quiz).
       - [x] true
       - [ ] false
 </ed-quiz>
-```
+``` -->
 
 ## micromark-plugins
 

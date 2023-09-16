@@ -28,7 +28,6 @@
     "build:css": "postcss \"_assets/style.postcss\" --base . --dir . --ext .css --config postcss.config.cjs",
     "build:html": "npx @11ty/eleventy",
     "build:js": "for comp in components/ed-*/;do comp=$(basename $comp) && echo $comp && esbuild components/$comp/src/$comp.ts --bundle --minify --platform=neutral --outdir=_site/js;done",
-    "build:doc:js": "node scripts/doc-build-js",
     "build:manifest": "pnpm -r analyze",
     "clean:dist": "find ./components -type d -name dist -exec rm -r \"{}\" \\; && echo 'Success: Dist cleaned'",
     "clean:node_modules": "find . -name \"node_modules\" -type d -exec rm -r \"{}\" \\;",
@@ -39,5 +38,8 @@
     "watch:html": "npx @11ty/eleventy --serve",
     "watch:js": "onchange components/ed-*/src/*.ts -- node scripts/doc-build-js.js {{changed}}",
     "watch:manifest": "pnpm -r analyze -- --watch"
+  },
+  "dependencies": {
+    "onchange": "^7.1.0"
   }
 }

@@ -1,9 +1,8 @@
+// @ts-nocheck
+
 import md2Html from "@ed-components/common";
 import "./_ed-progress-bar.js";
 import { EdProgressBar } from "./_EdProgressBar.js";
-
-// TODO just for dev remove later
-import "../../ed-sc/src/ed-sc.js";
 
 const xmlns = "http://www.w3.org/2000/svg";
 const template = document.createElement("template");
@@ -65,9 +64,8 @@ export class EdQuiz extends HTMLElement {
 
     this.title = this.title ? this.title : "Quiz";
 
-    // Prepare content
-    let contents = EdQuiz._dedentText(this.textContent);
-    contents = md2Html(contents);
+    // parse markdown into html
+    const contents = md2Html(this.innerHTML);
 
     // work on the DocumentFragment content before mounting it
     const fragment = template.content;
@@ -100,7 +98,7 @@ export class EdQuiz extends HTMLElement {
           try {
             if (this.goodAnswers.length !== nQue) {
               throw new Error(
-                "md-quizz error there's must be only one valid answer per question",
+                "md-quiz error there's must be only one valid answer per question",
               );
             }
           } catch (error) {
@@ -268,42 +266,6 @@ export class EdQuiz extends HTMLElement {
       "percent",
       String(Math.round((100 * score) / nAnswers)),
     );
-  }
-
-  /**
-   * De-dents the code by getting the padding from the first line,
-   * then removes the same indent amount padding from the rest of the lines
-   *
-   * @param {string} text - the text to dedent
-   * @returns {string} the dedented text
-   */
-  private static _dedentText(text: string) {
-    if (text.length === 0) return text;
-    const lines = text.split("\n");
-
-    // remove the first line if it is an empty line
-    if (lines[0] === "") lines.splice(0, 1);
-
-    const initline = lines[0];
-    let fwdPad = 0;
-    const usingTabs = initline[0] === "\t";
-    const checkChar = usingTabs ? "\t" : " ";
-
-    while (initline[fwdPad] === checkChar) {
-      fwdPad += 1;
-    }
-
-    const fixedLines = [];
-
-    for (const line of lines) {
-      fixedLines.push(line.substring(fwdPad));
-    }
-
-    if (fixedLines[fixedLines.length - 1] === "") {
-      fixedLines.splice(fixedLines.length - 1, 1);
-    }
-
-    return fixedLines.join("\n");
   }
 
   /**

@@ -131,7 +131,7 @@ importers:
   components/ed-num:
     dependencies:
       '@ed-components/common':
-        specifier: workspace:*
+        specifier: link:../common
         version: link:../common
     devDependencies:
       '@custom-elements-manifest/analyzer':
@@ -168,7 +168,7 @@ importers:
   components/ed-quiz:
     dependencies:
       '@ed-components/common':
-        specifier: workspace:*
+        specifier: link:../common
         version: link:../common
     devDependencies:
       '@custom-elements-manifest/analyzer':
@@ -199,7 +199,7 @@ importers:
   components/ed-sc:
     dependencies:
       '@ed-components/common':
-        specifier: workspace:*
+        specifier: link:../common
         version: link:../common
     devDependencies:
       '@custom-elements-manifest/analyzer':
@@ -230,7 +230,7 @@ importers:
   components/ed-survey:
     dependencies:
       '@ed-components/common':
-        specifier: workspace:*
+        specifier: link:../common
         version: link:../common
     devDependencies:
       '@custom-elements-manifest/analyzer':

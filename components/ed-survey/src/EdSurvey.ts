@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import md2Html from "@ed-components/common";
 
 import "./nudeui/nd-rating.js";

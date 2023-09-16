@@ -4,7 +4,7 @@ module.exports = function (eleventyConfig) {
   // ignore design files
   eleventyConfig.ignores.add("design/*");
   eleventyConfig.watchIgnores.add("design/*");
-  eleventyConfig.addWatchTarget("./components/**/*.ts");
+  // eleventyConfig.addWatchTarget("./components/**/*.ts");
   eleventyConfig.addWatchTarget("./**/README.md");
 
   // prismjs plugin
