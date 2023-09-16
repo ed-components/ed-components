@@ -11,7 +11,7 @@ import { math, mathHtml } from "micromark-extension-math";
 
 export default function md2html(md: string) {
   return micromark(md, {
-    allowDangerousHtml: true,
+    allowDangerousHtml: false,
     extensions: [gfm(), math()],
     htmlExtensions: [gfmHtml(), mathHtml({ output: "mathml" })],
   });

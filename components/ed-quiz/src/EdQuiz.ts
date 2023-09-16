@@ -2,6 +2,9 @@ import md2Html from "@ed-components/common";
 import "./_ed-progress-bar.js";
 import { EdProgressBar } from "./_EdProgressBar.js";
 
+// TODO just for dev remove later
+import "../../ed-sc/src/ed-sc.js";
+
 const xmlns = "http://www.w3.org/2000/svg";
 const template = document.createElement("template");
 
@@ -24,104 +27,8 @@ template.innerHTML = `
       z-index: 10;
     }
 
-    h1 {
-      font-size: calc(1.425rem + 2.1vw);
-      font-weight: 300;
-      line-height: 1.1;
-    }
-    
-    h2 {
-      font-size: calc(1.375rem + 1.5vw);
-      font-weight: 300;
-      line-height: 1.1;
-    }
-
-    input {
-      /* remove the checkbox from flow */
-      position: absolute;
-  
-      /* hide it visually */
-      opacity: 0.00001;
-  
-      /* tweak size and position if needed */
-      width: 1.9em;
-      height: 1.9em;
-
-      z-index: 10;
-
-    }
-    
-
-    input:disabled {
-      cursor: not-allowed;
-    }
-    
-    li.answer {
-      font-size: 1.1em;
-      left: -2em;
-      line-height: 1.6;
-      list-style-type: none;
-      position: relative;
-    }
-    
-    svg {
-      display: inline;
-      width: 1.3em;
-      height: 1.3em;
-      color: black;
-      position: relative;
-      top: 0.3em;
-      position: middle;
-    }
-    .box {
-      stroke-dasharray: 320;
-      stroke-dashoffset: 0;
-      /*fill: white;*/
-      transition: stroke-dashoffset 0.3s linear;
-    }
-    input:checked + svg .box {
-      stroke-dashoffset: 320;
-    }
-    .check {
-      color: var(--green-7, #37b24d);
-      stroke-dasharray: 95;
-      stroke-dashoffset: 95;
-      fill: none;
-      transition: stroke-dashoffset 0.3s linear;
-    }
-    .check {
-      stroke-dasharray: 95;
-      stroke-dashoffset: 95;
-      fill: none;
-      transition: stroke-dashoffset 0.3s linear;
-    }
-    li.good-answer input:checked + svg .check {
-      color: var(--green-7, g#37b24d);
-      stroke-dashoffset: 0;
-    }
-    li.bad-answer input:checked + svg .check  {
-      color: var(--red-7, #f03e3e);
-      stroke-dashoffset: 0;
-    }
-    .cross {
-      color: var(--red-7, #f03e3e);
-      fill: none;
-      transition: stroke-dashoffset 0.3s linear;
-    }
-    li.bad-answer input:checked + svg .cross{
-      stroke-dashoffset: 0;
-    }
-    li.bad-answer {
-      text-decoration-line: line-through;
-    }
     #note {
       scroll-margin: 195px;
-    }
-    .math-inline {
-      font-size: 1.3em;
-    }
-    .math-display {
-      font-size: 1.5em;
     }
   </style>
   <article id="quiz">

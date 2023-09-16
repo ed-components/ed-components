@@ -32,6 +32,7 @@ it's content. Each
 [task-list](https://github.github.com/gfm/#task-list-items-extension-) is turned
 into a single choice question.
 
+TODO: can it accept multiple questions? multiple answers?
 
 ```html
 <ed-sc>

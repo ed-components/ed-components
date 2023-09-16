@@ -55,13 +55,14 @@ into a single choice question.
 
   Note that there is **only one true answer per question**.
 
+  <ed-sc>
   1. This image shows:
 
      ![a fruit example](https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Garden_strawberry_%28Fragaria_%C3%97_ananassa%29_halved.jpg/320px-Garden_strawberry_%28Fragaria_%C3%97_ananassa%29_halved.jpg)
 
       - [ ] a raspberry
       - [x] a strawberry.
-
+  
   2. Another QCM
 
       - [ ] First _false_ answer
@@ -81,6 +82,7 @@ into a single choice question.
 
       - [x] true
       - [ ] false
+  <ed-sc>    
 </ed-quiz>
 ```
 

@@ -28,6 +28,7 @@
     "build:css": "postcss \"_assets/style.postcss\" --base . --dir . --ext .css --config postcss.config.cjs",
     "build:html": "npx @11ty/eleventy",
     "build:js": "for comp in components/ed-*/;do comp=$(basename $comp) && echo $comp && esbuild components/$comp/src/$comp.ts --bundle --minify --platform=neutral --outdir=_site/js;done",
+    "build:doc:js": "node scripts/doc-build-js",
     "build:manifest": "pnpm -r analyze",
     "clean:dist": "find ./components -type d -name dist -exec rm -r \"{}\" \\; && echo 'Success: Dist cleaned'",
     "clean:node_modules": "find . -name \"node_modules\" -type d -exec rm -r \"{}\" \\;",
@@ -36,7 +37,7 @@
     "start": "npx concurrently -n w: npm:watch:*",
     "watch:css": "postcss \"_assets/style.postcss\" --verbose --base . --dir . --ext .css --config postcss.config.cjs --watch",
     "watch:html": "npx @11ty/eleventy --serve",
-    "watch:js": "for comp in components/ed-*/;do comp=$(basename $comp) && esbuild components/$comp/src/$comp.ts --watch=forever --bundle --outdir=_site/js & echo $comp;done",
+    "watch:js": "onchange components/ed-*/src/*.ts -- node scripts/doc-build-js.js {{changed}}",
     "watch:manifest": "pnpm -r analyze -- --watch"
   }
 }
