@@ -25,12 +25,15 @@
         {% endif %}
         {% if isComponent %}
             <script src="/js/{{ id }}.js" type="module"></script>
+
+            {% if npmPackage.name == "ed-quiz" %}
+            {# ed-quiz is wrapper for all other packages #}
+            <script src="/js/ed-num.js" type="module"></script>
+            <script src="/js/ed-sc.js" type="module"></script>
+            <script src="/js/ed-survey.js" type="module"></script>
+            {% endif %}
         {% endif %}
-        {# TODO juste pour tester #}
-        <script src="/js/ed-sc.js" type="module"></script>
-        <script src="/js/ed-quiz.js" type="module"></script>
-        <script src="/js/ed-survey.js" type="module"></script>
-        <script src="/js/ed-num.js" type="module"></script>
+               
         <script src="/global.js" type="module"></script>
         <script src="/theme-toggle.js"></script>
         {% if isComponent %}

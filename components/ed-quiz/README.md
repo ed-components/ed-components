@@ -30,7 +30,7 @@ it's content. Each
 [task-list](https://github.github.com/gfm/#task-list-items-extension-) is turned
 into a single choice question.
 
-**Warning: Blank lines are not allowed inside chidrens of ed-quie.**
+**Warning: Blank lines are not allowed inside ed-components chidren of ed-quiz.**
 
 
 ```html
@@ -49,7 +49,6 @@ Do you like pastas.
 </ed-survey>
 
 <ed-sc>
-# WARNING BLANK LINESARE NOT ALLOWED
 1. Some inline maths $\eta = \frac{m}{G_m}$, and display mode: </br>
    $$
    L = \frac{1}{2} \rho v^2 S C_L

@@ -78,9 +78,7 @@ programmatic graders should use javascript instead of python.
 
 ## Roadmap
 
-1. Split quiz component into a single choice question `<ed-sc??>` and the
-   wrapper that would enable multiple questions of any kind in his content with
-   progress and result.
+1. Enable blank lines in ed components children of ed-quiz.
 2. `ed-speech` component.
 3. Docs: implement search with [Pagefind](https://pagefind.app/)
 4. DEV: Try `bun` instead of pnpm.
