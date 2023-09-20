@@ -72,6 +72,7 @@ programmatic graders should use javascript instead of python.
 
 ## References
 
+- [Web components Guide](https://webcomponents.guide)
 - [Open UI](https://open-ui.org/research/component-matrix/) for presentational content.
 - [zoo-web-components](https://github.com/zooplus/zoo-web-components/tree/master)
   bundle vanilla web-components with shared part.
@@ -79,6 +80,5 @@ programmatic graders should use javascript instead of python.
 ## Roadmap
 
 1. Enable blank lines in ed components children of ed-quiz.
-2. `ed-speech` component.
-3. Docs: implement search with [Pagefind](https://pagefind.app/)
-4. DEV: Try `bun` instead of pnpm.
+2. Docs: implement search with [Pagefind](https://pagefind.app/)
+3. DEV: Try `bun` instead of pnpm.

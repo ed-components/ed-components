@@ -6,14 +6,20 @@
 
 > Not ready for production yet. These components are used for research.
 
-- [`<ed-survey>`](./ed-survey/)
-- [`<ed-quiz>`](./ed-quiz/)
-- [`<ed-num>`](./ed-num/)
+Wrapper component: [`<ed-quiz>`](./ed-quiz/)
 
+Single answer components.
+
+- [`<ed-survey>`](./ed-survey/)
+- [`<ed-num>`](./ed-num/)
+- [`<ed-speech>`](./ed-speech/)
+- [`<ed-sc>`](./ed-sc/)
 
 ## User interface layout
 
-Ideas comes from [Edx](https://edx.readthedocs.io/projects/open-edx-building-and-running-a-course/en/open-release-ficus.master/course_components/create_problem.html#the-learner-view-of-a-problem) licensed CC-BY-SA.
+Ideas comes from
+[Edx](https://edx.readthedocs.io/projects/open-edx-building-and-running-a-course/en/open-release-ficus.master/course_components/create_problem.html#the-learner-view-of-a-problem)
+licensed CC-BY-SA.
 
 
 ![The learner view of a problem from edx CC-BY-SA](/images/EdxAnatomyOfExercise.png)
@@ -28,8 +34,7 @@ Ideas comes from [Edx](https://edx.readthedocs.io/projects/open-edx-building-and
 8. Show Answer.
 9. Feedback.
     
-![Deedbacks view in edx](/images/EdxAnatomyOfExercise2.png)
-
+![Feedbacks view in edx](/images/EdxAnatomyOfExercise2.png)
 
 ## Development
 

@@ -131,7 +131,7 @@ importers:
   components/ed-num:
     dependencies:
       '@ed-components/common':
-        specifier: link:../common
+        specifier: workspace:*
         version: link:../common
     devDependencies:
       '@custom-elements-manifest/analyzer':
@@ -168,7 +168,7 @@ importers:
   components/ed-quiz:
     dependencies:
       '@ed-components/common':
-        specifier: link:../common
+        specifier: workspace:*
         version: link:../common
     devDependencies:
       '@custom-elements-manifest/analyzer':
@@ -199,7 +199,7 @@ importers:
   components/ed-sc:
     dependencies:
       '@ed-components/common':
-        specifier: link:../common
+        specifier: workspace:*
         version: link:../common
     devDependencies:
       '@custom-elements-manifest/analyzer':
@@ -227,10 +227,47 @@ importers:
         specifier: ^5.2.2
         version: 5.2.2
 
+  components/ed-speech:
+    dependencies:
+      '@ed-components/common':
+        specifier: workspace:*
+        version: link:../common
+    devDependencies:
+      '@custom-elements-manifest/analyzer':
+        specifier: ^0.4.17
+        version: 0.4.17
+      '@open-wc/testing':
+        specifier: ^3.2.0
+        version: 3.2.0
+      '@rollup/plugin-commonjs':
+        specifier: ^25.0.4
+        version: 25.0.4
+      '@rollup/plugin-replace':
+        specifier: ^5.0.2
+        version: 5.0.2
+      '@types/jest':
+        specifier: ^29.5.4
+        version: 29.5.4
+      '@web/dev-server-esbuild':
+        specifier: ^0.4.1
+        version: 0.4.1
+      '@web/dev-server-rollup':
+        specifier: ^0.5.2
+        version: 0.5.2
+      '@web/test-runner':
+        specifier: ^0.17.1
+        version: 0.17.1(typescript@5.2.2)
+      tslib:
+        specifier: ^2.6.2
+        version: 2.6.2
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
+
   components/ed-survey:
     dependencies:
       '@ed-components/common':
-        specifier: link:../common
+        specifier: workspace:*
         version: link:../common
     devDependencies:
       '@custom-elements-manifest/analyzer':

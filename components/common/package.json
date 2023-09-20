@@ -1,7 +1,7 @@
 {
   "name": "@ed-components/common",
-  "version": "0.0.0",
   "description": "Shared code between ed-components.",
+  "version": "0.0.0",
   "author": "Benjamin Abel <dev.abel@free.fr> (lyceum.fr)",
   "keywords": [
     "markdown",

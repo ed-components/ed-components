@@ -1,5 +1,8 @@
 {
   "private": true,
+  "dependencies": {
+    "onchange": "^7.1.0"
+  },
   "devDependencies": {
     "@11ty/eleventy": "^2.0.1",
     "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.0",
@@ -36,10 +39,7 @@
     "start": "npx concurrently -n w: npm:watch:*",
     "watch:css": "postcss \"_assets/style.postcss\" --verbose --base . --dir . --ext .css --config postcss.config.cjs --watch",
     "watch:html": "npx @11ty/eleventy --serve",
-    "watch:js": "onchange components/ed-*/src/*.ts -- node scripts/doc-build-js.js {{changed}}",
+    "watch:js": "npm run build && onchange components/ed-*/src/*.ts -- node scripts/doc-build-js.js {{changed}}",
     "watch:manifest": "pnpm -r analyze -- --watch"
-  },
-  "dependencies": {
-    "onchange": "^7.1.0"
   }
 }
