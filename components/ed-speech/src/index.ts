@@ -1,1 +1,1 @@
-export { EdSurvey } from "./EdSpeech.js";
+export { EdSpeechElement as EdSurvey } from "./EdSpeech.js";

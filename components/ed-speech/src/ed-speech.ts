@@ -1,3 +1,3 @@
-import { EdSurvey } from "./EdSpeech.js";
+import { EdSpeechElement } from "./EdSpeech.js";
 
-window.customElements.define("ed-speech", EdSurvey);
+window.customElements.define("ed-speech", EdSpeechElement);

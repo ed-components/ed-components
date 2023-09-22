@@ -7,7 +7,11 @@ let ignoreOnend = false;
 let recognizing = false;
 
 // This component implements text to speech using web speech api
-export class EdSurvey extends HTMLElement {
+export class EdSpeechElement extends HTMLElement {
+  static define() {
+    customElements.define("ed-speech", this);
+  }
+
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
@@ -82,7 +86,7 @@ export class EdSurvey extends HTMLElement {
       <p class="question" aria-label="question"></p>
       <button id="mic-button" style="display: none;">
         <!-- from bootstrap icons -->
-        <svg class="mic" role="icon" aria-label="Start microphone" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+        <svg class="mic" aria-label="Start microphone" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
           fill="currentColor" viewBox="0 0 16 16">
           <title>Mic</title>
           <path
