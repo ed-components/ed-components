@@ -5,6 +5,10 @@ const template = document.createElement("template");
 
 template.innerHTML = `
   <style>
+  :host {
+      display: block;
+    }
+
     article {
       font-family: var(--font-sans, system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif);
       margin-top: 1rem;
@@ -116,13 +120,12 @@ template.innerHTML = `
     }
   </style>
   <article id="quiz">
-  <section id="title"></section>
-    <section id="content">
-    </section>
+  <section id="content"></section>
   </article>
   `;
 
 export class EdScElement extends HTMLElement {
+  question: string;
   static define() {
     customElements.define("ed-sc", this);
   }
@@ -131,13 +134,10 @@ export class EdScElement extends HTMLElement {
     super();
     this.attachShadow({ mode: "open" });
     this.checkAnswer = this.checkAnswer.bind(this);
+    this.question = "";
   }
 
   async connectedCallback() {
-    this.style.display = "block";
-
-    this.title = this.title ? this.title : "Quiz";
-
     // parse markdown into html
     const contents = md2Html(this.innerHTML);
 
@@ -145,73 +145,62 @@ export class EdScElement extends HTMLElement {
     const fragment = template.content;
 
     fragment.querySelector("#content").innerHTML = contents.trim();
-    fragment.querySelector("#title").innerHTML = this.title;
 
     // prepare html
-    // retrieve goodAnswers
-    let nQue = 0;
-    fragment.querySelectorAll("ol > li").forEach((q: HTMLElement) => {
-      let nAns = 0;
-      nQue += 1;
-      q.className = "question";
-      q.id = `quest-${nQue}`;
-      q.dataset.nque = String(nQue);
-      q.querySelectorAll("ul > li").forEach((a: HTMLLIElement) => {
-        nAns += 1;
-        a.className = "answer";
-        a.dataset.nque = String(nQue);
-        a.dataset.nans = String(nAns);
+    let nAns = 0;
+    fragment.querySelectorAll("ul > li").forEach((a: HTMLLIElement) => {
+      nAns += 1;
+      a.className = "answer";
+      a.dataset.nans = String(nAns);
 
-        // handle answers
-        const input = a.querySelector("input");
-        input.removeAttribute("disabled");
-        // is it a good answer?
-        if (input.checked) {
-          input.removeAttribute("checked");
-        }
-        // append svg after input
-        const svgInput = document.createElementNS(xmlns, "svg");
+      // handle answers
+      const input = a.querySelector("input");
+      input.removeAttribute("disabled");
+      // is it a good answer?
+      if (input.checked) {
+        input.removeAttribute("checked");
+      }
+      // append svg after input
+      const svgInput = document.createElementNS(xmlns, "svg");
 
-        svgInput.setAttributeNS(null, "viewBox", "0 0 100 100");
-        svgInput.setAttributeNS(null, "stroke-linecap", "round");
+      svgInput.setAttributeNS(null, "viewBox", "0 0 100 100");
+      svgInput.setAttributeNS(null, "stroke-linecap", "round");
 
-        // <path class="box" d="M82,89H18c-3.87,0-7-3.13-7-7V18c0-3.87,3.13-7,7-7h64c3.87,0,7,3.13,7,7v64C89,85.87,85.87,89,82,89z"/>
-        const box = document.createElementNS(xmlns, "path");
-        box.setAttributeNS(null, "class", "box");
-        box.setAttributeNS(
-          null,
-          "d",
-          "M82,89H18c-3.87,0-7-3.13-7-7V18c0-3.87,3.13-7,7-7h64c3.87,0,7,3.13,7,7v64C89,85.87,85.87,89,82,89z",
-        );
-        box.setAttributeNS(null, "fill", "none");
-        box.setAttributeNS(null, "stroke", "currentColor");
-        box.setAttributeNS(null, "stroke-width", "9px");
-        svgInput.appendChild(box);
-        // <polyline class="check" points="25.5,53.5 39.5,67.5 72.5,34.5 "/>
-        const check = document.createElementNS(xmlns, "polyline");
-        check.setAttributeNS(null, "class", "check");
-        check.setAttributeNS(null, "points", "20,53.5 40,75 80,25");
-        check.setAttributeNS(null, "fill", "currentColor");
-        check.setAttributeNS(null, "stroke", "currentColor");
-        check.setAttributeNS(null, "stroke-width", "13");
-        // console.log(check.getTotalLength())
-        // check.setAttributeNS(null, 'stroke-dashoffset', 0)
-        svgInput.appendChild(check);
-        // <path class="cross" d="M10,90L90,10M10,10L90,90 " fill="none" stroke="currentColor" stroke-width="7px"></path>
-        const cross = document.createElementNS(xmlns, "path");
-        cross.setAttributeNS(null, "class", "cross");
-        cross.setAttributeNS(null, "d", "M10,90L90,10M10,10L90,90");
-        cross.setAttributeNS(null, "fill", "currentColor");
-        cross.setAttributeNS(null, "stroke", "currentColor");
-        cross.setAttributeNS(null, "stroke-width", "13");
-        const crossPathLength = String(cross.getTotalLength());
-        cross.setAttributeNS(null, "stroke-dasharray", crossPathLength);
-        cross.setAttributeNS(null, "stroke-dashoffset", crossPathLength);
-        svgInput.appendChild(cross);
-        input.insertAdjacentElement("afterend", svgInput);
-      });
+      // <path class="box" d="M82,89H18c-3.87,0-7-3.13-7-7V18c0-3.87,3.13-7,7-7h64c3.87,0,7,3.13,7,7v64C89,85.87,85.87,89,82,89z"/>
+      const box = document.createElementNS(xmlns, "path");
+      box.setAttributeNS(null, "class", "box");
+      box.setAttributeNS(
+        null,
+        "d",
+        "M82,89H18c-3.87,0-7-3.13-7-7V18c0-3.87,3.13-7,7-7h64c3.87,0,7,3.13,7,7v64C89,85.87,85.87,89,82,89z",
+      );
+      box.setAttributeNS(null, "fill", "none");
+      box.setAttributeNS(null, "stroke", "currentColor");
+      box.setAttributeNS(null, "stroke-width", "9px");
+      svgInput.appendChild(box);
+      // <polyline class="check" points="25.5,53.5 39.5,67.5 72.5,34.5 "/>
+      const check = document.createElementNS(xmlns, "polyline");
+      check.setAttributeNS(null, "class", "check");
+      check.setAttributeNS(null, "points", "20,53.5 40,75 80,25");
+      check.setAttributeNS(null, "fill", "currentColor");
+      check.setAttributeNS(null, "stroke", "currentColor");
+      check.setAttributeNS(null, "stroke-width", "13");
+      // console.log(check.getTotalLength())
+      // check.setAttributeNS(null, 'stroke-dashoffset', 0)
+      svgInput.appendChild(check);
+      // <path class="cross" d="M10,90L90,10M10,10L90,90 " fill="none" stroke="currentColor" stroke-width="7px"></path>
+      const cross = document.createElementNS(xmlns, "path");
+      cross.setAttributeNS(null, "class", "cross");
+      cross.setAttributeNS(null, "d", "M10,90L90,10M10,10L90,90");
+      cross.setAttributeNS(null, "fill", "currentColor");
+      cross.setAttributeNS(null, "stroke", "currentColor");
+      cross.setAttributeNS(null, "stroke-width", "13");
+      const crossPathLength = String(cross.getTotalLength());
+      cross.setAttributeNS(null, "stroke-dasharray", crossPathLength);
+      cross.setAttributeNS(null, "stroke-dashoffset", crossPathLength);
+      svgInput.appendChild(cross);
+      input.insertAdjacentElement("afterend", svgInput);
     });
-
     // mount template
     this.shadowRoot.appendChild(fragment.cloneNode(true));
 
@@ -219,10 +208,8 @@ export class EdScElement extends HTMLElement {
     this.shadowRoot
       .querySelectorAll("li.answer")
       .forEach((ans: HTMLLIElement) => {
-        const nQue = ans.dataset.nque;
         const nAns = ans.dataset.nans;
         ans.querySelectorAll("input").forEach((input: HTMLElement) => {
-          input.dataset.nque = nQue;
           input.dataset.nans = nAns;
           // get a reference of the function
           // see https://stackoverflow.com/a/22870717
@@ -232,32 +219,13 @@ export class EdScElement extends HTMLElement {
       });
   }
 
-  static get observedAttributes() {
-    return ["title"];
-  }
-
-  get title() {
-    return this.getAttribute("title");
-  }
-
-  set title(value) {
-    this.setAttribute("title", value);
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (oldValue !== newValue) {
-      this[name] = newValue;
-    }
-  }
-
   checkAnswer(evt) {
     const el = evt.target;
-    const nQue = Number(el.dataset.nque);
     const nAns = Number(el.dataset.nans);
 
     // Update checks
     // disables all inputs
-    this.shadowRoot.querySelectorAll(`#quest-${nQue} li`).forEach((li, i) => {
+    this.shadowRoot.querySelectorAll(`li`).forEach((li, i) => {
       const input = li.querySelector("input");
 
       input.setAttribute("disabled", "");
@@ -291,7 +259,6 @@ export class EdScElement extends HTMLElement {
    */
   private _handleResponse(evt: Event) {
     const el = evt.target as HTMLInputElement;
-    const nQue = Number(el.dataset.nque);
     const nAns = Number(el.dataset.nans);
     const url = this.ownerDocument.location as Location;
     // CustomEvent
@@ -302,9 +269,8 @@ export class EdScElement extends HTMLElement {
           date: new Date().toISOString(),
           url: url.host + url.pathname,
           tag: this.tagName,
-          title: this.title,
+          // question: this.question,
           verb: "RESPONDED",
-          question: nQue,
           answer: nAns,
         },
       }),
