@@ -121,6 +121,27 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0
     devDependencies:
+      '@open-wc/testing':
+        specifier: ^3.2.0
+        version: 3.2.0
+      '@rollup/plugin-commonjs':
+        specifier: ^25.0.4
+        version: 25.0.4
+      '@rollup/plugin-replace':
+        specifier: ^5.0.2
+        version: 5.0.2
+      '@types/jest':
+        specifier: ^29.5.4
+        version: 29.5.4
+      '@web/dev-server-esbuild':
+        specifier: ^0.4.1
+        version: 0.4.1
+      '@web/dev-server-rollup':
+        specifier: ^0.5.2
+        version: 0.5.2
+      '@web/test-runner':
+        specifier: ^0.17.1
+        version: 0.17.1(typescript@5.2.2)
       tslib:
         specifier: ^2.6.2
         version: 2.6.2

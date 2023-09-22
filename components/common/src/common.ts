@@ -9,7 +9,7 @@ import { micromark } from "micromark";
 import { gfm, gfmHtml } from "micromark-extension-gfm";
 import { math, mathHtml } from "micromark-extension-math";
 
-export default function md2html(md: string) {
+export function md2html(md: string) {
   // It seems that empty lines are not allowed inside html content
   // in markdown
   const html = micromark(md, {

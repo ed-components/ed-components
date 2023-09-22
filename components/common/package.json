@@ -14,6 +14,13 @@
     "micromark-extension-math": "^3.0.0"
   },
   "devDependencies": {
+    "@open-wc/testing": "^3.2.0",
+    "@rollup/plugin-commonjs": "^25.0.4",
+    "@rollup/plugin-replace": "^5.0.2",
+    "@types/jest": "^29.5.4",
+    "@web/dev-server-esbuild": "^0.4.1",
+    "@web/dev-server-rollup": "^0.5.2",
+    "@web/test-runner": "^0.17.1",
     "tslib": "^2.6.2",
     "typescript": "^5.2.2"
   },
