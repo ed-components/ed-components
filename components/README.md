@@ -38,6 +38,15 @@ licensed CC-BY-SA.
 
 ## Development
 
+### Programming guide
+
+1. Element class names are on the form `EdXyzElement` and have a static method
+   `define` that allow to register element in the custom registry with default
+   name `ed-xyz`. See [webcomponents.guide](https://webcomponents.guide/learn/components/).
+   
+
+
+
 ### Testing with [Web Test Runner](https://modern-web.dev/docs/test-runner/)
 
 All components are tested from the `components` directory.

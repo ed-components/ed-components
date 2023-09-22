@@ -1,10 +1,10 @@
 import { fixture, expect } from "@open-wc/testing";
-import { EdNum } from "../src/EdNum.js";
+import { EdNumElement } from "../src/EdNum.js";
 import "../src/ed-num.js";
 
-describe("EdNum", () => {
+describe("EdNum is accessible", () => {
   it("passes the a11y audit", async () => {
-    const el = await fixture<EdNum>(`<ed-num></ed-num>`);
+    const el = await fixture<EdNumElement>(`<ed-num></ed-num>`);
     await expect(el).shadowDom.to.be.accessible();
   });
 });

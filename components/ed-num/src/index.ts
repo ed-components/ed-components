@@ -1,1 +1,1 @@
-export { EdNum } from "./EdNum.js";
+export { EdNumElement as EdNum } from "./EdNum.js";

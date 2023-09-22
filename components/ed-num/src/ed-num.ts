@@ -1,3 +1,3 @@
-import { EdNum } from "./EdNum.js";
+import { EdNumElement } from "./EdNum.js";
 
-window.customElements.define("ed-num", EdNum);
+EdNumElement.define();

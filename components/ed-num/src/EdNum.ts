@@ -11,10 +11,14 @@ import md2Html from "@ed-components/common";
  * see https://github.com/adlnet/xAPI-Spec/blob/master/xAPI-Data.md#interaction-activities
  * 
  * @export
- * @class EdNum
+ * @class EdNumElement
  * @extends {HTMLElement}
  */
-export class EdNum extends HTMLElement {
+export class EdNumElement extends HTMLElement {
+  static define(tagName = "ed-num") {
+    customElements.define(tagName, this);
+  }
+
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
