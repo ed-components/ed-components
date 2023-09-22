@@ -9,7 +9,11 @@ import "./_EdSmiley.js";
 // ie, An interaction which asks the learner to select from a discrete set of choices on a scale
 // see https://github.com/adlnet/xAPI-Spec/blob/master/xAPI-Data.md#interaction-activities
 
-export class EdSurvey extends HTMLElement {
+export class EdSurveyElement extends HTMLElement {
+  static define() {
+    customElements.define("ed-survey", this);
+  }
+
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
