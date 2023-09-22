@@ -1,3 +1,3 @@
-import { EdSc } from "./EdSc.js";
+import { EdScElement } from "./EdSc.js";
 
-customElements.define("ed-sc", EdSc);
+EdScElement.define();

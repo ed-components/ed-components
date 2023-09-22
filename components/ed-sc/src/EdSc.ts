@@ -123,6 +123,10 @@ template.innerHTML = `
   `;
 
 export class EdScElement extends HTMLElement {
+  static define() {
+    customElements.define("ed-sc", this);
+  }
+
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
@@ -163,18 +167,7 @@ export class EdScElement extends HTMLElement {
         input.removeAttribute("disabled");
         // is it a good answer?
         if (input.checked) {
-          this.goodAnswers.push(nAns);
           input.removeAttribute("checked");
-          try {
-            if (this.goodAnswers.length !== nQue) {
-              throw new Error(
-                "md-quizz error there's must be only one valid answer per question",
-              );
-            }
-          } catch (error) {
-            console.error(error);
-            // TODO render checked answers without interaction with message on screen
-          }
         }
         // append svg after input
         const svgInput = document.createElementNS(xmlns, "svg");
@@ -222,9 +215,6 @@ export class EdScElement extends HTMLElement {
     // mount template
     this.shadowRoot.appendChild(fragment.cloneNode(true));
 
-    // create answers array
-    this.answers = this.goodAnswers.map(() => -1);
-
     // add event listener to check response
     this.shadowRoot
       .querySelectorAll("li.answer")
@@ -264,7 +254,6 @@ export class EdScElement extends HTMLElement {
     const el = evt.target;
     const nQue = Number(el.dataset.nque);
     const nAns = Number(el.dataset.nans);
-    this.answers[nQue - 1] = nAns;
 
     // Update checks
     // disables all inputs
@@ -276,7 +265,8 @@ export class EdScElement extends HTMLElement {
       input.removeEventListener("click", this.checkAnswer);
 
       // marque la bonne réponse
-      const goodAnswer = Number(this.goodAnswers[nQue - 1]);
+      // TODO allways first is good for this iteration of dev
+      const goodAnswer = 0;
       if (i === goodAnswer - 1) {
         // la bonne réponse a été cochée
         // li.querySelector("svg").setAttribute("class", "good-answer")
@@ -289,26 +279,6 @@ export class EdScElement extends HTMLElement {
         }
       }
     });
-    // is it finished?
-    console.log(this.answers);
-    if (this.answers.indexOf(-1) < 0) {
-      console.log("Finished?");
-      // CustomEvent
-      const url = this.ownerDocument.location as Location;
-      this.dispatchEvent(
-        new CustomEvent("edEvent", {
-          bubbles: true,
-          detail: {
-            date: new Date().toISOString(),
-            url: url.host + url.pathname,
-            tag: this.tagName,
-            title: this.title,
-            verb: "COMPLETED",
-            answers: this.answers,
-          },
-        }),
-      );
-    }
   }
 
   /**

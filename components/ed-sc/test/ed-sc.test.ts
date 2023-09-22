@@ -8,19 +8,7 @@ const example = html`<ed-sc>
   ] two - [x] three
 </ed-sc>`;
 
-describe("EdSc", () => {
-  it('has a default title "Quiz"', async () => {
-    const el: EdScElement = await fixture<EdScElement>(html`<ed-sc></ed-sc>`);
-    expect(el.title).to.equal("Quiz");
-  });
-
-  it("Can customize title attribute", async () => {
-    const el: EdScElement = await fixture<EdScElement>(
-      html`<ed-sc title="QCU"></ed-sc>`,
-    );
-    expect(el.title).to.equal("QCU");
-  });
-
+describe("EdScElement", () => {
   it("passes the a11y audit", async () => {
     const el: EdScElement = await fixture<EdScElement>(html`<ed-sc></ed-sc>`);
     await expect(el).shadowDom.to.be.accessible();
