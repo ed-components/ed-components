@@ -17,6 +17,7 @@
     "@open-wc/testing": "^3.2.0",
     "@rollup/plugin-commonjs": "^25.0.4",
     "@rollup/plugin-replace": "^5.0.2",
+    "@types/dom-speech-recognition": "^0.0.1",
     "@types/jest": "^29.5.4",
     "@web/dev-server-esbuild": "^0.4.1",
     "@web/dev-server-rollup": "^0.5.2",

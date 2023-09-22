@@ -2,23 +2,9 @@
 
 import md2Html from "@ed-components/common";
 
-const twoLine = /\n\n/g;
-const oneLine = /\n/g;
-function linebreak(s) {
-  return s.replace(twoLine, "<p></p>").replace(oneLine, "<br>");
-}
-
-const firstChar = /\S/;
-function capitalize(s) {
-  return s.replace(firstChar, function (m) {
-    return m.toUpperCase();
-  });
-}
-
 let startTimestamp: number;
 let ignoreOnend = false;
 let recognizing = false;
-let finalTranscript = "";
 
 // This component implements text to speech using web speech api
 export class EdSurvey extends HTMLElement {
@@ -43,6 +29,21 @@ export class EdSurvey extends HTMLElement {
     main {
       display: flex;
     }
+    #mic-button {
+      background-color: var(--red-5);
+      color: white;
+      &.recording {
+        background-color: initial;
+        color: initial;
+      }
+      &.error {
+        &::before {
+          content: "!";
+        }
+        
+      }
+    }
+    
     .question {
       font-size: var(--font-size-fluid-1, max(1.5rem,min(6vw,2.5rem)));
       font-weight: var(--font-weight-5, 500);
@@ -60,21 +61,26 @@ export class EdSurvey extends HTMLElement {
          --bs-alert-color: var(--orange-5);
          --bs-alert-bg: var(--orange-1);
          --bs-alert-border-color: var(--orange-3);
-         --bs-alert-link-color: var(--orange-1);
+         --bs-alert-link-color: var(--orange-1mic-butt)mic-buuton;
       }
       &.success {
         --bs-alert-color: var(--blue-5);
          --bs-alert-bg: var(--blue-1);
          --bs-alert-border-color: var(--blue-3);
          --bs-alert-link-color: var(--blue-1);
-
       }
     }
+    .final {
+        font-weight: var(--font-weight-8);
+      }
+      .interim {
+        color: var(--blue-5);
+      }
     </style>
     <div id="info"></div>
     <main>
       <p class="question" aria-label="question"></p>
-      <button id="start-button" style="display: none;">
+      <button id="mic-button" style="display: none;">
         <!-- from bootstrap icons -->
         <svg class="mic" role="icon" aria-label="Start microphone" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
           fill="currentColor" viewBox="0 0 16 16">
@@ -87,9 +93,8 @@ export class EdSurvey extends HTMLElement {
         <button id="submit">Submit</button>
     </main>
     <div id="results">
-          <span id="final_span" class="final"></span>
-          <span id="interim_span" class="interim"></span>
-          <p>
+          <p id="final-result" class="final"></p>
+          <p id="interim-result" class="interim"></p>
     </div>
     `;
   }
@@ -97,48 +102,55 @@ export class EdSurvey extends HTMLElement {
   connectedCallback() {
     this.question = this.innerHTML ? this.innerHTML : "Say something!";
     this.shadowRoot.querySelector("p").innerHTML = md2Html(this.question);
-    // TODO attribute
-    this.lang = "en";
+
     this.startButton = this.shadowRoot.querySelector(
-      "#start-button",
+      "#mic-button",
     ) as HTMLButtonElement;
-    this.finalSpan = this.shadowRoot.querySelector(
-      "#final_span",
-    ) as HTMLSpanElement;
-    this.interimSpan = this.shadowRoot.querySelector(
-      "#interim_span",
-    ) as HTMLSpanElement;
+    this.submitButton = this.shadowRoot.querySelector(
+      "#submit",
+    ) as HTMLButtonElement;
+    this.finalParagraph = this.shadowRoot.querySelector(
+      "#final-result",
+    ) as HTMLParagraphElement;
+    this.interimParagraph = this.shadowRoot.querySelector(
+      "#interim-result",
+    ) as HTMLParagraphElement;
+
+    // event listeners
     this.startButton.addEventListener("click", this._handleClick.bind(this));
+    this.submitButton.addEventListener(
+      "click",
+      this._handleResponse.bind(this),
+    );
+
     if (!("webkitSpeechRecognition" in window)) {
       this.showInfo("upgrade");
     } else {
       // webspeech available
       this.showInfo("start");
       this.startButton.style.display = "inline-block";
-      this.recognition = new webkitSpeechRecognition();
+      // eslint-disable-next-line new-cap
+      this.recognition = new webkitSpeechRecognition() as SpeechRecognition;
       this.recognition.continuous = true;
       this.recognition.interimResults = true;
 
       this.recognition.onstart = () => {
         recognizing = true;
         this.showInfo("speak_now");
-        // start_img.src = "images/mic-animation.gif";
+        this.startButton.className = "recording";
       };
 
       this.recognition.onerror = (evt) => {
-        if (evt.error == "no-speech") {
-          // start_img.src = "images/mic.gif";
+        this.startButton.className = "error";
+        if (evt.error === "no-speech") {
           this.showInfo("no_speech");
           ignoreOnend = true;
         }
         if (evt.error === "audio-capture") {
-          // start_img.src = "images/mic.gif";
           this.showInfo("no_microphone");
           ignoreOnend = true;
         }
         if (evt.error === "not-allowed") {
-          console.log(this);
-
           if (evt.timeStamp - startTimestamp < 100) {
             this.showInfo("blocked");
           } else {
@@ -148,49 +160,45 @@ export class EdSurvey extends HTMLElement {
         }
       };
       this.recognition.onend = () => {
+        this.startButton.className = "";
         recognizing = false;
         if (ignoreOnend) {
           return;
         }
         // start_img.src = "images/mic.gif";
-        if (!finalTranscript) {
-          this.showInfo("start");
-          return;
-        }
         this.showInfo("stop");
       };
 
-      this.recognition.onresult = (evt) => {
-        let interim_transcript = "";
+      this.recognition.onresult = (evt: SpeechRecognitionResult) => {
+        let finalTranscript = "";
+        let interimTranscript = "";
         for (let i = evt.resultIndex; i < evt.results.length; ++i) {
           if (evt.results[i].isFinal) {
             finalTranscript += evt.results[i][0].transcript;
           } else {
-            interim_transcript += evt.results[i][0].transcript;
+            interimTranscript += evt.results[i][0].transcript;
           }
         }
-        this.final_transcript = capitalize(finalTranscript);
-        this.shadowRoot.querySelector("#final_span").innerHTML =
-          linebreak(finalTranscript);
-        this.shadowRoot.querySelector("#interim_span").innerHTML =
-          linebreak(interim_transcript);
+
+        this.finalParagraph.innerHTML = finalTranscript;
+        this.interimParagraph.innerHTML = interimTranscript;
       };
     }
   }
 
-  set question(question: string) {
-    this.setAttribute("question", question);
+  set lang(lang: string) {
+    this.setAttribute("lang", lang);
   }
 
-  get question() {
-    return this.getAttribute("question") ?? "How are you today";
+  get lang() {
+    return this.getAttribute("lang") ?? document.documentElement.lang;
   }
 
   static get observedAttributes() {
     return ["question"];
   }
 
-  private showInfo(s) {
+  private showInfo(s: string) {
     if (s) {
       const message = messages[s];
       this.shadowRoot.querySelector("#info").innerHTML = message.msg;
@@ -210,8 +218,8 @@ export class EdSurvey extends HTMLElement {
     this.recognition.lang = this.lang;
     this.recognition.start();
 
-    this.finalSpan.innerHTML = "";
-    this.interimSpan.innerHTML = "";
+    this.finalParagraph.innerHTML = "";
+    this.interimParagraph.innerHTML = "";
     // start_img.src = "images/mic-slash.gif";
     this.showInfo("allow");
     startTimestamp = evt.timeStamp;
@@ -223,11 +231,9 @@ export class EdSurvey extends HTMLElement {
     // TODO get unique identifier of html element ie id or // dompath:
     // https://stackoverflow.com/a/69104350
 
-    const el = evt.target as HTMLInputElement;
-    const choice = el.getAttribute("value");
+    const response = this.finalParagraph.innerHTML;
 
-    // if clicked outside a real choice return
-    if (!choice) return;
+    if (response.length === 0) return;
 
     const url = this.ownerDocument.location as Location;
     // CustomEvent
@@ -241,7 +247,7 @@ export class EdSurvey extends HTMLElement {
           type: this.type,
           question: this.question,
           verb: "RESPONDED",
-          // choice: choice,
+          response,
         },
       }),
     );
@@ -283,11 +289,7 @@ const messages = {
     class: "alert warning",
   },
   stop: {
-    msg: "Stop listening, click on the microphone icon to restart",
-    class: "alert success",
-  },
-  copy: {
-    msg: "Content copy to clipboard successfully.",
+    msg: "Stopped listening, click on the microphone icon to restart",
     class: "alert success",
   },
 };

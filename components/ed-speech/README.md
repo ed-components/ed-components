@@ -15,8 +15,16 @@ The [Speech Recognition API](https://caniuse.com/speech-recognition) is only ava
 As in every ed-component, you can use Markdown as content.
 
 ```html
-<ed-speech type="rating">
+<ed-speech lang="en" answer="heat">
   Say **heat** and not _it_.
+</ed-speech>
+```
+
+As in every ed-component, you can use Markdown as content.
+
+```html
+<ed-speech lang="es" answer="j">
+  Pronuncia la lettra «j» en español
 </ed-speech>
 ```
 
