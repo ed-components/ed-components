@@ -1,1 +1,1 @@
-export { EdQuiz } from "./EdSc.js";
+export { EdScElement } from "./EdSc.js";

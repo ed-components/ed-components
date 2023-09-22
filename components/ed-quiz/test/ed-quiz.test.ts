@@ -1,5 +1,5 @@
 import { html, fixture, expect } from "@open-wc/testing";
-import { EdQuiz } from "../src/EdQuiz.js";
+import { EdQuizElement } from "../src/EdQuiz.js";
 
 import "../src/ed-quiz.js";
 
@@ -10,19 +10,23 @@ const example = html`<ed-quiz>
 
 describe("EdQuiz", () => {
   it('has a default title "Quiz"', async () => {
-    const el: EdQuiz = await fixture<EdQuiz>(html`<ed-quiz></ed-quiz>`);
+    const el: EdQuizElement = await fixture<EdQuizElement>(
+      html`<ed-quiz></ed-quiz>`,
+    );
     expect(el.title).to.equal("Quiz");
   });
 
   it("Can customize title attribute", async () => {
-    const el: EdQuiz = await fixture<EdQuiz>(
+    const el: EdQuizElement = await fixture<EdQuizElement>(
       html`<ed-quiz title="QCU"></ed-quiz>`,
     );
     expect(el.title).to.equal("QCU");
   });
 
   it("passes the a11y audit", async () => {
-    const el: EdQuiz = await fixture<EdQuiz>(html`<ed-quiz></ed-quiz>`);
+    const el: EdQuizElement = await fixture<EdQuizElement>(
+      html`<ed-quiz></ed-quiz>`,
+    );
     await expect(el).shadowDom.to.be.accessible();
   });
 });

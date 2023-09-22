@@ -46,10 +46,14 @@ template.innerHTML = `
   </article>
   `;
 
-export class EdQuiz extends HTMLElement {
+export class EdQuizElement extends HTMLElement {
   goodAnswers: Array<number>;
 
   answers: Array<number>;
+
+  static define() {
+    customElements.define("ed-quiz", this);
+  }
 
   constructor() {
     super();
@@ -242,7 +246,7 @@ export class EdQuiz extends HTMLElement {
    * Update progress and score bars
    *
    * @private
-   * @memberof EdQuiz
+   * @memberof EdQuizElement
    */
   private updateBars() {
     let score = 0;
@@ -273,7 +277,7 @@ export class EdQuiz extends HTMLElement {
    *
    * @private
    * @param {Event} evt
-   * @memberof EdQuiz
+   * @memberof EdQuizElement
    * @fires {EdEvent} edEvent containing user answers in details field
    */
   private _handleResponse(evt: Event) {

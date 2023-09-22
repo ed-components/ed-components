@@ -1,3 +1,3 @@
-import { EdQuiz } from "./EdSc.js";
+import { EdSc } from "./EdSc.js";
 
-customElements.define("ed-sc", EdQuiz);
+customElements.define("ed-sc", EdSc);

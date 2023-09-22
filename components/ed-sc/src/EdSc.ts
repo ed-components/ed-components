@@ -122,16 +122,10 @@ template.innerHTML = `
   </article>
   `;
 
-export class EdQuiz extends HTMLElement {
-  goodAnswers: Array<number>;
-
-  answers: Array<number>;
-
+export class EdScElement extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
-    this.goodAnswers = [];
-    this.answers = [];
     this.checkAnswer = this.checkAnswer.bind(this);
   }
 
@@ -322,7 +316,7 @@ export class EdQuiz extends HTMLElement {
    *
    * @private
    * @param {Event} evt
-   * @memberof EdQuiz
+   * @memberof EdScElement
    * @fires {EdEvent} edEvent containing user answers in details field
    */
   private _handleResponse(evt: Event) {
