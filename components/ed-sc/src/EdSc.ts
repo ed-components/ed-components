@@ -1,5 +1,5 @@
 import md2Html from "@ed-components/common";
-import { EdInputSvg } from "./_ed-input-svg";
+import { EdInputSvg } from "./_EdInputSvg";
 
 EdInputSvg.define();
 
@@ -21,38 +21,12 @@ template.innerHTML = `
       padding: 0em 1em;
     }
 
-    h1 {
-      font-size: calc(1.425rem + 2.1vw);
-      font-weight: 300;
-      line-height: 1.1;
-    }
-    
-    h2 {
-      font-size: calc(1.375rem + 1.5vw);
-      font-weight: 300;
-      line-height: 1.1;
-    }
-
     li.answer {
       font-size: 1.1em;
-      left: -2em;
-      line-height: 1.6;
       list-style-type: none;
-      position: relative;
     }
     
-    svg {
-      display: inline;
-      width: 1.3em;
-      height: 1.3em;
-      color: black;
-      position: relative;
-      top: 0.3em;
-      position: middle;
-    }
-        #note {
-      scroll-margin: 195px;
-    }
+   
     li.bad-answer {
       text-decoration-line: line-through;
     }

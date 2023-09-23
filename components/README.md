@@ -15,6 +15,14 @@ Single answer components.
 - [`<ed-speech>`](./ed-speech/)
 - [`<ed-sc>`](./ed-sc/)
 
+## Styling
+
+Via CSS custom properties (variables) inspired by bootstrap.
+
+- `--ed-brand`
+- `--ed-success`
+- `--ed-danger`
+  
 ## User interface layout
 
 Ideas comes from

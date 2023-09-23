@@ -9,104 +9,81 @@
 const template = document.createElement("template");
 template.innerHTML = `
   <style>
-    :host {
-      display: inline-flex;
-    }
-    :host([disabled]) {
-      cursor: not-allowed;
-    }
-    :host([checked]) .box {
-      stroke-dashoffset: 320;
-    }
-    
-    :host([checked]) .check {
-      stroke-dashoffset: 0;
-    }
+:host {
+  display: inline-block;
+  position: relative;
+  top: 0.5em;
+  --ed-success: var(--green-7, #37b24d);;
+  --ed-danger: var(--red-7, #f03e3e);;
+}
 
-    input[type="checkbox"] {
-      display: none;
-      pointer-events: none;
-    }
-    
-    label {
-      cursor: pointer;
-      pointer-events: none;
-      display: grid;
-      grid-template-columns: auto 3fr;
-      line-height: 1.5em;
-    }
-    
-    svg {
-      width: 1.7em;
-      stroke: #007ce2;
-      stroke-width: 7;
-      fill: white;
-    }
-    
-    .box {
-      stroke-dasharray: 320;
-      stroke-dashoffset: 0;
-      fill: white;
-      transition: stroke-dashoffset 0.3s linear;
-    }
-    
-    .check {
-      stroke-dasharray: 70;
-      stroke-dashoffset: 70;
-      fill: none;
-      transition: stroke-dashoffset 0.3s linear;
-    }
+:host([disabled]) {
+  cursor: not-allowed;
+}
 
-    input:disabled {
-      cursor: not-allowed;
-    }
+input[type="checkbox"] {
+  display: none;
+  pointer-events: none;
+}
 
-    .box {
-      stroke-dasharray: 320;
-      stroke-dashoffset: 0;
-      /*fill: white;*/
-      transition: stroke-dashoffset 0.3s linear;
-    }
-    input:checked + svg .box {
-      stroke-dashoffset: 320;
-    }
-    .check {
-      color: var(--green-7, #37b24d);
-      stroke-dasharray: 95;
-      stroke-dashoffset: 95;
-      fill: none;
-      transition: stroke-dashoffset 0.3s linear;
-    }
-    .check {
-      stroke-dasharray: 95;
-      stroke-dashoffset: 95;
-      fill: none;
-      transition: stroke-dashoffset 0.3s linear;
-    }
-    
-    .cross {
-      color: var(--red-7, #f03e3e);
-      fill: none;
-      transition: stroke-dashoffset 0.3s linear;
-    }
-    input.good-answer:checked + svg .check {
-      color: var(--green-7, g#37b24d);
-      stroke-dashoffset: 0;
-    }
-     input.bad-answer:checked + svg .check  {
-      color: var(--red-7, #f03e3e);
-      stroke-dashoffset: 0;
-    }
-    input.bad-answer:checked + svg .cross{
-      stroke-dashoffset: 0;
-    }
-    
+input:disabled {
+  cursor: not-allowed;
+}
+svg {
+  width: 1.7em;
+  stroke: #007ce2;
+  stroke-width: 7;
+  filter: blur;
+}
+
+.box {
+  stroke-dasharray: 320;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 0.3s linear;
+}
+
+.check {
+  stroke-width: 13;
+  stroke-dasharray: 67;
+  stroke-dashoffset: 67;
+  fill: none;
+  transition: stroke-dashoffset 0.3s linear;
+}
+
+.cross {
+  color: var(--red-7, #f03e3e);
+  stroke-dasharray: 226;
+  stroke-dashoffset: 226;
+  fill: none;
+  transition: stroke-dashoffset 0.3s linear;
+}
+
+:host([checked]) .box {
+    stroke-dashoffset: 320;
+}
+
+:host([checked]) .check {
+  stroke-dashoffset: 0;
+}
+
+:host(.bad-answer[checked]) .cross {
+  stroke-dashoffset: 0;
+}
+
+:host(.good-answer) .check {
+  stroke: var(--ed-success); 
+}
+
+:host(.bad-answer) .check {
+  stroke: var(--ed-danger); 
+}
+
   </style>
   <input type="checkbox" name="cb" id="cb" disabled />
   <label for="cb" id="checkbox">
     <svg viewBox="0 0 100 100">
-	    <path class="box" d="M82,89H18c-3.87,0-7-3.13-7-7V18c0-3.87,3.13-7,7-7h64c3.87,0,7,3.13,7,7v64C89,85.87,85.87,89,82,89z"/>
-      <polyline class="check" points="25.5,53.5 39.5,67.5 72.5,34.5 "/>
+	    <path class="box" fill="none" d="M82,89H18c-3.87,0-7-3.13-7-7V18c0-3.87,3.13-7,7-7h64c3.87,0,7,3.13,7,7v64C89,85.87,85.87,89,82,89z"/>
+      <polyline class="check" stroke-linecap="round" points="25.5,53.5 39.5,67.5 72.5,34.5 "/>
       <path class="cross" d="M10,90L90,10M10,10L90,90 " fill="none" stroke="currentColor" stroke-width="7px"></path>
     </svg>
     <slot name="text-label"></slot>
@@ -129,6 +106,8 @@ export class EdInputSvg extends HTMLElement {
 
   connectedCallback() {
     this.shadowRoot.appendChild(template.content.cloneNode(true));
+    // calculate pathlength for animation
+    // console.log(this.shadowRoot.querySelector(".check").getTotalLength());
 
     if (!this.hasAttribute("role")) this.setAttribute("role", "checkbox");
 
