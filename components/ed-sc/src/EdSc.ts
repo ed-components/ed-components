@@ -1,6 +1,8 @@
 import md2Html from "@ed-components/common";
+import { EdInputSvg } from "./_ed-input-svg";
 
-const xmlns = "http://www.w3.org/2000/svg";
+EdInputSvg.define();
+
 const template = document.createElement("template");
 
 template.innerHTML = `
@@ -31,26 +33,6 @@ template.innerHTML = `
       line-height: 1.1;
     }
 
-    input {
-      /* remove the checkbox from flow */
-      position: absolute;
-  
-      /* hide it visually */
-      opacity: 0.00001;
-  
-      /* tweak size and position if needed */
-      width: 1.9em;
-      height: 1.9em;
-
-      z-index: 10;
-
-    }
-    
-
-    input:disabled {
-      cursor: not-allowed;
-    }
-    
     li.answer {
       font-size: 1.1em;
       left: -2em;
@@ -68,50 +50,14 @@ template.innerHTML = `
       top: 0.3em;
       position: middle;
     }
-    .box {
-      stroke-dasharray: 320;
-      stroke-dashoffset: 0;
-      /*fill: white;*/
-      transition: stroke-dashoffset 0.3s linear;
-    }
-    input:checked + svg .box {
-      stroke-dashoffset: 320;
-    }
-    .check {
-      color: var(--green-7, #37b24d);
-      stroke-dasharray: 95;
-      stroke-dashoffset: 95;
-      fill: none;
-      transition: stroke-dashoffset 0.3s linear;
-    }
-    .check {
-      stroke-dasharray: 95;
-      stroke-dashoffset: 95;
-      fill: none;
-      transition: stroke-dashoffset 0.3s linear;
-    }
-    li.good-answer input:checked + svg .check {
-      color: var(--green-7, g#37b24d);
-      stroke-dashoffset: 0;
-    }
-    li.bad-answer input:checked + svg .check  {
-      color: var(--red-7, #f03e3e);
-      stroke-dashoffset: 0;
-    }
-    .cross {
-      color: var(--red-7, #f03e3e);
-      fill: none;
-      transition: stroke-dashoffset 0.3s linear;
-    }
-    li.bad-answer input:checked + svg .cross{
-      stroke-dashoffset: 0;
+        #note {
+      scroll-margin: 195px;
     }
     li.bad-answer {
       text-decoration-line: line-through;
     }
-    #note {
-      scroll-margin: 195px;
-    }
+    
+    {* TODO share math style*}
     .math-inline {
       font-size: 1.3em;
     }
@@ -126,8 +72,9 @@ template.innerHTML = `
 
 export class EdScElement extends HTMLElement {
   question: string;
-  static define() {
-    customElements.define("ed-sc", this);
+
+  static define(tagName = "ed-sc") {
+    customElements.define(tagName, this);
   }
 
   constructor() {
@@ -155,52 +102,17 @@ export class EdScElement extends HTMLElement {
 
       // handle answers
       const input = a.querySelector("input");
-      input.removeAttribute("disabled");
+
+      const edInput = document.createElement("ed-input");
       // is it a good answer?
       if (input.checked) {
-        input.removeAttribute("checked");
+        edInput.className = "good-answer";
+      } else {
+        edInput.className = "bad-answer";
       }
-      // append svg after input
-      const svgInput = document.createElementNS(xmlns, "svg");
-
-      svgInput.setAttributeNS(null, "viewBox", "0 0 100 100");
-      svgInput.setAttributeNS(null, "stroke-linecap", "round");
-
-      // <path class="box" d="M82,89H18c-3.87,0-7-3.13-7-7V18c0-3.87,3.13-7,7-7h64c3.87,0,7,3.13,7,7v64C89,85.87,85.87,89,82,89z"/>
-      const box = document.createElementNS(xmlns, "path");
-      box.setAttributeNS(null, "class", "box");
-      box.setAttributeNS(
-        null,
-        "d",
-        "M82,89H18c-3.87,0-7-3.13-7-7V18c0-3.87,3.13-7,7-7h64c3.87,0,7,3.13,7,7v64C89,85.87,85.87,89,82,89z",
-      );
-      box.setAttributeNS(null, "fill", "none");
-      box.setAttributeNS(null, "stroke", "currentColor");
-      box.setAttributeNS(null, "stroke-width", "9px");
-      svgInput.appendChild(box);
-      // <polyline class="check" points="25.5,53.5 39.5,67.5 72.5,34.5 "/>
-      const check = document.createElementNS(xmlns, "polyline");
-      check.setAttributeNS(null, "class", "check");
-      check.setAttributeNS(null, "points", "20,53.5 40,75 80,25");
-      check.setAttributeNS(null, "fill", "currentColor");
-      check.setAttributeNS(null, "stroke", "currentColor");
-      check.setAttributeNS(null, "stroke-width", "13");
-      // console.log(check.getTotalLength())
-      // check.setAttributeNS(null, 'stroke-dashoffset', 0)
-      svgInput.appendChild(check);
-      // <path class="cross" d="M10,90L90,10M10,10L90,90 " fill="none" stroke="currentColor" stroke-width="7px"></path>
-      const cross = document.createElementNS(xmlns, "path");
-      cross.setAttributeNS(null, "class", "cross");
-      cross.setAttributeNS(null, "d", "M10,90L90,10M10,10L90,90");
-      cross.setAttributeNS(null, "fill", "currentColor");
-      cross.setAttributeNS(null, "stroke", "currentColor");
-      cross.setAttributeNS(null, "stroke-width", "13");
-      const crossPathLength = String(cross.getTotalLength());
-      cross.setAttributeNS(null, "stroke-dasharray", crossPathLength);
-      cross.setAttributeNS(null, "stroke-dashoffset", crossPathLength);
-      svgInput.appendChild(cross);
-      input.insertAdjacentElement("afterend", svgInput);
+      input.replaceWith(edInput);
     });
+
     // mount template
     this.shadowRoot.appendChild(fragment.cloneNode(true));
 
@@ -226,7 +138,7 @@ export class EdScElement extends HTMLElement {
     // Update checks
     // disables all inputs
     this.shadowRoot.querySelectorAll(`li`).forEach((li, i) => {
-      const input = li.querySelector("input");
+      const input = li.querySelector("ed-input");
 
       input.setAttribute("disabled", "");
       // remove event listener

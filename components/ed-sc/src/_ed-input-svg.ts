@@ -9,8 +9,18 @@
 const template = document.createElement("template");
 template.innerHTML = `
   <style>
-    * {
-      box-sizing: border-box;
+    :host {
+      display: inline-flex;
+    }
+    :host([disabled]) {
+      cursor: not-allowed;
+    }
+    :host([checked]) .box {
+      stroke-dashoffset: 320;
+    }
+    
+    :host([checked]) .check {
+      stroke-dashoffset: 0;
     }
 
     input[type="checkbox"] {
@@ -46,37 +56,68 @@ template.innerHTML = `
       fill: none;
       transition: stroke-dashoffset 0.3s linear;
     }
-    
-    ::slotted(*) {
-      line-height: 1.7em;
-      padding-left: 0.5em;
-    }
-    
-    :host {
-      margin:0.15em;
-    }
-    :host([disabled]) {
+
+    input:disabled {
       cursor: not-allowed;
     }
-    :host([checked]) .box {
+
+    .box {
+      stroke-dasharray: 320;
+      stroke-dashoffset: 0;
+      /*fill: white;*/
+      transition: stroke-dashoffset 0.3s linear;
+    }
+    input:checked + svg .box {
       stroke-dashoffset: 320;
     }
+    .check {
+      color: var(--green-7, #37b24d);
+      stroke-dasharray: 95;
+      stroke-dashoffset: 95;
+      fill: none;
+      transition: stroke-dashoffset 0.3s linear;
+    }
+    .check {
+      stroke-dasharray: 95;
+      stroke-dashoffset: 95;
+      fill: none;
+      transition: stroke-dashoffset 0.3s linear;
+    }
     
-    :host([checked]) .check {
+    .cross {
+      color: var(--red-7, #f03e3e);
+      fill: none;
+      transition: stroke-dashoffset 0.3s linear;
+    }
+    input.good-answer:checked + svg .check {
+      color: var(--green-7, g#37b24d);
       stroke-dashoffset: 0;
     }
+     input.bad-answer:checked + svg .check  {
+      color: var(--red-7, #f03e3e);
+      stroke-dashoffset: 0;
+    }
+    input.bad-answer:checked + svg .cross{
+      stroke-dashoffset: 0;
+    }
+    
   </style>
   <input type="checkbox" name="cb" id="cb" disabled />
   <label for="cb" id="checkbox">
     <svg viewBox="0 0 100 100">
 	    <path class="box" d="M82,89H18c-3.87,0-7-3.13-7-7V18c0-3.87,3.13-7,7-7h64c3.87,0,7,3.13,7,7v64C89,85.87,85.87,89,82,89z"/>
       <polyline class="check" points="25.5,53.5 39.5,67.5 72.5,34.5 "/>
+      <path class="cross" d="M10,90L90,10M10,10L90,90 " fill="none" stroke="currentColor" stroke-width="7px"></path>
     </svg>
     <slot name="text-label"></slot>
   </label>
   `;
 
-export class WCInputSvg extends HTMLElement {
+export class EdInputSvg extends HTMLElement {
+  static define(tagName = "ed-input") {
+    customElements.define(tagName, this);
+  }
+
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
@@ -87,18 +128,17 @@ export class WCInputSvg extends HTMLElement {
   }
 
   connectedCallback() {
-    this.style.display = "block";
     this.shadowRoot.appendChild(template.content.cloneNode(true));
 
     if (!this.hasAttribute("role")) this.setAttribute("role", "checkbox");
 
     this._upgradeProperty("checked");
     this._upgradeProperty("disabled");
-    this.addEventListener("click", this._onClick);
+    this.addEventListener("click", this._toggleChecked);
   }
 
   disconnectedCallback() {
-    this.removeEventListener("click", this._onClick);
+    this.removeEventListener("click", this._toggleChecked);
   }
 
   _upgradeProperty(prop) {
@@ -161,10 +201,6 @@ export class WCInputSvg extends HTMLElement {
     }
   }
 
-  _onClick() {
-    this._toggleChecked();
-  }
-
   /**
    * `_toggleChecked()` calls the `checked` setter and flips its state.
    * Because `_toggleChecked()` is only caused by a user action, it will
@@ -172,6 +208,7 @@ export class WCInputSvg extends HTMLElement {
    * the native behavior of `<input type=checkbox>`.
    */
   _toggleChecked() {
+    console.log("ed-input toggle");
     if (this.disabled) return;
     this.checked = !this.checked;
     this.dispatchEvent(
@@ -185,5 +222,3 @@ export class WCInputSvg extends HTMLElement {
     );
   }
 }
-
-customElements.define("wc-input-svg", WCInputSvg);

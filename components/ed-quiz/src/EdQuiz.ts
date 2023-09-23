@@ -51,8 +51,8 @@ export class EdQuizElement extends HTMLElement {
 
   answers: Array<number>;
 
-  static define() {
-    customElements.define("ed-quiz", this);
+  static define(tagName = "ed-quiz") {
+    customElements.define(tagName, this);
   }
 
   constructor() {

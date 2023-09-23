@@ -10,8 +10,8 @@ import "./_EdSmiley.js";
 // see https://github.com/adlnet/xAPI-Spec/blob/master/xAPI-Data.md#interaction-activities
 
 export class EdSurveyElement extends HTMLElement {
-  static define() {
-    customElements.define("ed-survey", this);
+  static define(tagName = "ed-survey") {
+    customElements.define(tagName, this);
   }
 
   constructor() {

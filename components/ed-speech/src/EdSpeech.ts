@@ -8,8 +8,8 @@ let recognizing = false;
 
 // This component implements text to speech using web speech api
 export class EdSpeechElement extends HTMLElement {
-  static define() {
-    customElements.define("ed-speech", this);
+  static define(tagName = "ed-speech") {
+    customElements.define(tagName, this);
   }
 
   constructor() {
