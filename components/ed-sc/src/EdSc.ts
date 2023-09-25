@@ -9,6 +9,8 @@ template.innerHTML = `
   <style>
   :host {
       display: block;
+      --ed-success: var(--green-7, #37b24d);
+      --ed-danger: var(--red-7, #f03e3e);
     }
 
     article {
@@ -21,14 +23,20 @@ template.innerHTML = `
       padding: 0em 1em;
     }
 
-    li.answer {
+    li {
       font-size: 1.1em;
       list-style-type: none;
     }
     
    
     li.bad-answer {
-      text-decoration-line: line-through;
+      text-decoration: line-through;
+    }
+
+    li.good-answer {
+      text-decoration: underline solid var(--ed-success);
+      font-size: 1.5em;
+      transition: font-size 0.3s linear;
     }
     
     {* TODO share math style*}
@@ -54,8 +62,10 @@ export class EdScElement extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
-    this.checkAnswer = this.checkAnswer.bind(this);
-    this.question = "";
+    // add event listener to check response
+    this.addEventListener("click", this._handleResponse.bind(this), {
+      once: true,
+    });
   }
 
   async connectedCallback() {
@@ -68,14 +78,9 @@ export class EdScElement extends HTMLElement {
     fragment.querySelector("#content").innerHTML = contents.trim();
 
     // prepare html
-    let nAns = 0;
-    fragment.querySelectorAll("ul > li").forEach((a: HTMLLIElement) => {
-      nAns += 1;
-      a.className = "answer";
-      a.dataset.nans = String(nAns);
-
+    fragment.querySelectorAll("ul > li").forEach((li: HTMLLIElement) => {
       // handle answers
-      const input = a.querySelector("input");
+      const input = li.querySelector("input");
 
       const edInput = document.createElement("ed-input");
       // is it a good answer?
@@ -84,59 +89,16 @@ export class EdScElement extends HTMLElement {
       } else {
         edInput.className = "bad-answer";
       }
+
       input.replaceWith(edInput);
     });
 
     // mount template
-    this.shadowRoot.appendChild(fragment.cloneNode(true));
-
-    // add event listener to check response
-    this.shadowRoot
-      .querySelectorAll("li.answer")
-      .forEach((ans: HTMLLIElement) => {
-        const nAns = ans.dataset.nans;
-        ans.querySelectorAll("input").forEach((input: HTMLElement) => {
-          input.dataset.nans = nAns;
-          // get a reference of the function
-          // see https://stackoverflow.com/a/22870717
-          input.addEventListener("click", this.checkAnswer);
-          input.addEventListener("click", this._handleResponse.bind(this));
-        });
-      });
-  }
-
-  checkAnswer(evt) {
-    const el = evt.target;
-    const nAns = Number(el.dataset.nans);
-
-    // Update checks
-    // disables all inputs
-    this.shadowRoot.querySelectorAll(`li`).forEach((li, i) => {
-      const input = li.querySelector("ed-input");
-
-      input.setAttribute("disabled", "");
-      // remove event listener
-      input.removeEventListener("click", this.checkAnswer);
-
-      // marque la bonne réponse
-      // TODO allways first is good for this iteration of dev
-      const goodAnswer = 0;
-      if (i === goodAnswer - 1) {
-        // la bonne réponse a été cochée
-        // li.querySelector("svg").setAttribute("class", "good-answer")
-        li.setAttribute("class", "answer good-answer");
-        // la bonne réponse n'a pas été cochée
-        if (i !== nAns - 1) {
-          const cross = li.querySelector(".cross");
-          cross.setAttribute("stroke-dashoffset", "0");
-          el.parentNode.setAttribute("class", "answer bad-answer");
-        }
-      }
-    });
+    this.shadowRoot.replaceChildren(fragment.cloneNode(true));
   }
 
   /**
-   * Dispatch event on user response
+   * Check answer and dispatch event on user response
    *
    * @private
    * @param {Event} evt
@@ -145,8 +107,25 @@ export class EdScElement extends HTMLElement {
    */
   private _handleResponse(evt: Event) {
     const el = evt.target as HTMLInputElement;
-    const nAns = Number(el.dataset.nans);
     const url = this.ownerDocument.location as Location;
+
+    // iterate over all possible answers
+    let score = 0;
+    let answers = [];
+    this.shadowRoot.querySelectorAll(`li`).forEach((li: HTMLLIElement) => {
+      const input: HTMLInputElement = li.querySelector("ed-input");
+      const good = input.className; // "good-answer / bad-answer"
+      if (input.checked) {
+        score += good === "good-answer" ? 1 : 0;
+        answers.push(li.textContent);
+      }
+      // disables all inputs
+      input.setAttribute("disabled", "");
+
+      // stroke all bad answers and higlight good one
+      li.setAttribute("class", good);
+    });
+
     // CustomEvent
     this.dispatchEvent(
       new CustomEvent("edEvent", {
@@ -155,9 +134,10 @@ export class EdScElement extends HTMLElement {
           date: new Date().toISOString(),
           url: url.host + url.pathname,
           tag: this.tagName,
-          // question: this.question,
+          label: this.label,
           verb: "RESPONDED",
-          answer: nAns,
+          answer: JSON.stringify(answers),
+          score,
         },
       }),
     );

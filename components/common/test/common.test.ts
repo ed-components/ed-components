@@ -16,4 +16,58 @@ describe("EdNum is accessible", () => {
 `,
     );
   });
+  it("Handle single choice tag <ed-sc>", async () => {
+    const html = md2html(`<ed-sc>
+This is my label that could also contain some block content like code blocks.
+
+\`\`\`python
+for i in range(10):
+  print(i)
+\`\`\`
+
+> optional description
+
+- [x] True answer
+  > Optional choice hint
+- [ ] False answer
+  > Optional choice hint
+
+> solution
+
+1. optional additional information that learners can access if needed.
+2. second info.
+</ed-sc>
+`);
+    expect(html).to.be.equal(
+      `<ed-sc>
+This is my label that could also contain some block content like code blocks.
+<pre><code class="language-python">for i in range(10):
+  print(i)
+</code></pre>
+<blockquote>
+<p>optional description</p>
+</blockquote>
+<ul>
+<li><input type="checkbox" disabled="" checked="" /> True answer
+<blockquote>
+<p>Optional choice hint</p>
+</blockquote>
+</li>
+<li><input type="checkbox" disabled="" /> False answer
+<blockquote>
+<p>Optional choice hint</p>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<p>solution</p>
+</blockquote>
+<ol>
+<li>optional additional information that learners can access if needed.</li>
+<li>second info.
+</ed-sc></li>
+</ol>
+`,
+    );
+  });
 });

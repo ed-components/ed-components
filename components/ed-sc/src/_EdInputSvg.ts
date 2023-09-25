@@ -13,12 +13,8 @@ template.innerHTML = `
   display: inline-block;
   position: relative;
   top: 0.5em;
-  --ed-success: var(--green-7, #37b24d);;
-  --ed-danger: var(--red-7, #f03e3e);;
-}
-
-:host([disabled]) {
-  cursor: not-allowed;
+  --ed-success: var(--green-7, #37b24d);
+  --ed-danger: var(--red-7, #f03e3e);
 }
 
 input[type="checkbox"] {
@@ -26,14 +22,18 @@ input[type="checkbox"] {
   pointer-events: none;
 }
 
-input:disabled {
-  cursor: not-allowed;
-}
+:host([disabled]) svg {
+    cursor: not-allowed;
+  }
 svg {
   width: 1.7em;
   stroke: #007ce2;
   stroke-width: 7;
   filter: blur;
+  
+  &:hover {
+    cursor: help;
+  }
 }
 
 .box {
@@ -187,7 +187,6 @@ export class EdInputSvg extends HTMLElement {
    * the native behavior of `<input type=checkbox>`.
    */
   _toggleChecked() {
-    console.log("ed-input toggle");
     if (this.disabled) return;
     this.checked = !this.checked;
     this.dispatchEvent(
