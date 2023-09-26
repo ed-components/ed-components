@@ -6,7 +6,7 @@
 
 > Not ready for production yet. These components are used for research.
 
-Wrapper component: [`<ed-quiz>`](./ed-quiz/)
+Wrapper component: [`<ed-pb>`](./ed-pb/)
 
 Single answer components.
 
