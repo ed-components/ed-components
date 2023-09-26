@@ -8,16 +8,46 @@
 import { micromark } from "micromark";
 import { gfm, gfmHtml } from "micromark-extension-gfm";
 import { math, mathHtml } from "micromark-extension-math";
+import {
+  directive,
+  directiveHtml,
+  Directive,
+} from "micromark-extension-directive";
 
 export function md2HTML(md: string) {
   // It seems that empty lines are not allowed inside html content
   // in markdown
   const html = micromark(md, {
     allowDangerousHtml: true,
-    extensions: [gfm(), math()],
-    htmlExtensions: [gfmHtml(), mathHtml({ output: "mathml" })],
+    extensions: [directive(), gfm(), math()],
+    htmlExtensions: [
+      directiveHtml({ answer }),
+      gfmHtml(),
+      mathHtml({ output: "mathml" }),
+    ],
   });
   return html;
+}
+
+/**
+ * @this {import('micromark-util-types').CompileContext}
+ * @type {import('micromark-extension-directive').Handle}
+ * @returns {undefined}
+ */
+function answer(d: Directive) {
+  if (d.type !== "containerDirective" && d.name !== "answer") return false;
+
+  // TODO handle all ed-components types
+  this.tag("<ed-sc");
+
+  // if (d.attributes && "title" in d.attributes) {
+  //   this.tag(' title="' + this.encode(d.attributes.title) + '"');
+  // }
+
+  this.tag(">");
+  this.raw("\n");
+  this.raw(d.content);
+  this.tag("</ed-sc>");
 }
 
 // /**

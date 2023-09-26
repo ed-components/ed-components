@@ -8,9 +8,9 @@ The answer attribute holds the correct answer.
 
 ## Exercice
 
-> Include any markdown you want, like this _quote_.
+> This is a note. Who'd have noted?
 
-1.  Each numberic element list  is turned into a question.
+1.  Each numeric element list  is turned into a question.
 
     You can provide some context.
 

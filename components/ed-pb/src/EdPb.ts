@@ -31,19 +31,35 @@ export class EdPbElement extends HTMLElement {
 
   connectedCallback() {
     // parse markdown into html
+    const contents = md2HTML(this.textContent.trim());
     // TODO use a template before mounting?
-    console.log(this.innerHTML.trim());
-    this.shadowRoot.querySelector("article").innerHTML = md2HTML(
-      this.innerHTML.trim(),
-    );
+    const article = this.shadowRoot.querySelector("article");
+    article.innerHTML = contents;
 
     // prepare html
     this.shadowRoot.querySelectorAll("ol > li").forEach((li: HTMLElement) => {
-      console.log(li);
+      // console.log(li);
     });
+
+    // as a wrapper ed-pb catches events from his ed-components childrens
+    article.addEventListener("edEvent", this._handleResponse.bind(this));
   }
 
   private _handleResponse(evt: Event) {
-    // TODO just listen to edEvent's of the childrens
+    console.log(evt);
+    const url = this.ownerDocument.location as Location;
+    // CustomEvent
+    this.dispatchEvent(
+      new CustomEvent("edEvent", {
+        bubbles: true,
+        detail: {
+          date: new Date().toISOString(),
+          url: url.host + url.pathname,
+          tag: this.tagName,
+          verb: "RESPONDED",
+          // value: input.value,
+        },
+      }),
+    );
   }
 }
