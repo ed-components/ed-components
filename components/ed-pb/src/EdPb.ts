@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import md2Html from "@ed-components/common";
+import { md2HTML } from "@ed-components/common";
 
 /**
  * This component is a wrapper that allows to include multiple questions
@@ -33,7 +33,7 @@ export class EdPbElement extends HTMLElement {
     // parse markdown into html
     // TODO use a template before mounting?
     console.log(this.innerHTML.trim());
-    this.shadowRoot.querySelector("article").innerHTML = md2Html(
+    this.shadowRoot.querySelector("article").innerHTML = md2HTML(
       this.innerHTML.trim(),
     );
 

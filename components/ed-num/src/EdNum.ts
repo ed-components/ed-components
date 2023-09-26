@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import md2Html from "@ed-components/common";
+import { md2HTML } from "@ed-components/common";
 
 /**
  * This component implements a choice interaction activitie as defined in xapi spec
@@ -38,7 +38,7 @@ export class EdNumElement extends HTMLElement {
   }
 
   connectedCallback() {
-    this.shadowRoot.querySelector("label").innerHTML = md2Html(this.innerHTML);
+    this.shadowRoot.querySelector("label").innerHTML = md2HTML(this.innerHTML);
     const button = this.shadowRoot.querySelector("button");
     // pass attributes to input
     const input = this.shadowRoot.querySelector("input");

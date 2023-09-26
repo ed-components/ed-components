@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import md2Html from "@ed-components/common";
+import { md2HTML } from "@ed-components/common";
 
 let startTimestamp: number;
 let ignoreOnend = false;
@@ -105,7 +105,7 @@ export class EdSpeechElement extends HTMLElement {
 
   connectedCallback() {
     this.question = this.innerHTML ? this.innerHTML : "Say something!";
-    this.shadowRoot.querySelector("p").innerHTML = md2Html(this.question);
+    this.shadowRoot.querySelector("p").innerHTML = md2HTML(this.question);
 
     this.startButton = this.shadowRoot.querySelector(
       "#mic-button",

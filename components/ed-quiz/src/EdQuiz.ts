@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import md2Html from "@ed-components/common";
+import { md2HTML } from "@ed-components/common";
 import "./_ed-progress-bar.js";
 import { EdProgressBar } from "./_EdProgressBar.js";
 
@@ -69,7 +69,7 @@ export class EdQuizElement extends HTMLElement {
     this.title = this.title ? this.title : "Quiz";
 
     // parse markdown into html
-    const contents = md2Html(this.innerHTML);
+    const contents = md2HTML(this.innerHTML);
 
     // work on the DocumentFragment content before mounting it
     const fragment = template.content;

@@ -1,4 +1,4 @@
-import md2Html from "@ed-components/common";
+import { md2HTML } from "@ed-components/common";
 import { EdInputSvg } from "./_EdInputSvg";
 
 EdInputSvg.define();
@@ -70,7 +70,7 @@ export class EdScElement extends HTMLElement {
 
   async connectedCallback() {
     // parse markdown into html
-    const contents = md2Html(this.innerHTML);
+    const contents = md2HTML(this.innerHTML);
 
     // work on the DocumentFragment content before mounting it
     const fragment = template.content;

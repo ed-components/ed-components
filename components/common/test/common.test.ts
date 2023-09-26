@@ -1,9 +1,9 @@
 import { expect } from "@open-wc/testing";
-import { md2html } from "../src/common.js";
+import { md2HTML } from "../src/common.js";
 
 describe("EdNum is accessible", () => {
   it("Use gfm task lists", async () => {
-    const html = md2html(`- [ ] A
+    const html = md2HTML(`- [ ] A
 - [x] B
 - [ ] C
 `);
@@ -17,7 +17,7 @@ describe("EdNum is accessible", () => {
     );
   });
   it("Handle single choice tag <ed-sc>", async () => {
-    const html = md2html(`<ed-sc>
+    const html = md2HTML(`<ed-sc>
 This is my label that could also contain some block content like code blocks.
 
 \`\`\`python

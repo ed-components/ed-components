@@ -25,11 +25,11 @@
     "typescript": "^5.2.2"
   },
   "exports": {
-    ".": "./dist/common.js"
+    ".": "./dist/src/common.js"
   },
   "license": "MIT",
-  "main": "dist/common.js",
-  "module": "dist/common.js",
+  "main": "dist/src/common.js",
+  "module": "dist/src/common.js",
   "repository": "https://github.com/ed-components/ed-components",
   "scripts": {
     "build": "tsc",
