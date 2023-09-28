@@ -1,6 +1,4 @@
-// @ts-nocheck
-
-import { md2HTML } from "common";
+import { md2HTML } from "../../common/src/index.js";
 
 /**
  * This component implements a choice interaction activitie as defined in xapi spec

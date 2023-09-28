@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import { md2HTML } from "common";
+import { md2HTML } from "../../common/src/index.js";
 
 /**
  * This component is a wrapper that allows to include multiple questions

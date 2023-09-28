@@ -8,15 +8,9 @@
     "web-components"
   ],
   "type": "module",
-  "dependencies": {
-    "ed-num": "workspace:*",
-    "ed-pb": "workspace:*",
-    "ed-sc": "workspace:*",
-    "ed-speech": "workspace:*",
-    "ed-survey": "workspace:*"
-  },
   "devDependencies": {
     "@open-wc/eslint-config": "^9.2.2",
+    "@open-wc/testing": "^3.2.0",
     "@types/jest": "^29.5.4",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
     "@typescript-eslint/parser": "^6.6.0",
@@ -38,10 +32,17 @@
   "main": "dist/index.js",
   "module": "dist/esm/index.js",
   "scripts": {
-    "build": "tsc -p tsconfig.base.json",
+    "build": "tsc",
+    "watch:ts": "tsc --watch -p tsconfig.dev.json",
     "lint": "eslint --ext .js,.ts --ignore-path .gitignore .",
     "test": "wtr --coverage",
     "test:watch": "wtr --watch"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "dependencies": {
+    "micromark": "^4.0.0",
+    "micromark-extension-directive": "^3.0.0",
+    "micromark-extension-gfm": "^3.0.0",
+    "micromark-extension-math": "^3.0.0"
+  }
 }

@@ -1,4 +1,4 @@
-import { md2HTML } from "common";
+import { md2HTML } from "../../common/src/index.js";
 import { EdInputSvg } from "./_EdInputSvg";
 
 EdInputSvg.define();
@@ -53,7 +53,7 @@ template.innerHTML = `
   `;
 
 export class EdScElement extends HTMLElement {
-  question: string;
+  label: string;
 
   static define(tagName = "ed-sc") {
     customElements.define(tagName, this);

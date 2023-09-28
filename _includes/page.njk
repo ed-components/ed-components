@@ -24,14 +24,8 @@
             {{ content | safe }}
         {% endif %}
         {% if isComponent %}
-            <script src="/js/{{ id }}.js" type="module"></script>
+            <script src="/js/{{ id }}/src/index.js" type="module"></script>
 
-            {% if npmPackage.name == "ed-pb" %}
-            {# ed-pb is wrapper for all other packages #}
-            <script src="/js/ed-num.js" type="module"></script>
-            <script src="/js/ed-sc.js" type="module"></script>
-            <script src="/js/ed-survey.js" type="module"></script>
-            {% endif %}
         {% endif %}
                
         <script src="/global.js" type="module"></script>
