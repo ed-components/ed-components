@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import { md2HTML } from "@ed-components/common";
+import { md2HTML } from "common";
 
 import "./nudeui/nd-rating.js";
 import "./_EdSmiley.js";

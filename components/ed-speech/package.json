@@ -10,7 +10,7 @@
   "type": "module",
   "customElements": "custom-elements.json",
   "dependencies": {
-    "@ed-components/common": "workspace:*"
+    "common": "workspace:*"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.4.17",

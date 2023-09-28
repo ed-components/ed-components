@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import { md2HTML } from "@ed-components/common";
+import { md2HTML } from "common";
 
 /**
  * This component implements a choice interaction activitie as defined in xapi spec

@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import { md2HTML } from "@ed-components/common";
+import { md2HTML } from "common";
 import "./_ed-progress-bar.js";
 import { EdProgressBar } from "./_EdProgressBar.js";
 

@@ -10,6 +10,7 @@
     "useDefineForClassFields": false,
     "sourceMap": true,
     "inlineSources": true,
+    "outDir": "dist",
     // Skip typechecking libraries and .d.ts files
     "skipLibCheck": true
   }

@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import { md2HTML } from "@ed-components/common";
+import { md2HTML } from "common";
 
 /**
  * This component is a wrapper that allows to include multiple questions

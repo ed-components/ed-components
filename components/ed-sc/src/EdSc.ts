@@ -1,4 +1,4 @@
-import { md2HTML } from "@ed-components/common";
+import { md2HTML } from "common";
 import { EdInputSvg } from "./_EdInputSvg";
 
 EdInputSvg.define();

@@ -1,5 +1,6 @@
 {
-  "name": "@ed-components/common",
+  "private": true,
+  "name": "common",
   "description": "Shared code between ed-components.",
   "version": "0.0.0",
   "author": "Benjamin Abel <dev.abel@free.fr> (lyceum.fr)",

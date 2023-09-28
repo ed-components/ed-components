@@ -1,7 +1,8 @@
 {
+  "private": true,
   "name": "ed-sc",
   "description": "A web component to create quiz using markdown gfm markdown's task-list.",
-  "version": "0.2.0",
+  "version": "0.0.0",
   "author": "Benjamin Abel <dev.abel@free.fr> (lyceum.fr)",
   "keywords": [
     "markdown",
@@ -11,7 +12,7 @@
   "type": "module",
   "customElements": "custom-elements.json",
   "dependencies": {
-    "@ed-components/common": "workspace:*"
+    "common": "workspace:*"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.4.17",
