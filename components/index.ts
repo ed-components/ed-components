@@ -1,7 +1,7 @@
-export { EdNumElement } from "./ed-num/src/EdNum";
-export { EdScElement } from "./ed-sc/src/EdSc";
-export { EdSpeechElement } from "./ed-speech/src/EdSpeech";
-export { EdSurveyElement } from "./ed-survey/src/EdSurvey";
+export { EdNumElement } from "./ed-num/src/index";
+export { EdScElement } from "./ed-sc/src/index";
+export { EdSpeechElement } from "./ed-speech/src/index";
+export { EdSurveyElement } from "./ed-survey/src/index";
 
 // wrapper
-export { EdPbElement } from "./ed-pb/src/EdPb";
+export { EdPbElement } from "./ed-pb/src/index";
