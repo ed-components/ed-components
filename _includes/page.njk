@@ -26,8 +26,7 @@
         {% if isComponent %}
             {# <script src="/js/{{ id }}/src/index.js" type="module"></script> #}
             <script type="module">
-                import  {EdNumElement,EdScElement,EdSpeechElement,EdSurveyElement,EdPbElement}from "/js/components/dist/index.rollup.js";
-
+                import  {EdNumElement,EdScElement,EdSpeechElement,EdSurveyElement,EdPbElement}from "/dist/index.min.js";
                 EdNumElement.define()
                 EdScElement.define()
                 EdSpeechElement.define()

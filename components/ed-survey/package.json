@@ -33,7 +33,7 @@
   "main": "dist/index.js",
   "module": "dist/index.js",
   "scripts": {
-    "analyze": "cem analyze --globs \"src/Ed*.ts\"",
+    "analyze": "for comp in components/ed-*/;do comp=$(basename $comp) && echo $comp && cem analyze --outdir components/$comp/ components/$comp/src/$comp.ts;done",
     "build": "tsc && npm run analyze",
     "prepublish": "tsc && npm run analyze",
     "start": "tsc && ../../node_modules/.bin/concurrently -n $npm_package_name: -k \"tsc --watch --preserveWatchOutput\" \"npm run analyze -- --watch\"",

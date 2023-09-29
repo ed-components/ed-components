@@ -27,6 +27,7 @@
     "micromark-extension-math": "^3.0.0"
   },
   "devDependencies": {
+    "@custom-elements-manifest/analyzer": "^0.8.4",
     "@open-wc/eslint-config": "^9.2.2",
     "@open-wc/testing": "^3.2.0",
     "@rollup/plugin-node-resolve": "^15.2.1",
@@ -68,6 +69,7 @@
   },
   "scripts": {
     "build": "tsc && rollup -c",
+    "analyze": "for comp in ed-*/;do comp=$(basename $comp) && echo $comp  && cem analyze --outdir $comp/ --globs $comp/src/Ed*.ts;done",
     "lint": "eslint --ext .js,.ts --ignore-path .gitignore .",
     "postbuild": "pnpm cem",
     "test": "wtr --coverage",

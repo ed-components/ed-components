@@ -30,8 +30,8 @@
     "build": "npx concurrently -n w: npm:build:*",
     "build:css": "postcss \"_assets/style.postcss\" --base . --dir . --ext .css --config postcss.config.cjs",
     "build:html": "npx @11ty/eleventy",
-    "build:js": "for comp in components/ed-*/;do comp=$(basename $comp) && echo $comp && esbuild components/$comp/src/$comp.ts --bundle --minify --platform=neutral --outdir=_site/js;done",
-    "build:manifest": "pnpm -r analyze",
+    "build:js": "cd components && pnpm build && cp -r dist ../_site",
+    "build:manifest": "pnpm --filter ed-components analyze",
     "clean:dist": "find ./components -type d -name dist -exec rm -r \"{}\" \\; && echo 'Success: Dist cleaned'",
     "clean:node_modules": "find . -name \"node_modules\" -type d -exec rm -r \"{}\" \\;",
     "format": "prettier --write \"**/*.{js,mjs,cjs,ts}\" && syncpack format",
@@ -39,7 +39,7 @@
     "start": "npx concurrently -n w: npm:watch:*",
     "watch:css": "postcss \"_assets/style.postcss\" --verbose --base . --dir . --ext .css --config postcss.config.cjs --watch",
     "watch:html": "npx @11ty/eleventy --serve",
-    "watchtodo:js": "npm run build && onchange components/ed-*/src/*.ts -- node scripts/doc-build-js.js {{changed}}",
+    "watch:js": "npm run build:js && onchange components/*/src/*.ts -- npm run build:js",
     "watchtodo:manifest": "pnpm -r analyze -- --watch"
   }
 }
