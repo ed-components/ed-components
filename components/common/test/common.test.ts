@@ -1,5 +1,5 @@
 import { expect } from "@open-wc/testing";
-import { md2HTML } from "../src/index";
+import { md2HTML } from "../src/index.js";
 
 describe("EdNum is accessible", () => {
   it("Use gfm task lists", async () => {

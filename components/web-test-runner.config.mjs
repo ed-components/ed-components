@@ -6,7 +6,9 @@ import fs from "fs";
 const packages = fs
   .readdirSync(".")
   .filter(
-    (dir) => fs.statSync(`${dir}`).isDirectory() && (dir.startsWith("ed-") || dir === 'common')
+    (dir) =>
+      fs.statSync(`${dir}`).isDirectory() &&
+      (dir.startsWith("ed-") || dir === "common"),
   );
 
 // import { playwrightLauncher } from '@web/test-runner-playwright';

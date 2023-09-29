@@ -2,12 +2,30 @@
   "name": "@ed-components/ed-components",
   "description": "A set of web-components for education.",
   "version": "0.0.0",
-  "author": "Benjamin Abel <dev.abel@free.fr",
+  "author": {
+    "name": "Benjamin Abel",
+    "email": "dev.abel@free.fr"
+  },
+  "homepage": "https://components/lyceum.fr",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ed-components/ed-components.git",
+    "directory": "components"
+  },
+  "bugs": {
+    "url": "https://github.com/ed-components/ed-components/issues"
+  },
   "keywords": [
     "ed-tech",
     "web-components"
   ],
   "type": "module",
+  "dependencies": {
+    "micromark": "^4.0.0",
+    "micromark-extension-directive": "^3.0.0",
+    "micromark-extension-gfm": "^3.0.0",
+    "micromark-extension-math": "^3.0.0"
+  },
   "devDependencies": {
     "@open-wc/eslint-config": "^9.2.2",
     "@open-wc/testing": "^3.2.0",
@@ -37,21 +55,23 @@
   ],
   "license": "ISC",
   "main": "dist/index.js",
-  "module": "dist/esm/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/dts/index.d.ts",
+      "default": "./dist/esm/index.js"
+    },
+    "./ed-pb.js": {
+      "types": "./dist/dts/ed-pb/src/index.d.ts",
+      "default": "./dist/esm/ed-pb/src/index.js"
+    },
+  },
   "scripts": {
-    "prebuild": "tsc",
-    "build": "rollup -c",
-    "postbuild": "pnpm cem",
-    "watch:ts": "tsc --watch -p tsconfig.dev.json",
+    "build": "tsc && rollup -c",
     "lint": "eslint --ext .js,.ts --ignore-path .gitignore .",
+    "postbuild": "pnpm cem",
     "test": "wtr --coverage",
     "test:watch": "wtr --watch"
   },
-  "sideEffects": false,
-  "dependencies": {
-    "micromark": "^4.0.0",
-    "micromark-extension-directive": "^3.0.0",
-    "micromark-extension-gfm": "^3.0.0",
-    "micromark-extension-math": "^3.0.0"
-  }
+  "sideEffects": false
 }

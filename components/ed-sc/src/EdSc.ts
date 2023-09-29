@@ -1,5 +1,5 @@
 import { md2HTML } from "../../common/src/index.js";
-import { EdInputSvg } from "./_EdInputSvg";
+import { EdInputSvg } from "./_EdInputSvg.js";
 
 EdInputSvg.define();
 
