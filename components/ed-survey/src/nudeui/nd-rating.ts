@@ -3,6 +3,10 @@
 import MeterDiscrete, { internals } from "./meter-discrete.js";
 
 export class NudeRating extends MeterDiscrete {
+  static define(tagName = "nd-rating") {
+    customElements.define(tagName, this);
+  }
+
   constructor() {
     super();
 
@@ -131,6 +135,3 @@ export class NudeRating extends MeterDiscrete {
 function quantize(value, step) {
   return Math.round(value / step) * step;
 }
-
-// @ts-ignore
-customElements.define("nd-rating", NudeRating);

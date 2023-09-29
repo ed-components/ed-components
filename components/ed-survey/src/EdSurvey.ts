@@ -1,9 +1,12 @@
-// @ts-nocheck
-
 import { md2HTML } from "../../common/src/index.js";
 
-import "./nudeui/nd-rating.js";
-import "./_EdSmiley.js";
+import { NudeRating } from "./nudeui/nd-rating.js";
+import { EdSmiley } from "./_EdSmiley.js";
+
+NudeRating.define();
+EdSmiley.define();
+
+type SurveyType = "smiley" | "rating";
 
 // This component implements a likert interaction activitie as defined in xapi spec
 // ie, An interaction which asks the learner to select from a discrete set of choices on a scale
@@ -39,7 +42,7 @@ export class EdSurveyElement extends HTMLElement {
   connectedCallback() {
     this.question = this.innerHTML ? this.innerHTML : "How are you today?";
     this.shadowRoot.querySelector("p").innerHTML = md2HTML(this.question);
-    const type: "smiley" | "survey" = this.type ?? "smiley";
+    const type: SurveyType = this.type ?? "smiley";
     /**
      * type could be "smiley"(default) or "survey"
      */
@@ -51,16 +54,22 @@ export class EdSurveyElement extends HTMLElement {
         ? `<nd-rating max="5" value="${choice}"></nd-rating>`
         : `<ed-smiley value="${choice}"></ed-smiley>`;
     if (readonly) {
-      div.firstChild.setAttribue("readonly", "");
+      // div.firstChild.setAttribue("readonly", "");
     }
     div.addEventListener("click", this._handleResponse.bind(this));
   }
 
   get type() {
-    return this.getAttribute("type");
+    const type = this.getAttribute("type");
+    switch (type) {
+      case "rating":
+        return type;
+      default:
+        return "smiley";
+    }
   }
 
-  set type(type: string) {
+  set type(type: SurveyType) {
     this.setAttribute("type", type);
   }
 
@@ -120,7 +129,7 @@ export class EdSurveyElement extends HTMLElement {
           type: this.type,
           question: this.question,
           verb: "RESPONDED",
-          choice: choice,
+          choice,
         },
       }),
     );

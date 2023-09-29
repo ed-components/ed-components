@@ -39,7 +39,7 @@
     "start": "npx concurrently -n w: npm:watch:*",
     "watch:css": "postcss \"_assets/style.postcss\" --verbose --base . --dir . --ext .css --config postcss.config.cjs --watch",
     "watch:html": "npx @11ty/eleventy --serve",
-    "watch:js": "npm run build:js && onchange components/*/src/*.ts -- npm run build:js",
+    "watch:js": "onchange -i components/*/src/*.ts -- npm run build:js",
     "watchtodo:manifest": "pnpm -r analyze -- --watch"
   }
 }

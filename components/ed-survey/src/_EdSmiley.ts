@@ -22,6 +22,10 @@ template.innerHTML = `
   `;
 
 export class EdSmiley extends HTMLElement {
+  static define(tagName = "ed-smiley") {
+    customElements.define(tagName, this);
+  }
+
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
@@ -77,5 +81,3 @@ export class EdSmiley extends HTMLElement {
     }
   }
 }
-
-customElements.define("ed-smiley", EdSmiley);
