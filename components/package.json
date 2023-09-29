@@ -64,7 +64,7 @@
     "./ed-pb.js": {
       "types": "./dist/dts/ed-pb/src/index.d.ts",
       "default": "./dist/esm/ed-pb/src/index.js"
-    },
+    }
   },
   "scripts": {
     "build": "tsc && rollup -c",
