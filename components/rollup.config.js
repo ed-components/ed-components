@@ -7,8 +7,7 @@ let dev = process.env.NODE_ENV === "local";
 export default [
   {
     input: "dist/esm/index.js",
-    output:
-    {
+    output: {
       file: "dist/index.min.js",
       format: "esm",
     },

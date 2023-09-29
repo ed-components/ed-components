@@ -14,9 +14,9 @@ export const plugins = [
   dev
     ? noOpWatcher()
     : terser({
-      module: true,
-      keep_classnames: true,
-    }),
+        module: true,
+        keep_classnames: true,
+      }),
   filesize({
     showMinifiedSize: false,
     showBrotliSize: true,
