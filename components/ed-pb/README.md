@@ -14,20 +14,28 @@ The answer attribute holds the correct answer.
 
     You can provide some context.
 
-    :::answer
-    This is a simple text content, the correct answer you wait for.
+    :::ed-speech
+    Say hello
     :::
 
 1.  Question 2.
+
+    Directives are provided for each ed-component.
     
     1. Subquestion 2.1.
 
        If the answer is a gfm task-list it will be turned into a single choice question.
 
-       :::answer
+       :::ed-sc
+
        - [ ] first false answer
        - [x] This is true
+       
        :::
+    
+:::ed-survey
+Did you like this problem?
+:::
 </ed-pb>
 ```
 

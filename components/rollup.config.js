@@ -1,5 +1,5 @@
 import { plugins } from "./rollup-config/plugins.js";
-import { getModules } from "./rollup-config/getModules.js";
+// import { getModules } from "./rollup-config/getModules.js";
 
 let dev = process.env.NODE_ENV === "local";
 // const dev = 'local'

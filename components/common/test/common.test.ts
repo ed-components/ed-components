@@ -16,17 +16,12 @@ describe("EdNum is accessible", () => {
 `,
     );
   });
-  it("Handle answer directive", async () => {
-    const html = md2HTML(`:::answer
-What an **incredible** answer
-
-Also I would like to say _thank you_!)
+  it("Handle ed tags directives", async () => {
+    const html = md2HTML(`:::ed-sc
+- [x] true
+- [ ] false
 :::
 `);
-    expect(html).to.be.equal(`<ed-sc>
-<p>What an <strong>incredible</strong> answer</p>
-<p>Also I would like to say <em>thank you</em>!)</p>
-</ed-sc>
-`);
+    expect(html).to.be.equal("<ed-sc>\n- [x] true\n- [ ] false\n</ed-sc>\n");
   });
 });

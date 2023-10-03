@@ -16,6 +16,10 @@ export class EdPbElement extends HTMLElement {
     customElements.define(tagName, this);
   }
 
+  static get observedAttributes() {
+    return ["label", "description"];
+  }
+
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
@@ -32,6 +36,7 @@ export class EdPbElement extends HTMLElement {
   connectedCallback() {
     // parse markdown into html
     const contents = md2HTML(this.textContent.trim());
+
     // TODO use a template before mounting?
     const article = this.shadowRoot.querySelector("article");
     article.innerHTML = contents;
