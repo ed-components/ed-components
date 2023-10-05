@@ -35,13 +35,30 @@ export class EdPbElement extends HTMLElement {
 
   connectedCallback() {
     // parse markdown into html
-    const contents = md2HTML(this.textContent.trim());
+    const contents = md2HTML(this.innerHTML.trim());
 
     // TODO use a template before mounting?
     const article = this.shadowRoot.querySelector("article");
     article.innerHTML = contents;
 
     // prepare html
+    // turn task-lists into questions
+    this.shadowRoot.querySelectorAll("ul").forEach((ul: HTMLElement) => {
+      ul.querySelectorAll("& >li").forEach((li) => {
+        console.log(li);
+      });
+      let edc = document.createElement("ed-sc");
+      edc.innerHTML = ul.outerHTML;
+      ul.insertAdjacentElement("afterend", edc);
+      const edSc = `<ed-sc>${ul.outerHTML}</ed-sc>`;
+      ul.insertAdjacentHTML("beforebegin", edSc);
+
+      // insert wrapper before el in the DOM tree
+      // ul.parentNode.insertBefore(edSc, ul);
+      // // move el into wrapper
+      // edSc.innerHTML = ul.innerHTML;
+    });
+
     this.shadowRoot.querySelectorAll("ol > li").forEach((li: HTMLElement) => {
       // console.log(li);
     });

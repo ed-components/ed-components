@@ -1,0 +1,89 @@
+1. Qui est John Von Neumann ?
+
+   :::ed[sc]
+   - [ ] Un philosophe allemand.
+   - [ ] Un informaticien et logicien américain.
+   - [x] Un mathématicien et physicien d'origine hongroise.
+   :::
+
+2. Qu'est-ce que l'architecture de Von Neumann ?
+
+   :::ed[sc]
+   - [ ] Une architecture informatique qui utilise une technique de mémoire virtuelle pour
+     augmenter la capacité de stockage
+   - [x] Une architecture informatique qui sépare la mémoire et le processeur en deux composants
+     distincts
+   - [ ] Une architecture informatique qui utilise des processeurs multicœurs pour accélérer le
+     traitement des données
+   :::
+
+3. Quels sont les composants principaux de l'architecture de Von Neumann ?
+
+   :::ed[sc]
+   - [x] Le processeur, la mémoire, l'unité de commande et l'unité arithmétique et logique (ALU)
+   - [ ] Le processeur, la mémoire, l'unité de contrôle et l'unité de traitement graphique (GPU)
+   - [ ] Le processeur, le disque dur, l'unité de commande et l'unité de traitement sonore (DAC)
+   :::
+
+5. La mémoire de l'architecture de Von Neumann est:
+
+   ::ed[sc]
+   - [ ] La mémoire morte (ROM)
+   - [x] La mémoire vive (RAM).
+   - [ ] La mémoire de masse.
+   :::
+
+6. Qu'est-ce que la mémoire d'un ordinateur ?
+
+   - [ ] Un composant matériel qui permet le traitement des données
+   - [ ] Un composant logiciel qui permet de gérer les ressources de l'ordinateur
+   - [x] Un composant matériel qui stocke les données et les programmes
+
+7. À quoi sert la mémoire vive (RAM) ?
+
+   - [ ] À stocker les données et les programmes de façon permanente
+   - [x] À stocker les données et les programmes de façon temporaire pendant leur exécution
+   - [ ] À stocker les données et les programmes de façon virtuelle
+
+
+8. Qu'est-ce que la mémoire de masse ?
+
+   - [x] Une mémoire qui stocke les données de façon permanente, même lorsque l'ordinateur est
+     éteint
+   - [ ] Une mémoire qui stocke les données de façon temporaire, pendant leur exécution
+   - [ ] Une mémoire qui stocke les données de façon virtuelle, pour étendre la capacité de la
+     mémoire vive.
+
+9. Qu'est-ce que le processeur d'un ordinateur ?
+
+   - [ ] Un composant matériel qui stocke les données et les programmes
+   - [x] Un composant matériel qui permet le traitement des données
+   - [ ] Un composant logiciel qui permet de gérer les ressources de l'ordinateur
+
+10. Quels sont les composants principaux du processeur ?
+
+    - [ ] L'unité de traitement graphique (GPU), l'unité de contrôle et les registres
+    - [ ] L'unité de traitement sonore (DAC), l'unité arithmétique et logique (ALU) et les
+      registres
+    - [x] L'unité de commande, l'unité arithmétique et logique (ALU) et les registres
+
+11. À quoi sert l'unité de commande du processeur ?
+   
+    - [x] À interpréter les instructions du programme et à les transmettre à l'ALU
+    - [ ] À effectuer les opérations arithmétiques et logiques sur les données
+    - [ ] À stocker temporairement les données en cours de traitement
+
+12. À quoi sert l'unité arithmétique et logique (ALU) du processeur ?
+
+    - [ ] À interpréter les instructions du programme et à les transmettre à l'unité de commande
+    - [x] À effectuer les opérations arithmétiques et logiques sur les données
+    - [ ] À stocker temporairement les données en cours de traitement
+
+13. Qu'est-ce qu'un registre du processeur ?
+
+    - [x] Une mémoire temporaire de petite taille utilisée pour stocker des données en cours de
+      traitement
+    - [ ] Une mémoire permanente de grande taille utilisée pour stocker des données de façon
+      permanente
+    - [ ] Une extension de la mémoire vive qui permet d'augmenter la capacité de traitement du
+      processeur

@@ -28,6 +28,31 @@ ed-components can be exported to various formats using [pandoc](https://pandoc.o
 
 An open-source library of contents is published as a git repo.
 
+## Syntax
+
+Problems are easy to write thanks to a markdown like syntax which will turn your
+text into the interactive html `ed-components`.
+
+For example:
+
+```html
+# Eisntein formula
+
+We remind you that $$E=m c^2$$
+
+1. What means $E$ in this formula?
+
+
+   :::ed[sc]
+   - [ ] empty
+   - [x] energy
+   - [ ] entropy
+   :::
+
+```
+
+See [`ed-pb`](./components/ed-pb/) for more information.
+
 ## events
 
 Use https://www.xapijs.dev/ verbs, see <https://doc.xapi.fr/profiles/xapi/taxonomy/verbs>

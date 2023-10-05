@@ -23,10 +23,7 @@ export function md2HTML(md: string) {
     extensions: [directive(), gfm(), math()],
     htmlExtensions: [
       directiveHtml({
-        "ed-sc": answer,
-        "ed-speech": answer,
-        "ed-num": answer,
-        "ed-survey": answer,
+        ed: edDirective,
       }),
       gfmHtml(),
       mathHtml({ output: "mathml" }),
@@ -40,21 +37,23 @@ export function md2HTML(md: string) {
  * @type {import('micromark-extension-directive').Handle}
  * @returns {undefined}
  */
-function answer(d: Directive) {
-  if (d.type !== "containerDirective" && !d.name.startsWith("ed-"))
+function edDirective(d: Directive) {
+  if (d.type !== "containerDirective" && d.name !== "ed" && d.label)
     return false;
-
+  const tagName = `${d.name}-${d.label}`;
   this.tag("<");
-  this.tag(d.name);
+  this.tag(tagName);
 
-  // if (d.attributes && "title" in d.attributes) {
-  //   this.tag(' title="' + this.encode(d.attributes.title) + '"');
-  // }
+  if (d.attributes) {
+    for (const attr of Object.keys(d.attributes)) {
+      this.tag(` ${attr}="${this.encode(d.attributes[attr])}"`);
+    }
+  }
 
   this.tag(">");
   this.raw("\n");
   this.raw(d.content);
   this.tag("</");
-  this.tag(d.name);
+  this.tag(tagName);
   this.tag(">");
 }

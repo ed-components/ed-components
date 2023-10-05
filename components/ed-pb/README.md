@@ -1,6 +1,10 @@
 ## Usage
 
-The answer attribute holds the correct answer.
+This wrapper component allow to easliy write problems with ed-components.
+
+Some specific markdown is wrapped inside an adapted ed-components.
+
+1. task-list are wrapped into `<ed-sc>`.
 
 ```html
 <ed-pb>
@@ -14,27 +18,27 @@ The answer attribute holds the correct answer.
 
     You can provide some context.
 
-    :::ed-speech
-    Say hello
-    :::
 
 1.  Question 2.
 
-    Directives are provided for each ed-component.
     
     1. Subquestion 2.1.
 
        If the answer is a gfm task-list it will be turned into a single choice question.
 
-       :::ed-sc
-
        - [ ] first false answer
        - [x] This is true
        
-       :::
+Directives are provided for each other ed-components.
     
-:::ed-survey
+:::ed[survey]{type=rating}
+
 Did you like this problem?
+
+:::
+
+:::ed[speech]
+Say hello
 :::
 </ed-pb>
 ```

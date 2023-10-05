@@ -97,7 +97,10 @@ export class EdInputSvg extends HTMLElement {
 
   constructor() {
     super();
-    this.attachShadow({ mode: "open" });
+    // attach shadow if it do not exists
+    if (!this.shadowRoot) {
+      this.attachShadow({ mode: "open" });
+    }
   }
 
   static get observedAttributes() {
