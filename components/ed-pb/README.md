@@ -4,7 +4,7 @@ This wrapper component allow to easliy write problems with ed-components.
 
 Some specific markdown is wrapped inside an adapted ed-components.
 
-1. task-list are wrapped into `<ed-sc>`.
+1. task-list are wrapped into `<ed-choice>`.
 
 ```html
 <ed-pb>

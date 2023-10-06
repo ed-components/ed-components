@@ -1,4 +1,4 @@
-/** @module WCInputSvg
+/** @module EdInputRadio
  *
  * Based on https://codepen.io/Foxxite/pen/LYEdOoX for svg input
  * and https://github.com/GoogleChromeLabs/howto-components/blob/master/elements/howto-checkbox/howto-checkbox.js
@@ -90,7 +90,7 @@ svg {
   </label>
   `;
 
-export class EdInputCheckBox extends HTMLElement {
+export class EdInputRadio extends HTMLElement {
   static define(tagName = "ed-input") {
     customElements.define(tagName, this);
   }

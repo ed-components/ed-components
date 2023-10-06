@@ -13,7 +13,7 @@ Single answer components.
 - [`<ed-survey>`](./ed-survey/)
 - [`<ed-num>`](./ed-num/)
 - [`<ed-speech>`](./ed-speech/)
-- [`<ed-sc>`](./ed-sc/)
+- [`<ed-choice>`](./ed-choice/)
 
 ## Styling
 

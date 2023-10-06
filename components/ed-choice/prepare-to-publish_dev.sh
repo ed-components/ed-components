@@ -25,7 +25,7 @@ else
     echo "Lancement de la release"
     yarn build
     sed -i "s/\(\"version\": \"\).*\(\",$\)/\1$VERSION\2/" package.json
-    git commit -am "Publish v$VERSION de ed-sc"
+    git commit -am "Publish v$VERSION de ed-choice"
     git push
     npm publish
 fi

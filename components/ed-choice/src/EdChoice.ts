@@ -1,5 +1,6 @@
 import { md2HTML } from "../../common/src/index.js";
 import { EdInputCheckBox } from "./_EdInputCheckBox.js";
+import { EdInputRadio } from "./_EdInputRadio.js";
 
 EdInputCheckBox.define();
 
@@ -52,10 +53,10 @@ template.innerHTML = `
   </article>
   `;
 
-export class EdScElement extends HTMLElement {
+export class EdChoiceElement extends HTMLElement {
   label: string;
 
-  static define(tagName = "ed-sc") {
+  static define(tagName = "ed-choice") {
     customElements.define(tagName, this);
   }
 
@@ -102,7 +103,7 @@ export class EdScElement extends HTMLElement {
    *
    * @private
    * @param {Event} evt
-   * @memberof EdScElement
+   * @memberof EdChoiceElement
    * @fires {EdEvent} edEvent containing user answers in details field
    */
   private _handleResponse(evt: Event) {

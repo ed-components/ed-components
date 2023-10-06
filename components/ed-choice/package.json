@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "ed-sc",
+  "name": "ed-choice",
   "description": "A web component to create quiz using markdown gfm markdown's task-list.",
   "version": "0.0.0",
   "author": "Benjamin Abel <dev.abel@free.fr> (lyceum.fr)",
@@ -26,7 +26,7 @@
   },
   "exports": {
     ".": "./dist/index.js",
-    "./ed-survey.js": "./dist/ed-sc.js"
+    "./ed-survey.js": "./dist/ed-choice.js"
   },
   "license": "MIT",
   "main": "dist/index.js",

@@ -48,14 +48,14 @@ How old are you?
 Do you like pastas.
 </ed-survey>
 
-<ed-sc>
+<ed-choice>
 1. Some inline maths $\eta = \frac{m}{G_m}$, and display mode: </br>
    $$
    L = \frac{1}{2} \rho v^2 S C_L
    $$   
    - [x] true
    - [ ] false
-</ed-sc>    
+</ed-choice>    
 
 </ed-quiz>
 ```

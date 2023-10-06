@@ -47,16 +47,16 @@ export class EdPbElement extends HTMLElement {
       ul.querySelectorAll("& >li").forEach((li) => {
         console.log(li);
       });
-      let edc = document.createElement("ed-sc");
+      let edc = document.createElement("ed-choice");
       edc.innerHTML = ul.outerHTML;
       ul.insertAdjacentElement("afterend", edc);
-      const edSc = `<ed-sc>${ul.outerHTML}</ed-sc>`;
-      ul.insertAdjacentHTML("beforebegin", edSc);
+      const edChoice = `<ed-choice>${ul.outerHTML}</ed-choice>`;
+      ul.insertAdjacentHTML("beforebegin", edChoice);
 
       // insert wrapper before el in the DOM tree
-      // ul.parentNode.insertBefore(edSc, ul);
+      // ul.parentNode.insertBefore(edChoice, ul);
       // // move el into wrapper
-      // edSc.innerHTML = ul.innerHTML;
+      // edChoice.innerHTML = ul.innerHTML;
     });
 
     this.shadowRoot.querySelectorAll("ol > li").forEach((li: HTMLElement) => {

@@ -3,7 +3,7 @@
 _Installation_
 
 ```sh
-npm i ed-sc
+npm i ed-choice
 ```
 
 
@@ -11,7 +11,7 @@ npm i ed-sc
 _Import from NPM_
 
 ```html
-<script type="module" src="node_modules/ed-sc/index.js"></script>
+<script type="module" src="node_modules/ed-choice/index.js"></script>
 ```
 
 _Import from CDN_ **TODO**
@@ -19,7 +19,7 @@ _Import from CDN_ **TODO**
 ```html
 <script
   type="module"
-  src="https://cdn.jsdelivr.net/???gh/????/ed-sc/index.js"
+  src="https://cdn.jsdelivr.net/???gh/????/ed-choice/index.js"
 ></script>
 ``` -->
 
@@ -27,7 +27,7 @@ _Import from CDN_ **TODO**
 
 ### Basic Usage
 
-The `ed-sc` element accepts [gfm markdown](https://github.github.com/gfm/) for
+The `ed-choice` element accepts [gfm markdown](https://github.github.com/gfm/) for
 it's content. Each
 [task-list](https://github.github.com/gfm/#task-list-items-extension-) is turned
 into a single choice question.
@@ -35,7 +35,7 @@ into a single choice question.
 TODO: can it accept multiple questions? multiple answers?
 
 ```html
-<ed-sc>
+<ed-choice>
   Do you love pizzas?
 
   - [ ] First _false_ answer
@@ -47,7 +47,7 @@ TODO: can it accept multiple questions? multiple answers?
     exercitationem reprehenderit, quisquam tenetur sint maxime consequuntur?
     Adipisci, fuga.
         
-</ed-sc>
+</ed-choice>
 ```
 
 ## OLX compatibility
@@ -56,7 +56,7 @@ TODO: can it accept multiple questions? multiple answers?
 can include this hierarchy of child elements.
 
 ```
-<multiplechoiceresponse>      <ed-sc shuffle="true">
+<multiplechoiceresponse>      <ed-choice shuffle="true">
     <label>                   This is my label
     <description>             > optional description
     <choicegroup>             
@@ -68,7 +68,7 @@ can include this hierarchy of child elements.
     <solution>                > solution
 <demandhint>
     <hint>                    - optional additional information that learners can access if needed.
-                              </ed-sc>
+                              </ed-choice>
 ```
 
 **TODO**
