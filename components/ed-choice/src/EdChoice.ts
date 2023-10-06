@@ -2,7 +2,9 @@ import { md2HTML } from "../../common/src/index.js";
 import { EdInputCheckBox } from "./_EdInputCheckBox.js";
 import { EdInputRadio } from "./_EdInputRadio.js";
 
+// weird way to instantiate should use class constructor?
 EdInputCheckBox.define();
+EdInputRadio.define();
 
 const template = document.createElement("template");
 
@@ -60,6 +62,18 @@ export class EdChoiceElement extends HTMLElement {
     customElements.define(tagName, this);
   }
 
+  static get observedAttributes() {
+    return ["type"];
+  }
+
+  get type() {
+    return this.getAttribute("type");
+  }
+
+  set type(type) {
+    this.setAttribute("type", type);
+  }
+
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
@@ -79,19 +93,35 @@ export class EdChoiceElement extends HTMLElement {
     fragment.querySelector("#content").innerHTML = contents.trim();
 
     // prepare html
-    fragment.querySelectorAll("ul > li").forEach((li: HTMLLIElement) => {
-      // handle answers
-      const input = li.querySelector("input");
+    fragment.querySelectorAll("ul").forEach((ul: HTMLUListElement) => {
+      // We inspect li elements to see if there is only one or multiple answers
+      let inputs = [];
+      let nCorrect = 0;
+      ul.querySelectorAll("li").forEach((li: HTMLLIElement, i: number) => {
+        // handle answers
+        const input = li.querySelector("input");
+        const isCorrect = input.checked;
 
-      const edInput = document.createElement("ed-input");
-      // is it a good answer?
-      if (input.checked) {
-        edInput.className = "good-answer";
-      } else {
-        edInput.className = "bad-answer";
+        inputs.push([input, isCorrect]);
+        nCorrect += Number(isCorrect);
+      });
+      // Don't allow no correct answer
+      if (nCorrect === 0) {
+        return;
       }
+      // now we go for single or multiple choice
+      this.type = nCorrect === 1 ? "single" : "multiple";
 
-      input.replaceWith(edInput);
+      inputs.forEach(([input, isCorrect]) => {
+        const edInput =
+          this.type === "single"
+            ? document.createElement("ed-input-radio")
+            : document.createElement("ed-input-checkbox");
+        // is it a good answer?
+        edInput.className = isCorrect ? "good-answer" : "bad-answer";
+
+        input.replaceWith(edInput);
+      });
     });
 
     // mount template
@@ -114,7 +144,11 @@ export class EdChoiceElement extends HTMLElement {
     let score = 0;
     let answers = [];
     this.shadowRoot.querySelectorAll(`li`).forEach((li: HTMLLIElement) => {
-      const input: HTMLInputElement = li.querySelector("ed-input");
+      const input: EdInputCheckBox | EdInputRadio =
+        this.type === "single"
+          ? li.querySelector("ed-input-radio")
+          : li.querySelector("ed-input-checkbox");
+
       const good = input.className; // "good-answer / bad-answer"
       if (input.checked) {
         score += good === "good-answer" ? 1 : 0;

@@ -32,7 +32,7 @@ it's content. Each
 [task-list](https://github.github.com/gfm/#task-list-items-extension-) is turned
 into a single choice question.
 
-TODO: can it accept multiple questions? multiple answers?
+If only one element is checked it will be turned into a single-choide question with instant feedback.
 
 ```html
 <ed-choice>
@@ -46,6 +46,19 @@ TODO: can it accept multiple questions? multiple answers?
     necessitatibus quibusdam odit quas nobis rerum nesciunt harum modi
     exercitationem reprehenderit, quisquam tenetur sint maxime consequuntur?
     Adipisci, fuga.
+        
+</ed-choice>
+```
+
+If more than one answer is checked a submit button is added to allow the choice of multiple answers.
+
+```html
+<ed-choice>
+  Who are the best guitarsits of history.
+
+  - [x] Jimi Hendrix
+  - [ ] Your teacher
+  - [x] Jeff Beck
         
 </ed-choice>
 ```

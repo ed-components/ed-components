@@ -91,7 +91,7 @@ svg {
   `;
 
 export class EdInputRadio extends HTMLElement {
-  static define(tagName = "ed-input") {
+  static define(tagName = "ed-input-radio") {
     customElements.define(tagName, this);
   }
 

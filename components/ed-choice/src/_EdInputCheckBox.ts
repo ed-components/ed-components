@@ -91,7 +91,7 @@ svg {
   `;
 
 export class EdInputCheckBox extends HTMLElement {
-  static define(tagName = "ed-input") {
+  static define(tagName = "ed-input-checkbox") {
     customElements.define(tagName, this);
   }
 
