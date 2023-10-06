@@ -1,7 +1,7 @@
 import { md2HTML } from "../../common/src/index.js";
-import { EdInputSvg } from "./_EdInputSvg.js";
+import { EdInputCheckBox } from "./_EdInputCheckBox.js";
 
-EdInputSvg.define();
+EdInputCheckBox.define();
 
 const template = document.createElement("template");
 

@@ -90,7 +90,7 @@ svg {
   </label>
   `;
 
-export class EdInputSvg extends HTMLElement {
+export class EdInputCheckBox extends HTMLElement {
   static define(tagName = "ed-input") {
     customElements.define(tagName, this);
   }
