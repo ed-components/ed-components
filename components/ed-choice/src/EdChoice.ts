@@ -47,7 +47,7 @@ const template = `
     button.check-answer {
       background-color: var(--ed-primary);
     }
-    
+
     {* TODO share math style*}
     .math-inline {
       font-size: 1.3em;
@@ -56,7 +56,7 @@ const template = `
       font-size: 1.5em;
     }
   </style>
-  <article id="quiz">
+  <article>
   <section id="content"></section>
   <section id="feedback"></section>
   </article>
@@ -126,7 +126,7 @@ export class EdChoiceElement extends HTMLElement {
       });
       // add check answer if multiple-choice
       if (this.type === "multiple") {
-        // svg icon from bootsrap icons
+        // svg icon from bootstrap icons
         // https://icons.getbootstrap.com/icons/ui-checks/
         let button = document.createElement("button");
         button.className = "check-answer";
@@ -164,7 +164,10 @@ export class EdChoiceElement extends HTMLElement {
     // iterate over all possible answers
     let score = 0;
     let answers = [];
+    // count all choices
+    let nChoice = 0;
     this.shadowRoot.querySelectorAll(`li`).forEach((li: HTMLLIElement) => {
+      nChoice += 1;
       const input: EdInputCheckBox | EdInputRadio =
         this.type === "single"
           ? li.querySelector("ed-input-radio")
@@ -174,6 +177,8 @@ export class EdChoiceElement extends HTMLElement {
       if (input.checked) {
         score += good === "good-answer" ? 1 : 0;
         answers.push(li.textContent);
+      } else {
+        score += good === "bad-answer" ? 1 : 0;
       }
       // disables all inputs
       input.setAttribute("disabled", "");
@@ -181,6 +186,8 @@ export class EdChoiceElement extends HTMLElement {
       // stroke all bad answers and higlight good one
       li.setAttribute("class", good);
     });
+    // convert score to percentage
+    score = Math.round((100 * score) / nChoice);
 
     // CustomEvent
     this.dispatchEvent(
