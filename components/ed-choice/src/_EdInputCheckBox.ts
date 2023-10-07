@@ -66,15 +66,15 @@ svg {
   stroke-dashoffset: 0;
 }
 
-:host(.bad-answer[checked]) .cross {
+:host(.bad-answer[checked][disabled]) .cross {
   stroke-dashoffset: 0;
 }
 
-:host(.good-answer) .check {
+:host(.good-answer[disabled]) .check {
   stroke: var(--ed-success); 
 }
 
-:host(.bad-answer) .check {
+:host(.bad-answer[disabled]) .check {
   stroke: var(--ed-danger); 
 }
 

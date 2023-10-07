@@ -19,7 +19,7 @@ Single answer components.
 
 Via CSS custom properties (variables) inspired by bootstrap.
 
-- `--ed-brand`
+- `--ed-primary`
 - `--ed-success`
 - `--ed-danger`
   
@@ -68,3 +68,8 @@ to wtr:
 ```bash
 npm run test -- --group ed-survey
 ```
+
+## TODO
+
+- [ ] Share submit button with localization.
+- [ ] Localize.

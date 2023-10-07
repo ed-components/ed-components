@@ -110,10 +110,10 @@ export class EdInputRadio extends HTMLElement {
 
   connectedCallback() {
     this.shadowRoot.appendChild(template.content.cloneNode(true));
-    // calculate pathlength for animation
-    let svgPath: SVGPathElement =
-      this.shadowRoot.querySelector("svg > path.check");
-    console.log(svgPath.getTotalLength());
+    // // calculate pathlength for animation
+    // let svgPath: SVGPathElement =
+    //   this.shadowRoot.querySelector("svg > path.check");
+    // console.log(svgPath.getTotalLength());
 
     if (!this.hasAttribute("role")) this.setAttribute("role", "checkbox");
 
