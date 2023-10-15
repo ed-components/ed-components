@@ -42,16 +42,17 @@ export class EdPbElement extends HTMLElement {
     article.innerHTML = contents;
 
     // prepare html
-    // turn task-lists into questions
+    // turn task-lists into ed-choices components
     this.shadowRoot.querySelectorAll("ul").forEach((ul: HTMLElement) => {
-      ul.querySelectorAll("& >li").forEach((li) => {
-        console.log(li);
-      });
+      // verify if it a task-list
+      if (ul.querySelector("li > input[type='checkbox']:disabled") === null) {
+        // console.log("Not a task list");
+        return;
+      }
+      // replace task-list with ed-choice
       let edc = document.createElement("ed-choice");
       edc.innerHTML = ul.outerHTML;
-      ul.insertAdjacentElement("afterend", edc);
-      const edChoice = `<ed-choice>${ul.outerHTML}</ed-choice>`;
-      ul.insertAdjacentHTML("beforebegin", edChoice);
+      ul.parentNode.replaceChild(edc, ul);
 
       // insert wrapper before el in the DOM tree
       // ul.parentNode.insertBefore(edChoice, ul);
@@ -68,19 +69,11 @@ export class EdPbElement extends HTMLElement {
   }
 
   private _handleResponse(evt: Event) {
-    console.log(evt);
-    const url = this.ownerDocument.location as Location;
-    // CustomEvent
+    // resend evt from ed-components childs
     this.dispatchEvent(
       new CustomEvent("edEvent", {
         bubbles: true,
-        detail: {
-          date: new Date().toISOString(),
-          url: url.host + url.pathname,
-          tag: this.tagName,
-          verb: "RESPONDED",
-          // value: input.value,
-        },
+        detail: evt.detail,
       }),
     );
   }

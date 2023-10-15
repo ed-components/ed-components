@@ -1,6 +1,6 @@
 ## Usage
 
-This wrapper component allow to easliy write problems with ed-components.
+This wrapper component allow to easily write problems with ed-components.
 
 Some specific markdown is wrapped inside an adapted ed-components.
 
@@ -16,18 +16,29 @@ Some specific markdown is wrapped inside an adapted ed-components.
 
 1.  Each numeric element list  is turned into a question.
 
-    You can provide some context.
-
-
-1.  Question 2.
+    You can provide some context
 
     
     1. Subquestion 2.1.
 
-       If the answer is a gfm task-list it will be turned into a single choice question.
+       A gfm task-list with _one checked answer_ will be turned into a **single choice question**.
 
        - [ ] first false answer
        - [x] This is true
+    
+    1. Subquestion 2.2.
+
+       A gfm task-list with _more than one checked answer_ will be turned into a **multiple choice question**.
+
+       - [ ] first false answer
+       - [x] This is true
+       - [x] This is also true
+       - [ ] false also
+
+However you can use unordered lists in your markdown content.
+
+- Hello
+- World
        
 Directives are provided for each other ed-components.
     
