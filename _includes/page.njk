@@ -26,13 +26,13 @@
         {% if isComponent %}
             {# <script src="/js/{{ id }}/src/index.js" type="module"></script> #}
             <script type="module">
-                import  {EdNumElement,EdChoiceElement,EdSpeechElement,EdSurveyElement,EdPbElement}from "/dist/index.min.js";
+                import  {EdNumElement,EdChoiceElement,EdSpeechElement,EdSurveyElement,EdPbElement, EdMicroElement}from "/dist/index.min.js";
                 EdNumElement.define()
                 EdChoiceElement.define()
                 EdSpeechElement.define()
                 EdSurveyElement.define()
                 EdPbElement.define()
-                    
+                EdMicroElement.define()
             </script>
         {% endif %}
                

@@ -43,7 +43,7 @@ export class EdPbElement extends HTMLElement {
 
     // prepare html
     // turn task-lists into ed-choices components
-    this.shadowRoot.querySelectorAll("ul").forEach((ul: HTMLElement) => {
+    this.shadowRoot.querySelectorAll("ul").forEach((ul: HTMLUListElement) => {
       // verify if it a task-list
       if (ul.querySelector("li > input[type='checkbox']:disabled") === null) {
         // console.log("Not a task list");
@@ -60,8 +60,8 @@ export class EdPbElement extends HTMLElement {
       // edChoice.innerHTML = ul.innerHTML;
     });
 
-    this.shadowRoot.querySelectorAll("ol > li").forEach((li: HTMLElement) => {
-      // console.log(li);
+    this.shadowRoot.querySelectorAll("ol > li").forEach((li: HTMLLIElement) => {
+      console.log("QUESTION", li);
     });
 
     // as a wrapper ed-pb catches events from his ed-components childrens

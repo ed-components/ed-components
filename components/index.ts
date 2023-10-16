@@ -5,3 +5,4 @@ export { EdSurveyElement } from "./ed-survey/src/index.js";
 
 // wrapper
 export { EdPbElement } from "./ed-pb/src/index.js";
+export { EdMicroElement } from "./ed-micro/src/index.js";
