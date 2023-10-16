@@ -13,6 +13,8 @@ const microSvg = `<svg xmlns="http://www.w3.org/2000/svg"
  * in a modal carousel to allow easy navigation and remove unecesary distraction.
  *
  * Heavily inspired from https://github.com/argyleink/gui-challenges/tree/main/dialog
+ * and https://css-tricks.com/css-only-carousel/
+ * and https://webdesign.tutsplus.com/easy-slider-carousel-with-pure-css--cms-107626t
  *
  * @export
  * @class EdMicroElement
@@ -203,6 +205,79 @@ dialog {
       stroke-linejoin: round;
     }
     header {background-color: var(--surface-1);}
+
+    /* slider part*/
+    #slides {
+  display: flex;
+  
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+    
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+#slides::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+#slides::-webkit-scrollbar-thumb {
+  background: black;
+  border-radius: 10px;
+}
+#slides::-webkit-scrollbar-track {
+  background: transparent;
+}
+#slides > div {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  width: 100%;
+  height: 100%;
+  padding: 1.3em;
+  border-radius: 10px;
+  transform-origin: center center;
+  transform: scale(1);
+  transition: transform 0.5s;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.slide {
+  flex: 0 0 95%;
+}
+
+
+.carousel-arrow {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  top: 0;
+  bottom: 64px;
+  margin-block: auto;
+  height: fit-content;
+  width: 48px;
+  background-color: white;
+  border: none;
+  font-size: 3rem;
+  padding: 0;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 100ms;
+}
+
+.carousel-arrow:hover,
+.carousel-arrow:focus {
+  opacity: 1;
+}
+
+.carousel-arrow--prev {
+  left: 0;
+}
+
+.carousel-arrow--next {
+  right: 0;
+}
     </style>
     <dialog id="MegaDialog" modal-mode="mega">
       <form method="dialog">
@@ -217,7 +292,7 @@ dialog {
             </svg>
           </button>
       </header>
-      <article id="content"></article>
+      <article id="slides"></article>
       </form>
     </dialog>
     <section id="open-label">
@@ -231,18 +306,58 @@ dialog {
     if (this.innerHTML.length === 0) {
       return;
     }
-    this.shadowRoot.querySelector("#content").innerHTML = md2HTML(
-      this.innerHTML.trim(),
-    );
+    const slidesWrapper = this.shadowRoot.querySelector("#slides");
+
+    slidesWrapper.innerHTML = md2HTML(this.innerHTML.trim());
 
     // if no label is provided use first element
     if (this.label === null) {
-      const firstChild =
-        this.shadowRoot.querySelector("#content").firstElementChild;
+      const firstChild = slidesWrapper.firstElementChild;
       this.label = firstChild.outerHTML;
       firstChild.remove();
     }
     this._updateLabel(this.label);
+
+    // wrap headers inside slide units
+    // first add hr before headings
+    slidesWrapper.querySelectorAll("h1,h2,h3,h4,h5,h6").forEach((h) => {
+      h.insertAdjacentHTML("beforebegin", `<hr>`);
+    });
+
+    slidesWrapper.innerHTML = `<div class="slide">${slidesWrapper.innerHTML.replace(
+      /<hr>/g,
+      '</div>\n<div class="slide">',
+    )}</div>`;
+
+    // remove empty slides
+    slidesWrapper.querySelectorAll(".slide").forEach((slide) => {
+      if (slide.childElementCount === 0) {
+        slide.remove();
+      }
+    });
+
+    // add arrows navigation
+    let prevButton = document.createElement("span");
+    prevButton.className = "carousel-arrow carousel-arrow--prev";
+    prevButton.innerHTML = "&#8249;";
+    prevButton.addEventListener("click", this._handleCarouselMove.bind(this));
+    slidesWrapper.insertAdjacentElement("beforeend", prevButton);
+    let nextButton = document.createElement("span");
+    nextButton.className = "carousel-arrow carousel-arrow--next";
+    nextButton.innerHTML = "&#8250;";
+    nextButton.addEventListener("click", this._handleCarouselMove.bind(this));
+    slidesWrapper.insertAdjacentElement("beforeend", nextButton);
+
+    //   slidesWrapper.insertAdjacentHTML(
+    //     "afterbegin",
+    //     `<button class="carousel-arrow carousel-arrow--prev" onclick="handleCarouselMove(false)">
+    //   &#8249;
+    // </button>
+
+    // <button class="carousel-arrow carousel-arrow--next" onclick="handleCarouselMove()">
+    //   &#8250;
+    // </button>`,
+    //   )
   }
 
   get label() {
@@ -252,6 +367,15 @@ dialog {
   set label(value) {
     this._updateLabel(value);
     this.setAttribute("label", value);
+  }
+
+  private _handleCarouselMove(evt) {
+    const carousel = this.shadowRoot.querySelector("#slides");
+    const slideWidth = this.shadowRoot.querySelector(".slide").clientWidth;
+    console.log(evt.target.className);
+    carousel.scrollLeft = evt.target.classList.contains("carousel-arrow--next")
+      ? carousel.scrollLeft + slideWidth
+      : carousel.scrollLeft - slideWidth;
   }
 
   private _updateLabel(label) {
@@ -265,6 +389,8 @@ dialog {
     }
     openLabel.querySelector("svg").addEventListener("click", () => {
       this.shadowRoot.querySelector("dialog").showModal();
+      // move slider to the left on each opening
+      this.shadowRoot.querySelector("#slides").scrollTo(0, 0);
     });
   }
 }
