@@ -6,14 +6,18 @@
 
 > Not ready for production yet. These components are used for research.
 
-Wrapper component: [`<ed-pb>`](./ed-pb/)
+Wrapper components:
 
+- [`<ed-pb>`](./ed-pb/): Handle a set of questions and interactive answers.
+- [`<ed-micro>`](./ed-micro/): Allows wraping content inside a minimal dialog
+  element to easily chunk information and maximize memorization.
+  
 Single answer components.
 
 - [`<ed-survey>`](./ed-survey/)
 - [`<ed-num>`](./ed-num/)
 - [`<ed-speech>`](./ed-speech/)
-- [`<ed-choice>`](./ed-choice/)
+- [`<ed-choice>`](./ed-choice/): Single or multiple choice answer.
 
 ## Styling
 

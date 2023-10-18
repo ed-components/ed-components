@@ -46,6 +46,48 @@ Ok.
 </ed-micro>
 ```
 
+You can use another ed-components inside ed-micro component.
+
+```html
+<ed-micro>
+## Let's test
+
+<ed-pb>
+    
+> This is a note. Who'd have noted?
+
+1.  Each numeric element list  is turned into a question.
+
+    You can provide some context
+
+    
+    1. Subquestion 2.1.
+
+       A gfm task-list with _one checked answer_ will be turned into a **single choice question**.
+
+       - [ ] first false answer
+       - [x] This is true
+    
+    1. Subquestion 2.2.
+
+       A gfm task-list with _more than one checked answer_ will be turned into a **multiple choice question**.
+
+       - [ ] first false answer
+       - [x] This is true
+       - [x] This is also true
+       - [ ] false also
+</ed-pb>
+
+--- 
+
+This content is in its own slide.
+
+## Split content
+
+Ok.
+</ed-micro>
+```
+
 
 ## References
 
