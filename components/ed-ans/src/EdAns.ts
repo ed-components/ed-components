@@ -1,5 +1,8 @@
-import winkNLP from "https://cdn.jsdelivr.net/npm/wink-nlp@1.14.3/+esm";
-import model from "https://cdn.jsdelivr.net/npm/wink-eng-lite-web-model@1.5.2/+esm";
+// @ts-nocheck
+
+import winkNLP, { Bow } from "wink-nlp";
+import similarity from "wink-nlp/utilities/similarity";
+import model from "wink-eng-lite-web-model";
 
 const nlp = winkNLP(model);
 // Acquire "its" and "as" helpers from nlp.
@@ -45,26 +48,55 @@ export class EdAnsElement extends HTMLElement {
     </style>
     <label for="answer">Your answer</label>
     <input type="text" name="answer" placeholder="Enter your answer"/>
+    <out></out>
     <button type="submit">Submit</button>
     `;
   }
 
   connectedCallback() {
     // this.shadowRoot.querySelector("label").innerHTML = md2HTML(this.innerHTML);
-    const correctAns = this.innerHTML;
+    const correctAns: string = this.innerHTML.trim();
+    const bowCorrectAns: Bow = nlp
+      .readDoc(correctAns)
+      .tokens()
+      // .filter((t) => t.out(its.type) === "punctuation")
+      .out(its.value, as.bow);
+    const setCorrectAns = nlp
+      .readDoc(correctAns)
+      .tokens()
+      // .filter((t) => t.out(its.type) === "punctuation")
+      .out(its.value, as.set);
+
     const button: HTMLButtonElement = this.shadowRoot.querySelector("button");
     const input: HTMLInputElement = this.shadowRoot.querySelector("input");
     // We allow 10% larger
-    input.size = Math.round(correctAns.length * 1.1);
-    input.addEventListener("change", (evt) => {
-      const text = input.value;
-      console.log(text);
-      const doc = nlp.readDoc(text);
+    const size = Math.round(correctAns.length * 1.1);
+    if (size > 0) {
+      input.size = size;
+    }
 
-      doc.entities().each((e) => e.markup());
-      this.shadowRoot.querySelector("input").innerHTML = doc.out(
-        its.markedUpText,
-      );
+    input.addEventListener("keyup", (evt) => {
+      const ans = input.value;
+      const bowAns: Bow = nlp
+        .readDoc(ans)
+        .tokens()
+        // .filter((t) => t.out(its.type) === "punctuation")
+        .out(its.value, as.bow);
+      const setAns = nlp
+        .readDoc(ans)
+        .tokens()
+        // .filter((t) => t.out(its.type) === "punctuation")
+        .out(its.value, as.set);
+
+      this.shadowRoot.querySelector(
+        "out",
+      ).innerHTML = `COSINE SIMILARITY: ${similarity.bow.cosine(
+        bowAns,
+        bowCorrectAns,
+      )}|TVERTSY:  ${similarity.set.tversky(
+        setAns,
+        setCorrectAns,
+      )}|OO:  ${similarity.set.oo(setAns, setCorrectAns)}`;
     });
     button.addEventListener("click", this._handleResponse.bind(this));
   }
