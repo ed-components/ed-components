@@ -1,7 +1,7 @@
 {
   "name": "@ed-components/ed-components",
   "description": "A set of web-components for education.",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": {
     "name": "Benjamin Abel",
     "email": "dev.abel@free.fr"
@@ -13,7 +13,6 @@
   "type": "module",
   "bugs": "https://github.com/ed-components/ed-components/issues",
   "dependencies": {
-    "mdast-util-frontmatter": "^2.0.1",
     "micromark": "^4.0.0",
     "micromark-extension-directive": "^3.0.0",
     "micromark-extension-gfm": "^3.0.0",

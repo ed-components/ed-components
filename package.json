@@ -30,7 +30,7 @@
   "scripts": {
     "analyze": "pnpm --filter ed-components analyze",
     "build": "pnpm analyze && npx concurrently -n w: npm:build:*",
-    "build:css": "postcss \"_assets/style.postcss\" --base . --dir . --ext .css --config postcss.config.cjs",
+    "build:css": "postcss \"11ty/_assets/style.postcss\" --base . --dir . --ext .css --config postcss.config.cjs",
     "build:html": "npx @11ty/eleventy",
     "build:js": "cd components && pnpm build && cp -r dist ../_site",
     "clean:dist": "find ./components -type d -name dist -exec rm -r \"{}\" \\; && echo 'Success: Dist cleaned'",
@@ -38,7 +38,7 @@
     "format": "prettier --write \"**/*.{js,mjs,cjs,ts}\" && syncpack format",
     "serve": "npx @11ty/eleventy --serve",
     "start": "npx concurrently -n w: npm:watch:*",
-    "watch:css": "postcss \"_assets/style.postcss\" --verbose --base . --dir . --ext .css --config postcss.config.cjs --watch",
+    "watch:css": "postcss \"11ty/_assets/style.postcss\" --verbose --base . --dir . --ext .css --config postcss.config.cjs --watch",
     "watch:html": "npx @11ty/eleventy --serve",
     "watch:js": "onchange -i components/*/src/*.ts -- npm run build:js",
     "watchtodo:manifest": "pnpm -r analyze -- --watch"

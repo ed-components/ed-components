@@ -5,7 +5,7 @@ function renderDemos() {
     "pre > code.language-html, pre.language-html > code",
   )) {
     // render only demos
-    const regExpDirective = new RegExp("^:+\[ed\]");
+    const regExpDirective = new RegExp("^:+[ed]");
 
     if (code.textContent.startsWith("<ed-")) {
       const htmlCode = code.textContent;
