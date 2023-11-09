@@ -28,7 +28,9 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "11ty/_assets/**/*.js": "." });
   eleventyConfig.addPassthroughCopy({ "11ty/_assets/**/*.css": "." });
   eleventyConfig.addPassthroughCopy({ "11ty/_assets/*.svg": "." });
-  eleventyConfig.addPassthroughCopy({ "11ty/_assets/images/**/*": "./images/" });
+  eleventyConfig.addPassthroughCopy({
+    "11ty/_assets/images/**/*": "./images/",
+  });
 
   eleventyConfig.addFilter("relative", (page) => {
     let path = page.url.replace(/[^/]+$/, "");
@@ -43,7 +45,7 @@ module.exports = function (eleventyConfig) {
     dir: {
       input: ".",
       includes: "./11ty/_includes",
-      data: "./11ty/_data"
+      data: "./11ty/_data",
       // output: "_site",
     },
   };

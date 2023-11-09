@@ -6,8 +6,7 @@ import { esbuildPlugin } from "@web/dev-server-esbuild";
 import { fromRollup } from "@web/dev-server-rollup";
 import rollupCommonjs from "@rollup/plugin-commonjs";
 // import rollupReplace from "@rollup/plugin-replace";
-import rollupResolve from '@rollup/plugin-node-resolve';
-
+import rollupResolve from "@rollup/plugin-node-resolve";
 
 // const replace = fromRollup(rollupReplace);
 const resolve = fromRollup(rollupResolve);
@@ -55,7 +54,7 @@ export default /** @type {import("@web/test-runner").TestRunnerConfig} */ ({
   plugins: [
     esbuildPlugin({ ts: true }),
     commonjs({
-      include: ["**/node_modules/**/*"]
+      include: ["**/node_modules/**/*"],
     }),
     resolve(),
     // replace({
