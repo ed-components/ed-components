@@ -68,7 +68,7 @@
     "dist/**/*.js"
   ],
   "homepage": "https://components/lyceum.fr",
-  "license": "ISC",
+  "license": "MIT",
   "main": "dist/index.js",
   "repository": {
     "type": "git",
