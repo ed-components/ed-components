@@ -1,7 +1,7 @@
 {
   "name": "@ed-components/ed-components",
   "description": "A set of web-components for education.",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": {
     "name": "Benjamin Abel",
     "email": "dev.abel@free.fr"
@@ -17,6 +17,7 @@
     "micromark-extension-directive": "^3.0.0",
     "micromark-extension-gfm": "^3.0.0",
     "micromark-extension-math": "^3.0.0",
+    "tslib": "^2.6.2",
     "wink-eng-lite-web-model": "^1.5.2",
     "wink-nlp": "^1.14.3"
   },
@@ -49,7 +50,6 @@
     "on": "^1.3.0",
     "rollup": "^3.29.4",
     "rollup-plugin-filesize": "^10.0.0",
-    "tslib": "^2.6.2",
     "typescript": "^5.2.2",
     "util": "^0.12.5"
   },

@@ -1,4 +1,6 @@
-# ed-components
+# ed-components &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ed-components/ed-components/blob/main/LICENSE) [![npm version](https://img.shields.io/npm/v/@ed-components/ed-components.svg?style=flat)](https://www.npmjs.com/package/@ed-components/ed-components)
+
+ <!-- Badges restants [![CircleCI Status](https://circleci.com/gh/facebook/react.svg?style=shield)](https://circleci.com/gh/facebook/react) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://reactjs.org/docs/how-to-contribute.html#your-first-pull-request) -->
 
 > A set of web-components for education.
 
