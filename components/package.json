@@ -13,7 +13,6 @@
   "type": "module",
   "bugs": "https://github.com/ed-components/ed-components/issues",
   "dependencies": {
-    "mdast-util-frontmatter": "^2.0.1",
     "micromark": "^4.0.0",
     "micromark-extension-directive": "^3.0.0",
     "micromark-extension-gfm": "^3.0.0",
