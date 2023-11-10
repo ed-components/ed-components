@@ -65,9 +65,11 @@
   },
   "files": [
     "dist/*.js",
-    "dist/**/*.js"
+    "dist/**/*.js",
+    "dist/dts/*.d.ts",
+    "dist/dts/**/*.d.ts"
   ],
-  "homepage": "https://components/lyceum.fr",
+  "homepage": "https://components.lyceum.fr",
   "license": "MIT",
   "main": "dist/index.js",
   "repository": {
