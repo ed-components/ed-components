@@ -8,7 +8,6 @@
 import { micromark } from "micromark";
 import { gfm, gfmHtml } from "micromark-extension-gfm";
 import { math, mathHtml } from "micromark-extension-math";
-// import * as matter from "gray-matter";
 
 import {
   directive,
@@ -17,7 +16,6 @@ import {
 } from "micromark-extension-directive";
 
 export function md2HTML(md: string) {
-  // const { content, data } = matter(md);
   const html = micromark(md, {
     allowDangerousHtml: true,
     extensions: [directive(), gfm(), math()],
