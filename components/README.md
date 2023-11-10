@@ -22,6 +22,24 @@ Single answer components.
 - [`<ed-num>`](./ed-num/)
 - [`<ed-speech>`](./ed-speech/)
 
+## Importing all elements
+
+Components are published as npm packages, you can easily import all components and register it with the `registerComponents` function.
+
+```js
+import  registerElements from "https://esm.sh/@ed-components/ed-components";
+registerElements()
+```
+
+You can also install locally with `npm i @ed-components/ed-components` and then in your code.
+
+```js
+import  registerElements from "@ed-components/ed-components";
+registerElements()
+```
+
+You also can register the elements you use and rename them. See dedicated pages for each component.
+
 ## Styling
 
 Via CSS custom properties (variables) inspired by bootstrap.

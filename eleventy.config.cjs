@@ -31,6 +31,9 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({
     "11ty/_assets/images/**/*": "./images/",
   });
+  eleventyConfig.addPassthroughCopy({
+    "components/dist": "./dist"
+  });
 
   eleventyConfig.addFilter("relative", (page) => {
     let path = page.url.replace(/[^/]+$/, "");

@@ -23,20 +23,13 @@
         {% else %}
             {{ content | safe }}
         {% endif %}
-        {% if isComponent %}
-            {# <script src="/js/{{ id }}/src/index.js" type="module"></script> #}
-            <script type="module">
-                import  {EdAnsElement, EdNumElement,EdChoiceElement,EdSpeechElement,EdSurveyElement,EdPbElement, EdMicroElement}from "/dist/index.js";
-                EdAnsElement.define()
-                EdNumElement.define()
-                EdChoiceElement.define()
-                EdSpeechElement.define()
-                EdSurveyElement.define()
-                EdPbElement.define()
-                EdMicroElement.define()
-            </script>
-        {% endif %}
-               
+        
+        
+        <script type="module">
+            import  registerElements from "/dist/index.js";
+            registerElements()
+        </script>
+        
         <script src="/global.js" type="module"></script>
         <script src="/theme-toggle.js"></script>
         {% if isComponent %}

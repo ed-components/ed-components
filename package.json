@@ -32,7 +32,7 @@
     "build": "pnpm analyze && npx concurrently -n w: npm:build:*",
     "build:css": "postcss \"11ty/_assets/style.postcss\" --base . --dir . --ext .css --config postcss.config.cjs",
     "build:html": "npx @11ty/eleventy",
-    "build:js": "cd components && pnpm build && cp -r dist ../_site",
+    "build:js": "cd components && pnpm build",
     "clean:dist": "find ./components -type d -name dist -exec rm -r \"{}\" \\; && echo 'Success: Dist cleaned'",
     "clean:node_modules": "find . -name \"node_modules\" -type d -exec rm -r \"{}\" \\;",
     "format": "prettier --write \"**/*.{js,mjs,cjs,ts}\" && syncpack format",

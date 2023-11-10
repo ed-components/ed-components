@@ -33,25 +33,23 @@ An open-source library of contents is published as a git repo.
 Problems are easy to write thanks to a markdown like syntax which will turn your
 text into the interactive html `ed-components`.
 
-For example:
+For example using the `<ed-choice>`  let you easily write choices questions like this.
 
 ```html
-# Eisntein formula
+<ed-choice>
+# Einstein formula
 
 We remind you that $$E=m c^2$$
 
-1. What means $E$ in this formula?
+What means $E$ in this formula?
 
-
-   :::ed[sc]
    - [ ] empty
    - [x] energy
    - [ ] entropy
-   :::
-
+</ed-choice>
 ```
 
-See [`ed-pb`](./components/ed-pb/) for more information.
+See [`ed-choice`](./components/ed-choice/) for more information.
 
 ## events
 
