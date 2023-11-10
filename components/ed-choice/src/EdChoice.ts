@@ -1,4 +1,3 @@
-import { md2HTML } from "../../common/src/index.js";
 import { EdInputCheckBox } from "./_EdInputCheckBox.js";
 import { EdInputRadio } from "./_EdInputRadio.js";
 
@@ -70,7 +69,7 @@ export class EdChoiceElement extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["type"];
+    return ["type", "html"];
   }
 
   get type() {
@@ -81,6 +80,10 @@ export class EdChoiceElement extends HTMLElement {
     this.setAttribute("type", type);
   }
 
+  get html() {
+    return this.hasAttribute("html");
+  }
+
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
@@ -88,11 +91,15 @@ export class EdChoiceElement extends HTMLElement {
   }
 
   async connectedCallback() {
-    // parse markdown into html
-    const contents = md2HTML(this.innerHTML);
-
-    // work on the DocumentFragment content before mounting it
-    this.shadowRoot.querySelector("#content").innerHTML = contents.trim();
+    if (!this.html) {
+      // parse markdown into html
+      const { md2HTML } = await import("../../common/src/index.js");
+      const contents = md2HTML(this.innerHTML);
+      // work on the DocumentFragment content before mounting it
+      this.shadowRoot.querySelector("#content").innerHTML = contents.trim();
+    } else {
+      this.shadowRoot.querySelector("#content").innerHTML = this.innerHTML;
+    }
 
     // prepare html
     this.shadowRoot.querySelectorAll("ul").forEach((ul: HTMLUListElement) => {

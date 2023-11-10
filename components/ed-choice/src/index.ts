@@ -1,1 +1,1 @@
-export { EdChoiceElement as EdChoiceElement } from "./EdChoice.js";
+export { EdChoiceElement } from "./EdChoice.js";
