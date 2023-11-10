@@ -32,7 +32,7 @@ module.exports = function (eleventyConfig) {
     "11ty/_assets/images/**/*": "./images/",
   });
   eleventyConfig.addPassthroughCopy({
-    "components/dist": "./dist"
+    "components/dist": "./dist",
   });
 
   eleventyConfig.addFilter("relative", (page) => {
