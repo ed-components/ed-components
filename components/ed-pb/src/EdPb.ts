@@ -21,7 +21,7 @@ export class EdPbElement extends HTMLElement {
   // number of answers user responded
   private nAns = 0;
 
-  // score on pb as petrcentage
+  // score on pb as percentage
   private score = 0;
 
   static define(tagName = "ed-pb") {
@@ -105,7 +105,6 @@ export class EdPbElement extends HTMLElement {
     evt.stopPropagation();
     this.nAns += 1;
     this.score += evt.detail.score;
-    console.log(this.score);
 
     const progressBar: EdProgressBarElement =
       this.shadowRoot.querySelector("#bar-progress");

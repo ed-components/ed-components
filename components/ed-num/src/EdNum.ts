@@ -1,18 +1,15 @@
-import { md2HTML } from "../../common/src/index.js";
-
 /**
- * This component implements a choice interaction activitie as defined in xapi spec
- * ie, an interaction with a number of possible choices from which the learner
-   can select. This includes interactions in which the learner can select only
-   one answer from the list and those where the learner can select multiple TODO NOT FOR NOW
-   items.
+ * This component implements a numeric interaction activitie as defined in xapi spec
+ * ie, any interaction which requires a numeric response from the learner.
  * see https://github.com/adlnet/xAPI-Spec/blob/master/xAPI-Data.md#interaction-activities
- * 
+ *
  * @export
  * @class EdNumElement
  * @extends {HTMLElement}
  */
 export class EdNumElement extends HTMLElement {
+  private _answer: number;
+
   static define(tagName = "ed-num") {
     customElements.define(tagName, this);
   }
@@ -29,14 +26,16 @@ export class EdNumElement extends HTMLElement {
       display: block;
     }
     </style>
-    <label for="answer"></label>
     <input type="number" name="answer" placeholder="Enter number"/>
+    <label for="answer"></label>
     <button type="submit">Submit</button>
     `;
   }
 
   connectedCallback() {
-    this.shadowRoot.querySelector("label").innerHTML = md2HTML(this.innerHTML);
+    // this.innerHTML contains answer
+    this._answer = Number(this.innerHTML);
+
     const button = this.shadowRoot.querySelector("button");
     // pass attributes to input
     const input = this.shadowRoot.querySelector("input");
@@ -50,14 +49,6 @@ export class EdNumElement extends HTMLElement {
       input.setAttribute("step", String(this.step));
     }
     button.addEventListener("click", this._handleResponse.bind(this));
-  }
-
-  get answer() {
-    return Number(this.getAttribute("answer"));
-  }
-
-  set answer(answer: number) {
-    this.setAttribute("answer", String(answer));
   }
 
   get readonly() {
@@ -97,7 +88,7 @@ export class EdNumElement extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["answer", "choice", "readonly", "max", "min", "step"];
+    return ["max", "min", "step", "readonly"];
   }
 
   private _handleResponse(evt: Event) {
@@ -106,10 +97,16 @@ export class EdNumElement extends HTMLElement {
     // TODO get unique identifier of html element ie id or // dompath:
     // https://stackoverflow.com/a/69104350
 
-    const el = evt.target as HTMLInputElement;
     const input = this.shadowRoot.querySelector("input");
-    console.log(el);
+    const answer = Number(input.value);
+    this.shadowRoot.querySelector("label").innerHTML = `You answered ${answer}`;
 
+    // score calculated as a percentage based on error
+    const error = Math.min(
+      1,
+      Math.abs(answer - this._answer) / Math.abs(this._answer),
+    );
+    const score = Math.round(100 * (1 - error));
     const url = this.ownerDocument.location as Location;
     // CustomEvent
     this.dispatchEvent(
@@ -120,7 +117,7 @@ export class EdNumElement extends HTMLElement {
           url: url.host + url.pathname,
           tag: this.tagName,
           verb: "RESPONDED",
-          value: input.value,
+          score,
         },
       }),
     );

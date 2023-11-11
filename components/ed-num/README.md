@@ -1,26 +1,18 @@
 ## Usage
 
-The answer attribute holds the correct answer.
+The correct answer is provided inside the element.
 
 ```html
-<ed-num answer="2">
-1 + 1
+<ed-num>
+-24
 </ed-num>
 ```
 
 You can pass [input type number attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/number#additional_attributes) like `min`, `max`, `step`.
 
 ```html
-<ed-num answer="0.3" min="0" max="10" step="0.1">
-0.1 + 0.3
-</ed-num>
-```
-
-The content passed can be formatted with markdown.
-
-```html
-<ed-num>
-How many **times** you've been _lazy_ this mounth?
+<ed-num min="0" max="10" step="0.01">
+3.14
 </ed-num>
 ```
 
