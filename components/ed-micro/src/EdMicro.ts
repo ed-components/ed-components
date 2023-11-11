@@ -1,5 +1,3 @@
-import { md2HTML } from "../../common/src/index.js";
-
 // adapted from bootstrap icons https://icons.getbootstrap.com/icons/chat-left-quote/
 const microSvg = `<svg xmlns="http://www.w3.org/2000/svg"
   width="16" height="16" fill="var(--ed-primary)" viewBox="0 0 16 16"
@@ -26,7 +24,11 @@ export class EdMicroElement extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["label"];
+    return ["label", "html"];
+  }
+
+  get html() {
+    return this.hasAttribute("html");
   }
 
   constructor() {
@@ -302,13 +304,19 @@ dialog {
     `;
   }
 
-  connectedCallback() {
+  async connectedCallback() {
     if (this.innerHTML.length === 0) {
       return;
     }
     const slidesWrapper = this.shadowRoot.querySelector("#slides");
 
-    slidesWrapper.innerHTML = md2HTML(this.innerHTML.trim());
+    if (!this.html) {
+      // parse markdown into html
+      const { md2HTML } = await import("../../common/src/index.js");
+      slidesWrapper.innerHTML = md2HTML(this.innerHTML.trim());
+    } else {
+      slidesWrapper.innerHTML = this.innerHTML.trim();
+    }
 
     // if no label is provided use first element
     if (this.label === null) {
@@ -330,34 +338,28 @@ dialog {
     )}</div>`;
 
     // remove empty slides
+    let nSlide = 0;
     slidesWrapper.querySelectorAll(".slide").forEach((slide) => {
       if (slide.childElementCount === 0) {
         slide.remove();
+      } else {
+        nSlide += 1;
       }
     });
 
-    // add arrows navigation
-    let prevButton = document.createElement("span");
-    prevButton.className = "carousel-arrow carousel-arrow--prev";
-    prevButton.innerHTML = "&#8249;";
-    prevButton.addEventListener("click", this._handleCarouselMove.bind(this));
-    slidesWrapper.insertAdjacentElement("beforeend", prevButton);
-    let nextButton = document.createElement("span");
-    nextButton.className = "carousel-arrow carousel-arrow--next";
-    nextButton.innerHTML = "&#8250;";
-    nextButton.addEventListener("click", this._handleCarouselMove.bind(this));
-    slidesWrapper.insertAdjacentElement("beforeend", nextButton);
-
-    //   slidesWrapper.insertAdjacentHTML(
-    //     "afterbegin",
-    //     `<button class="carousel-arrow carousel-arrow--prev" onclick="handleCarouselMove(false)">
-    //   &#8249;
-    // </button>
-
-    // <button class="carousel-arrow carousel-arrow--next" onclick="handleCarouselMove()">
-    //   &#8250;
-    // </button>`,
-    //   )
+    // add arrows navigation if more than one slide
+    if (nSlide > 1) {
+      let prevButton = document.createElement("span");
+      prevButton.className = "carousel-arrow carousel-arrow--prev";
+      prevButton.innerHTML = "&#8249;";
+      prevButton.addEventListener("click", this._handleCarouselMove.bind(this));
+      slidesWrapper.insertAdjacentElement("beforeend", prevButton);
+      let nextButton = document.createElement("span");
+      nextButton.className = "carousel-arrow carousel-arrow--next";
+      nextButton.innerHTML = "&#8250;";
+      nextButton.addEventListener("click", this._handleCarouselMove.bind(this));
+      slidesWrapper.insertAdjacentElement("beforeend", nextButton);
+    }
   }
 
   get label() {
@@ -372,7 +374,6 @@ dialog {
   private _handleCarouselMove(evt) {
     const carousel = this.shadowRoot.querySelector("#slides");
     const slideWidth = this.shadowRoot.querySelector(".slide").clientWidth;
-    console.log(evt.target.className);
     carousel.scrollLeft = evt.target.classList.contains("carousel-arrow--next")
       ? carousel.scrollLeft + slideWidth
       : carousel.scrollLeft - slideWidth;
