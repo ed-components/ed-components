@@ -122,9 +122,9 @@ export class EdSpeechElement extends HTMLElement {
     if (!this.html) {
       // parse markdown into html
       const { md2HTML } = await import("../../common/src/index.js");
-      question.innerHTML = md2HTML(this.innerHTML.trim());
+      questionEl.innerHTML = md2HTML(this.innerHTML.trim());
     } else {
-      question.innerHTML = this.innerHTML.trim();
+      questionEl.innerHTML = this.innerHTML.trim();
     }
 
     this.startButton = this.shadowRoot.querySelector(

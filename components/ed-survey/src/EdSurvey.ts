@@ -1,5 +1,3 @@
-import { md2HTML } from "../../common/src/index.js";
-
 import { NudeRating } from "./nudeui/nd-rating.js";
 import { EdSmiley } from "./_EdSmiley.js";
 
@@ -15,48 +13,6 @@ type SurveyType = "smiley" | "rating";
 export class EdSurveyElement extends HTMLElement {
   static define(tagName = "ed-survey") {
     customElements.define(tagName, this);
-  }
-
-  constructor() {
-    super();
-    this.attachShadow({ mode: "open" });
-    this.shadowRoot.innerHTML = `
-    <style>
-    :host {
-      display: block;
-    }
-    div {
-      display: flex;
-      justify-content: space-evenly;
-    }
-    .question {
-      font-size: var(--font-size-fluid-2, max(1.5rem,min(6vw,2.5rem)));
-      font-weight: var(--font-weight-6, 600);
-    }
-    </style>
-    <p class="question" aria-label="question"></p>
-    <div></div>
-    `;
-  }
-
-  connectedCallback() {
-    this.question = this.innerHTML ? this.innerHTML : "How are you today?";
-    this.shadowRoot.querySelector("p").innerHTML = md2HTML(this.question);
-    const type: SurveyType = this.type ?? "smiley";
-    /**
-     * type could be "smiley"(default) or "survey"
-     */
-    this.type = type;
-    const div = this.shadowRoot.querySelector("div");
-    const { choice, readonly } = this;
-    div.innerHTML =
-      this.type === "rating"
-        ? `<nd-rating max="5" value="${choice}"></nd-rating>`
-        : `<ed-smiley value="${choice}"></ed-smiley>`;
-    if (readonly) {
-      // div.firstChild.setAttribue("readonly", "");
-    }
-    div.addEventListener("click", this._handleResponse.bind(this));
   }
 
   get type() {
@@ -101,8 +57,62 @@ export class EdSurveyElement extends HTMLElement {
     }
   }
 
+  get html() {
+    return this.hasAttribute("html");
+  }
+
   static get observedAttributes() {
-    return ["type", "question", "choice", "readonly"];
+    return ["type", "question", "choice", "readonly", "html"];
+  }
+
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open" });
+    this.shadowRoot.innerHTML = `
+    <style>
+    :host {
+      display: block;
+    }
+    div {
+      display: flex;
+      justify-content: space-evenly;
+    }
+    .question {
+      font-size: var(--font-size-fluid-2, max(1.5rem,min(6vw,2.5rem)));
+      font-weight: var(--font-weight-6, 600);
+    }
+    </style>
+    <p class="question" aria-label="question"></p>
+    <div></div>
+    `;
+  }
+
+  connectedCallback() {
+    this.question = this.innerHTML ? this.innerHTML : "How are you today?";
+    const questionEl = this.shadowRoot.querySelector(".question");
+    if (!this.html) {
+      // parse markdown into html
+      const { md2HTML } = await import("../../common/src/index.js");
+      questionEl.innerHTML = md2HTML(this.innerHTML.trim());
+    } else {
+      questionEl.innerHTML = this.innerHTML.trim();
+    }
+
+    /**
+     * type could be "smiley"(default) or "survey"
+     */
+    const type: SurveyType = this.type ?? "smiley";
+    this.type = type;
+    const div = this.shadowRoot.querySelector("div");
+    const { choice, readonly } = this;
+    div.innerHTML =
+      this.type === "rating"
+        ? `<nd-rating max="5" value="${choice}"></nd-rating>`
+        : `<ed-smiley value="${choice}"></ed-smiley>`;
+    if (readonly) {
+      // div.firstChild.setAttribue("readonly", "");
+    }
+    div.addEventListener("click", this._handleResponse.bind(this));
   }
 
   private _handleResponse(evt: Event) {
