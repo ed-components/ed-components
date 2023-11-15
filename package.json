@@ -29,7 +29,7 @@
   },
   "scripts": {
     "analyze": "pnpm --filter ed-components analyze",
-    "build": "pnpm analyze && npx concurrently -n w: npm:build:*",
+    "build": "npx concurrently \"npm:analyze\" \"npm:build:css\" \"npm:build:js\" && pnpm build:html",
     "build:css": "postcss \"11ty/_assets/style.postcss\" --base . --dir . --ext .css --config postcss.config.cjs",
     "build:html": "npx @11ty/eleventy",
     "build:js": "cd components && pnpm build",
