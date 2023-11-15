@@ -1,7 +1,5 @@
 // @ts-nocheck
 
-import { md2HTML } from "../../common/src/index.js";
-
 let startTimestamp: number;
 let ignoreOnend = false;
 let recognizing = false;
@@ -10,6 +8,21 @@ let recognizing = false;
 export class EdSpeechElement extends HTMLElement {
   static define(tagName = "ed-speech") {
     customElements.define(tagName, this);
+  }
+  static get observedAttributes() {
+    return ["question", "lang", "html"];
+  }
+
+  set lang(lang: string) {
+    this.setAttribute("lang", lang);
+  }
+
+  get lang() {
+    return this.getAttribute("lang") ?? document.documentElement.lang;
+  }
+
+  get html() {
+    return this.hasAttribute("html");
   }
 
   constructor() {
@@ -105,7 +118,14 @@ export class EdSpeechElement extends HTMLElement {
 
   connectedCallback() {
     this.question = this.innerHTML ? this.innerHTML : "Say something!";
-    this.shadowRoot.querySelector("p").innerHTML = md2HTML(this.question);
+    const questionEl = this.shadowRoot.querySelector(".question");
+    if (!this.html) {
+      // parse markdown into html
+      const { md2HTML } = await import("../../common/src/index.js");
+      question.innerHTML = md2HTML(this.innerHTML.trim());
+    } else {
+      question.innerHTML = this.innerHTML.trim();
+    }
 
     this.startButton = this.shadowRoot.querySelector(
       "#mic-button",
@@ -188,18 +208,6 @@ export class EdSpeechElement extends HTMLElement {
         this.interimParagraph.innerHTML = interimTranscript;
       };
     }
-  }
-
-  set lang(lang: string) {
-    this.setAttribute("lang", lang);
-  }
-
-  get lang() {
-    return this.getAttribute("lang") ?? document.documentElement.lang;
-  }
-
-  static get observedAttributes() {
-    return ["question"];
   }
 
   private showInfo(s: string) {
