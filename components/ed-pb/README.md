@@ -16,7 +16,7 @@ Some specific markdown is wrapped inside an adapted ed-components.
 
 1.  Each numeric element list  is turned into a question.
 
-    You can provide some context
+    You can provide some context, and even include sub-questions.
 
     
     1. Subquestion 2.1.
@@ -35,22 +35,26 @@ Some specific markdown is wrapped inside an adapted ed-components.
        - [x] This is also true
        - [ ] false also
 
-However you can use unordered lists in your markdown content.
-
-- Hello
-- World
-       
-Directives are provided for each other ed-components.
+    However you can use unordered lists in your markdown content. 
     
-:::ed[survey]{type=rating}
+    - Hello
+    - World
 
-Did you like this problem?
+1. Here is the second question, don't bother about which is the right number,
+   markdown oredred lists handle this natively.
 
-:::
+   This time, we'll use
+   [nlp](https://en.wikipedia.org/wiki/Natural_language_processing) to score the
+   answer of the student.
 
-:::ed[speech]
-Say hello
-:::
+   What is the capital of France?
+
+   > You must write a sentence. 
+
+   - :100: Paris is the capital of France.
+   - :100: The capital of France is Paris.
+   - :50: Paris.
+       
 </ed-pb>
 ```
 
