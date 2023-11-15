@@ -27,14 +27,27 @@
 
 ## Importing all elements
 
-Components are published as npm packages, you can easily import all components and register it with the `registerComponents` function.
+Components are published as npm packages, you can easily import all components and register it with the `ed-components` file including side-effects.
+
+```js
+import  "https://esm.sh/@ed-components/ed-components/ed-components";
+```
+
+You can also install locally with `npm i @ed-components/ed-components` and then in your code.
+
+```js
+import  "@ed-components/ed-components/ed-components";
+```
+
+
+A `registerComponents` function is also provided.
 
 ```js
 import  registerElements from "https://esm.sh/@ed-components/ed-components";
 registerElements()
 ```
 
-You can also install locally with `npm i @ed-components/ed-components` and then in your code.
+With local package:
 
 ```js
 import  registerElements from "@ed-components/ed-components";

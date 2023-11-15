@@ -9,7 +9,7 @@ let dev = process.env.NODE_ENV === "local";
 
 export default [
   {
-    input: "dist/esm/index.js",
+    input: ["dist/esm/index.js", "dist/esm/ed-components.js"],
     output: {
       dir: "dist",
       format: "esm",

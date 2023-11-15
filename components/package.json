@@ -58,6 +58,10 @@
       "types": "./dist/dts/index.d.ts",
       "default": "./dist/esm/index.js"
     },
+    "./ed-components": {
+      "types": "./dist/dts/ed-components.d.ts",
+      "default": "./dist/esm/ed-components.js"
+    },
     "./ed-pb.js": {
       "types": "./dist/dts/ed-pb/src/index.d.ts",
       "default": "./dist/esm/ed-pb/src/index.js"
