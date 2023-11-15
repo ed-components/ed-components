@@ -1,6 +1,5 @@
 // @ts-nocheck
 
-import { md2HTML } from "../../common/src/index.js";
 import { EdProgressBarElement } from "./_EdProgressBar.js";
 
 EdProgressBarElement.define();
@@ -29,7 +28,19 @@ export class EdPbElement extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["label", "description"];
+    return ["label", "description", "html"];
+  }
+
+  get label() {
+    return this.getAttribute("label");
+  }
+
+  set label(value) {
+    this.setAttribute("label", value);
+  }
+
+  get html() {
+    return this.hasAttribute("html");
   }
 
   constructor() {
@@ -68,14 +79,19 @@ export class EdPbElement extends HTMLElement {
     `;
   }
 
-  connectedCallback() {
-    // parse markdown into html
-    const contents = md2HTML(this.innerHTML.trim());
-
+  async connectedCallback() {
+    if (this.label) {
+      this.shadowRoot.querySelector("#label").innerHTML = this.label;
+    }
     // TODO use a template before mounting?
     const article = this.shadowRoot.querySelector("article");
-    article.innerHTML = contents;
-
+    if (!this.html) {
+      // parse markdown into html
+      const { md2HTML } = await import("../../common/src/index.js");
+      article.innerHTML = md2HTML(this.innerHTML.trim());
+    } else {
+      article.innerHTML = this.innerHTML.trim();
+    }
     // prepare html
     // turn task-lists into ed-choices components
     this.shadowRoot

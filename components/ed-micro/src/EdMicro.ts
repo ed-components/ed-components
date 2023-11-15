@@ -31,6 +31,15 @@ export class EdMicroElement extends HTMLElement {
     return this.hasAttribute("html");
   }
 
+  get label() {
+    return this.getAttribute("label");
+  }
+
+  set label(value) {
+    this._updateLabel(value);
+    this.setAttribute("label", value);
+  }
+
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
@@ -360,15 +369,6 @@ dialog {
       nextButton.addEventListener("click", this._handleCarouselMove.bind(this));
       slidesWrapper.insertAdjacentElement("beforeend", nextButton);
     }
-  }
-
-  get label() {
-    return this.getAttribute("label");
-  }
-
-  set label(value) {
-    this._updateLabel(value);
-    this.setAttribute("label", value);
   }
 
   private _handleCarouselMove(evt) {

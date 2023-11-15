@@ -116,8 +116,10 @@ export class EdProgressBarElement extends HTMLElement {
     const { percent } = this;
     const progress: HTMLElement =
       this.shadowRoot.querySelector("#progress-bar");
-    progress.innerHTML = `&nbsp;${percent}&nbsp;%`;
-    progress.style.width = `${percent}%`;
-    progress.setAttribute("aria-valuenow", percent);
+    if (progress) {
+      progress.innerHTML = `&nbsp;${percent}&nbsp;%`;
+      progress.style.width = `${percent}%`;
+      progress.setAttribute("aria-valuenow", percent);
+    }
   }
 }
