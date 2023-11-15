@@ -5,6 +5,7 @@ import "../src/ed-survey.js";
 describe("EdSurveyElement", () => {
   it('has a default question "How are you today?" and type smiley', async () => {
     const el = await fixture<EdSurveyElement>(`<ed-survey></ed-survey>`);
+    await el.connectedCallback();
     expect(el.question).to.equal("How are you today?");
     expect(el.type).to.equal("smiley");
     expect(

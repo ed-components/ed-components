@@ -82,12 +82,12 @@ export class EdSurveyElement extends HTMLElement {
       font-weight: var(--font-weight-6, 600);
     }
     </style>
-    <p class="question" aria-label="question"></p>
+    <p class="question" aria-description="question"></p>
     <div></div>
     `;
   }
 
-  connectedCallback() {
+  async connectedCallback() {
     this.question = this.innerHTML ? this.innerHTML : "How are you today?";
     const questionEl = this.shadowRoot.querySelector(".question");
     if (!this.html) {

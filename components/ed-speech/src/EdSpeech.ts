@@ -96,7 +96,7 @@ export class EdSpeechElement extends HTMLElement {
     </style>
     <div id="info"></div>
     <main>
-      <p class="question" aria-label="question"></p>
+      <p class="question" aria-description="question"></p>
       <button id="mic-button" style="display: none;">
         <!-- from bootstrap icons -->
         <svg class="mic" aria-label="Start microphone" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -116,7 +116,7 @@ export class EdSpeechElement extends HTMLElement {
     `;
   }
 
-  connectedCallback() {
+  async connectedCallback() {
     this.question = this.innerHTML ? this.innerHTML : "Say something!";
     const questionEl = this.shadowRoot.querySelector(".question");
     if (!this.html) {
