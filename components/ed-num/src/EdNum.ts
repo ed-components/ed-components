@@ -99,14 +99,17 @@ export class EdNumElement extends HTMLElement {
 
     const input = this.shadowRoot.querySelector("input");
     const answer = Number(input.value);
-    this.shadowRoot.querySelector("label").innerHTML = `You answered ${answer}`;
-
     // score calculated as a percentage based on error
     const error = Math.min(
       1,
       Math.abs(answer - this._answer) / Math.abs(this._answer),
     );
     const score = Math.round(100 * (1 - error));
+    let feedback = `You answered <em>${answer}</em>. Score: <strong>${score}%</strong>`;
+    if (score < 100) {
+      feedback += `</br>The correct answer is ${this._answer}`;
+    }
+    this.shadowRoot.querySelector("label").innerHTML = feedback;
     const url = this.ownerDocument.location as Location;
     // CustomEvent
     this.dispatchEvent(
