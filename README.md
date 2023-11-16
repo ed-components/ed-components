@@ -7,7 +7,7 @@
   [Lightweight markup language](https://en.wikipedia.org/wiki/Lightweight_markup_language)
   based on [Markdown](https://en.wikipedia.org/wiki/Markdown).
 - **Easy to use**, it can be used without any server with a simple Web browser.
-- **Easy to share, save and reuse** with a file based approach, no server required.
+- **Easy to share, save and reuse** with a file based approach, no database required.
 
 ## White book
 
