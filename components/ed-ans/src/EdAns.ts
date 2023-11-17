@@ -102,7 +102,7 @@ export class EdAnsElement extends HTMLElement {
 
   private _bagOfWords(s: string) {
     return nlp
-      .readDoc(s)
+      .readDoc(s.toLocaleLowerCase())
       .tokens()
       .filter((t) => t.out(its.type) !== "punctuation")
       .out(its.value, as.set);
