@@ -13,7 +13,6 @@ const resolve = fromRollup(rollupResolve);
 const commonjs = fromRollup(rollupCommonjs);
 const json = fromRollup(rollupJson);
 
-
 // group tests by component
 const packages = fs
   .readdirSync(".")
