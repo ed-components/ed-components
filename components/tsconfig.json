@@ -2,10 +2,11 @@
   "compilerOptions": {
     "declarationDir": "dist/dts",
     "outDir": "dist/esm",
-    "target": "es2015",
+    // Best pratcice? https://justinfagnani.com/2019/11/01/how-to-publish-web-components-to-npm/
+    "target": "es2017",
     "module": "Node16",
     "moduleResolution": "Node16",
-    "lib": ["DOM", "ES2015"],
+    "lib": ["DOM", "ES2017", "es2018.regexp"],
     "declaration": true,
     "importHelpers": true,
     "declarationMap": true,

@@ -7,7 +7,10 @@ EdProgressBarElement.define();
 /**
  * This component is a wrapper that allows to include multiple questions
  * with answers of different types in a lightweight markup langage based
- * on markdown
+ * on markdown.
+ * Currently:
+ * - single and multiple choice answer via ed-choice component
+ * - text answer via ed-ans component.
  *
  * @export
  * @class EdPbElement

@@ -1,17 +1,18 @@
 {
   "private": true,
   "name": "ed-ans",
-  "description": "A webcomponent for numeric answers in education.",
+  "description": "A webcomponent for sentences answers in education.",
   "version": "0.0.0",
   "author": "Benjamin Abel <dev.abel@free.fr> (lyceum.fr)",
   "keywords": [
-    "numeric",
+    "nlp",
     "web-component"
   ],
   "type": "module",
   "customElements": "custom-elements.json",
   "dependencies": {
-    "common": "workspace:*"
+    "wink-eng-lite-web-model": "^1.5.2",
+    "wink-nlp": "^1.14.3"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.4.17",

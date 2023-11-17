@@ -7,8 +7,9 @@ export const plugins = [
   nodeResolve({ browser: true }),
   commonjs(),
   json(),
-  filesize({
-    showMinifiedSize: false,
-    showBrotliSize: true,
-  }),
+  // very long!
+  // filesize({
+  //   showMinifiedSize: false,
+  //   showBrotliSize: true,
+  // }),
 ];

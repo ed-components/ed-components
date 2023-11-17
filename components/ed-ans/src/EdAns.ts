@@ -1,12 +1,21 @@
-// @ts-nocheck
 //  TODO move this as dynamic import based on attribute lang
 import winkNLP, { Bow } from "wink-nlp";
 import similarity from "wink-nlp/utilities/similarity";
 import model from "wink-eng-lite-web-model";
+
 const nlp = winkNLP(model);
 // Acquire "its" and "as" helpers from nlp.
 const { its } = nlp;
 const { as } = nlp;
+
+// Match score and ans as regexp
+const regexScoreAns = /^:(?<score>\d+):\s(?<answer>.*$)/;
+// typings
+type answerData = {
+  bow: Set<string>;
+  score: number;
+  answer: string;
+};
 
 /**
  * @tag ed-ans
@@ -15,11 +24,8 @@ const { as } = nlp;
  * @class EdAnsElement
  * @extends {HTMLElement}
  *
- * @attr {string} eval - Select the type of evaluation allowed values are
- * 'exact' while give 100% or 0% wether it matches exactly the answer or not.
- * 'similarity' while eval similarity using nlp.
  *
- *  @attr {boolean} long - Turn answer into long fill-in that will open a textarea input element.
+ *  @attr {boolean} html - Is html already parsed.
  *
  * @summary This component implements a fill-in interaction type as defined in xapi spec
  * ie, An interaction which requires the learner to supply a response in
@@ -29,10 +35,18 @@ const { as } = nlp;
  *
  */
 export class EdAnsElement extends HTMLElement {
-  private _correctAns: string;
+  private _answers: answerData[] = [];
 
   static define(tagName = "ed-ans") {
     customElements.define(tagName, this);
+  }
+
+  static get observedAttributes() {
+    return ["html"];
+  }
+
+  get html() {
+    return this.hasAttribute("html");
   }
 
   constructor() {
@@ -46,6 +60,7 @@ export class EdAnsElement extends HTMLElement {
     div {
       display: flex;
       width: 100%;
+      font-size: 1.1em;
     }
     input {
       flex: 1;
@@ -58,83 +73,37 @@ export class EdAnsElement extends HTMLElement {
     <input type="text" name="answer" placeholder="Enter your answer"/>
     <button type="submit">Submit</button>
     </div>
-    <label></label>
-    <out></out>
+    <output name="answer"></out>
     `;
   }
 
-  connectedCallback() {
-    // TODO mustn't be empty
-    this._correctAns = this.innerHTML.trim();
+  async connectedCallback() {
+    if (!this.html) {
+      // parse markdown into html
+      const { md2HTML } = await import("../../common/src/index.js");
+      this.innerHTML = md2HTML(this.innerHTML);
+    }
+
+    this.querySelectorAll("ul > li").forEach((el: HTMLLIElement) => {
+      const m = regexScoreAns.exec(el.innerText);
+      if (m === null) {
+        return;
+      }
+      const { score, answer } = m.groups;
+      const bow = new Set(this._bagOfWords(m.groups.answer));
+      this._answers.push({ score: Number(score), answer, bow });
+    });
 
     const button: HTMLButtonElement = this.shadowRoot.querySelector("button");
     button.addEventListener("click", this._handleResponse.bind(this));
-
-    // For debug purposes
-    // const input: HTMLInputElement = this.shadowRoot.querySelector("input");
-    // input.addEventListener("keyup", (evt) => {
-    //   const ans = input.value;
-    //   const bowAns: Bow = nlp
-    //     .readDoc(ans)
-    //     .tokens()
-    //     // .filter((t) => t.out(its.type) === "punctuation")
-    //     .out(its.value, as.bow);
-    //   const setAns = nlp
-    //     .readDoc(ans)
-    //     .tokens()
-    //     // .filter((t) => t.out(its.type) === "punctuation")
-    //     .out(its.value, as.set);
-
-    //   this.shadowRoot.querySelector(
-    //     "out",
-    //   ).innerHTML = `COSINE SIMILARITY: ${similarity.bow.cosine(
-    //     bowAns,
-    //     bowCorrectAns,
-    //   )}|TVERTSY:  ${similarity.set.tversky(
-    //     setAns,
-    //     setCorrectAns,
-    //   )}|OO:  ${similarity.set.oo(setAns, setCorrectAns)}`;
-    // });
   }
 
-  set eval(evaluation: string) {
-    this.setAttribute("eval", evaluation);
-  }
-
-  get eval() {
-    return this.getAttribute("eval") || "exact";
-  }
-
-  get long() {
-    return this.hasAttribute("long");
-  }
-
-  set long(long: boolean) {
-    if (long) {
-      // TODO move to textarea???
-      this.setAttribute("long", "");
-    } else {
-      this.removeAttribute("long");
-    }
-  }
-
-  static get observedAttributes() {
-    return ["eval", "long"];
-  }
-
-  private _calculate_similarity(ans: string) {
-    const bowAns: Bow = nlp
-      .readDoc(ans)
+  private _bagOfWords(s: string) {
+    return nlp
+      .readDoc(s)
       .tokens()
-      // .filter((t) => t.out(its.type) === "punctuation")
-      .out(its.value, as.bow);
-
-    const bowCorrectAns: Bow = nlp
-      .readDoc(this._correctAns)
-      .tokens()
-      // .filter((t) => t.out(its.type) === "punctuation")
-      .out(its.value, as.bow);
-    return similarity.bow.cosine(bowAns, bowCorrectAns);
+      .filter((t) => t.out(its.type) !== "punctuation")
+      .out(its.value, as.set);
   }
 
   private _handleResponse() {
@@ -145,13 +114,24 @@ export class EdAnsElement extends HTMLElement {
 
     const input = this.shadowRoot.querySelector("input");
     const answer = input.value;
-
-    const score = Math.round(100 * this._calculate_similarity(answer));
-
     // TODO find a way to inform user(submit disabled)
     if (answer.length === 0) {
       return;
     }
+
+    // we search for best similarity
+    // The score is the product of similarity and best match score
+    const bowAns: Set<string> = new Set(this._bagOfWords(answer));
+
+    const score = Math.round(
+      this._answers.reduce((acc, { score, bow }) => {
+        const sim = similarity.set.tversky(bowAns, bow);
+        if (sim * score > acc) {
+          return sim * score;
+        }
+        return acc;
+      }, 0),
+    );
 
     const url = this.ownerDocument.location as Location;
     // CustomEvent
@@ -167,12 +147,10 @@ export class EdAnsElement extends HTMLElement {
         },
       }),
     );
-    // Replace input with answer
-    const p = document.createElement("p");
-    p.innerHTML = answer;
-    input.parentNode.replaceWith(p);
+    // Disapble input and output results
+    input.setAttribute("disabled", "");
     this.shadowRoot.querySelector(
-      "label",
-    ).innerHTML = `Score: ${score}% the correct answer was: ${this._correctAns}`;
+      "output",
+    ).innerHTML = `Score: ${score}% the correct answer was: ${this._answers[0].answer}`;
   }
 }

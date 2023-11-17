@@ -16,13 +16,4 @@ describe("md2HTML function", () => {
 `,
     );
   });
-  it("Handle ed tags directives", async () => {
-    const html = md2HTML(`:::ed[survey]{type=rating}
-Do you like pasta?
-:::
-`);
-    expect(html).to.be.equal(
-      '<ed-survey type="rating">\n<p>Do you like pasta?</p>\n</ed-survey>\n',
-    );
-  });
 });

@@ -5,12 +5,14 @@ import fs from "fs";
 import { esbuildPlugin } from "@web/dev-server-esbuild";
 import { fromRollup } from "@web/dev-server-rollup";
 import rollupCommonjs from "@rollup/plugin-commonjs";
-// import rollupReplace from "@rollup/plugin-replace";
 import rollupResolve from "@rollup/plugin-node-resolve";
+import rollupJson from "@rollup/plugin-json";
 
 // const replace = fromRollup(rollupReplace);
 const resolve = fromRollup(rollupResolve);
 const commonjs = fromRollup(rollupCommonjs);
+const json = fromRollup(rollupJson);
+
 
 // group tests by component
 const packages = fs
@@ -53,10 +55,11 @@ export default /** @type {import("@web/test-runner").TestRunnerConfig} */ ({
   // esbuildTarget: 'auto',
   plugins: [
     esbuildPlugin({ ts: true }),
+    resolve(),
     commonjs({
       include: ["**/node_modules/**/*"],
     }),
-    resolve(),
+    json(),
     // replace({
     //   values: {
     //     "process.env.NODE_ENV": '"DEVELOPMENT"',
