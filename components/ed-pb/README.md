@@ -1,10 +1,11 @@
 ## Usage
 
-This wrapper component allow to easily write problems with ed-components.
+This wrapper component allows to easily write problems with ed-components.
 
 Some specific markdown is wrapped inside an adapted ed-components.
 
-1. task-list are wrapped into `<ed-choice>`.
+1. Task-list are wrapped into `<ed-choice>`.
+2. Unordered lists with score metadata(`:100:`) are wrapped into `<ed-ans>`.
 
 ```html
 <ed-pb>
@@ -17,6 +18,8 @@ Some specific markdown is wrapped inside an adapted ed-components.
 1.  Each numeric element list  is turned into a question.
 
     You can provide some context, and even include sub-questions.
+
+    Under the hood the two sub-answers here use `<ed-choice>` component.
 
     
     1. Subquestion 2.1.
@@ -46,6 +49,8 @@ Some specific markdown is wrapped inside an adapted ed-components.
    This time, we'll use
    [nlp](https://en.wikipedia.org/wiki/Natural_language_processing) to score the
    answer of the student.
+
+   Under the hood it uses `<ed-ans>` component.
 
    What is the capital of France?
 

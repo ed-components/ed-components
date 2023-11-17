@@ -1,6 +1,6 @@
-// @ts-nocheck
-
 import { EdProgressBarElement } from "./_EdProgressBar.js";
+import { EdAnsElement } from "../../ed-ans/src/EdAns.js";
+import { EdChoiceElement } from "../../ed-choice/src/EdChoice.js";
 
 EdProgressBarElement.define();
 
@@ -99,7 +99,20 @@ export class EdPbElement extends HTMLElement {
     // turn task-lists into ed-choices components
     this.shadowRoot
       .querySelectorAll("ul")
-      .forEach((ul: HTMLUListElement, i: bigint) => {
+      .forEach((ul: HTMLUListElement, i: number) => {
+        // verify if it is an ed-ans
+        const li = ul.querySelector("li");
+        if (li.innerText.startsWith(":100: ")) {
+          this.nAnsTot += 1;
+          // replace unorder-list with ed-ans
+          // @ts-ignore
+          const edAns: EdAnsElement = document.createElement("ed-ans");
+
+          // TODO make it uniques checking for collisions
+          edAns.label = `Q${i + 1}: ${ul.parentElement.innerText.slice(0, 30)}`;
+          edAns.innerHTML = ul.outerHTML;
+          ul.parentNode.replaceChild(edAns, ul);
+        }
         // verify if it a task-list
         if (ul.querySelector("li > input[type='checkbox']:disabled") === null) {
           // console.log("Not a task list");
@@ -108,12 +121,16 @@ export class EdPbElement extends HTMLElement {
 
         this.nAnsTot += 1;
         // replace task-list with ed-choice
-        const edc = document.createElement("ed-choice");
+        // @ts-ignore
+        const edChoice: EdChoiceElement = document.createElement("ed-choice");
 
         // TODO make it uniques checking for collisions
-        edc.label = `Q${i + 1}: ${ul.parentElement.innerText.slice(0, 30)}`;
-        edc.innerHTML = ul.outerHTML;
-        ul.parentNode.replaceChild(edc, ul);
+        edChoice.label = `Q${i + 1}: ${ul.parentElement.innerText.slice(
+          0,
+          30,
+        )}`;
+        edChoice.innerHTML = ul.outerHTML;
+        ul.parentNode.replaceChild(edChoice, ul);
       });
 
     // as a wrapper ed-pb catches events from his ed-components childrens
@@ -123,6 +140,8 @@ export class EdPbElement extends HTMLElement {
   private _handleResponse(evt: Event) {
     evt.stopPropagation();
     this.nAns += 1;
+    // TODO need to type custom edevents!
+    // @ts-ignore
     this.score += evt.detail.score;
 
     const progressBar: EdProgressBarElement =
@@ -134,10 +153,8 @@ export class EdPbElement extends HTMLElement {
 
     const resultBar: EdProgressBarElement =
       this.shadowRoot.querySelector("#bar-results");
-    resultBar.setAttribute(
-      "percent",
-      String(Math.round(this.score / this.nAnsTot)),
-    );
+    const score = Math.round(this.score / this.nAnsTot);
+    resultBar.setAttribute("percent", String(score));
 
     // if finished bubble event
     if (this.nAns < this.nAnsTot) {
@@ -153,7 +170,7 @@ export class EdPbElement extends HTMLElement {
           url: url.host + url.pathname,
           tag: this.tagName,
           verb: "COMPLETED",
-          score: this.score / this.nAnsTot,
+          score,
         },
       }),
     );

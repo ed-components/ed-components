@@ -35,6 +35,8 @@ type answerData = {
  *
  */
 export class EdAnsElement extends HTMLElement {
+  label: string;
+
   private _answers: answerData[] = [];
 
   static define(tagName = "ed-ans") {
@@ -142,6 +144,7 @@ export class EdAnsElement extends HTMLElement {
           date: new Date().toISOString(),
           url: url.host + url.pathname,
           tag: this.tagName,
+          label: this.label,
           verb: "RESPONDED",
           score,
         },

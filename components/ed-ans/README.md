@@ -1,8 +1,11 @@
 ## Usage
 
-The correct answer is wrapped inside de `<ed-ans>` element and will be compared to student answer.
+A set of answers is wrapped inside de `<ed-ans>` element in a markdown unordered list extended with a score metadata and will be compared to student answer.
 
-You **must** indicate score for each answer and use first answer as the correct answer with score 100.
+You **must**:
+
+1. Indicate the score between 0 and 100 for each answer at the beginning of the answer `:100: Your answer here gets a score of 100`
+2. **and** use first answer as the correct answer with score 100.
 
 ```html
 <ed-ans>
