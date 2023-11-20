@@ -1,4 +1,4 @@
-/** @module ytiles
+/** @module common
  *
  * Convert content from markdown to html with micromark
  *

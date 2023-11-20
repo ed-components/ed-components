@@ -47,7 +47,7 @@ export class EdMicroElement extends HTMLElement {
     <style>
     :host {
       display: block;
-      --ed-primary: var(--blue-5, blue);
+      --ed-primary: var(--blue-7, #1c7ed6);
     }
     html:has(dialog[open][modal-mode="mega"]) {
   overflow: hidden;

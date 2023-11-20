@@ -13,7 +13,7 @@ template.innerHTML = `
   display: inline-block;
   position: relative;
   top: 0.5em;
-  --ed-primary: var(--blue-5, blue);
+  --ed-primary: var(--blue-7, #1c7ed6);
   --ed-success: var(--green-7, green);
   --ed-danger: var(--red-7, red);
 }

@@ -3,10 +3,14 @@ import winkNLP, { Bow } from "wink-nlp";
 import similarity from "wink-nlp/utilities/similarity";
 import model from "wink-eng-lite-web-model";
 
+import { EdCheckButtonElement } from "../../common/src/EdCheckButton.js";
+
 const nlp = winkNLP(model);
 // Acquire "its" and "as" helpers from nlp.
 const { its } = nlp;
 const { as } = nlp;
+
+EdCheckButtonElement.define();
 
 // Match score and ans as regexp
 const regexScoreAns = /^:(?<score>\d+):\s(?<answer>.*$)/;
@@ -71,9 +75,9 @@ export class EdAnsElement extends HTMLElement {
       display: block;
     }
     </style>
-    <div>
+    <div class="user-input">
     <input type="text" name="answer" placeholder="Enter your answer"/>
-    <button type="submit">Submit</button>
+    <button is="ed-check-button"/>
     </div>
     <output name="answer"></out>
     `;
