@@ -8,7 +8,7 @@ const template = `
   <style>
   :host {
       display: block;
-      --ed-primary: var(--blue-7, blue);
+      --ed-primary: var(--blue-7, #1c7ed6);
       --ed-success: var(--green-7, #37b24d);
       --ed-danger: var(--red-7, #f03e3e);
     }
@@ -44,7 +44,21 @@ const template = `
     }
 
     button.check-answer {
+      --_accent: color-mix(in srgb, var(--ed-primary) 75%, white);
       background-color: var(--ed-primary);
+      border-radius: 0.3em;
+      border: 2px solid var(--_accent);
+      box-shadow: 
+        2px;,
+        0 1px 3px,
+        0 0 0 3px var(--_accent)
+      ;
+      text-shadow: var(--_accent);
+       display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      gap: 0.2ch;
     }
 
     {* TODO share math style*}
@@ -134,13 +148,13 @@ export class EdChoiceElement extends HTMLElement {
       // add check answer if multiple-choice
       if (this.type === "multiple") {
         // svg icon from bootstrap icons
-        // https://icons.getbootstrap.com/icons/ui-checks/
+        // https://icons.getbootstrap.com/icons/card-checklist/
         let button = document.createElement("button");
         button.className = "check-answer";
-        button.innerHTML = `Check answer
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-ui-checks" viewBox="0 0 16 16">
-  <path d="M7 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-1zM2 1a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2zm0 8a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2H2zm.854-3.646a.5.5 0 0 1-.708 0l-1-1a.5.5 0 1 1 .708-.708l.646.647 1.646-1.647a.5.5 0 1 1 .708.708l-2 2zm0 8a.5.5 0 0 1-.708 0l-1-1a.5.5 0 0 1 .708-.708l.646.647 1.646-1.647a.5.5 0 0 1 .708.708l-2 2zM7 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-1zm0-5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
-</svg>`;
+        button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-checklist" viewBox="0 0 16 16">
+  <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
+  <path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"/>
+</svg>&nbsp;Correction`;
 
         // add event listener to button check response
         button.addEventListener("click", this._handleResponse.bind(this), {
