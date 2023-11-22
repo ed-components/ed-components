@@ -100,6 +100,14 @@ export class EdChoiceElement extends HTMLElement {
     return this.hasAttribute("html");
   }
 
+  set html(html) {
+    if (html) {
+      this.setAttribute("html", "");
+    } else {
+      this.removeAttribute("html");
+    }
+  }
+
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
@@ -122,7 +130,7 @@ export class EdChoiceElement extends HTMLElement {
       // We inspect li elements to see if there is only one or multiple answers
       let inputs = [];
       let nCorrect = 0;
-      ul.querySelectorAll("li").forEach((li: HTMLLIElement, i: number) => {
+      ul.querySelectorAll("li").forEach((li: HTMLLIElement) => {
         // handle answers
         const input = li.querySelector("input");
         const isCorrect = input.checked;
@@ -165,6 +173,11 @@ export class EdChoiceElement extends HTMLElement {
         });
       }
     });
+  }
+
+  disconnectedCallback() {
+    // remove event listener to this to check response
+    this.removeEventListener("click", this._handleResponse.bind(this));
   }
 
   /**

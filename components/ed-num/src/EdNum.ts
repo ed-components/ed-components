@@ -8,7 +8,9 @@
  * @extends {HTMLElement}
  */
 export class EdNumElement extends HTMLElement {
-  private _answer: number;
+  label: string;
+
+  _answer: number;
 
   static define(tagName = "ed-num") {
     customElements.define(tagName, this);
@@ -119,6 +121,7 @@ export class EdNumElement extends HTMLElement {
           date: new Date().toISOString(),
           url: url.host + url.pathname,
           tag: this.tagName,
+          label: this.label,
           verb: "RESPONDED",
           score,
         },

@@ -1,17 +1,20 @@
 import { EdProgressBarElement } from "./_EdProgressBar.js";
 import { EdAnsElement } from "../../ed-ans/src/EdAns.js";
+import { EdNumElement } from "../../ed-num/src/EdNum.js";
 import { EdChoiceElement } from "../../ed-choice/src/EdChoice.js";
 
 EdProgressBarElement.define();
+
+const edNumRegex = /^:num: (?<answer>\d+)$/gm;
 
 /**
  * This component is a wrapper that allows to include multiple questions
  * with answers of different types in a lightweight markup langage based
  * on markdown.
  * Currently:
- * - single and multiple choice answer via ed-choice component
- * - text answer via ed-ans component.
- *
+ * - single and multiple choice answer via ed-choice component using gfm task-lists.
+ * - text answer via ed-ans component using unordered lists with scores.
+ * - numeric answers via vanilla ed-ans component.
  * @export
  * @class EdPbElement
  * @extends {HTMLElement}
@@ -95,14 +98,31 @@ export class EdPbElement extends HTMLElement {
     } else {
       article.innerHTML = this.innerHTML.trim();
     }
-    // prepare html
-    // turn task-lists into ed-choices components
+    // turn lists into ed components
     this.shadowRoot
       .querySelectorAll("ul")
       .forEach((ul: HTMLUListElement, i: number) => {
-        // verify if it is an ed-ans
+        // type of answer depends on list item type
         const li = ul.querySelector("li");
-        if (li.innerText.startsWith(":100: ")) {
+
+        // task-list is turned into ed-choice component
+        if (li.querySelector("input[type='checkbox']:disabled") !== null) {
+          this.nAnsTot += 1;
+          // replace task-list with ed-choice
+          // @ts-ignore
+          const edChoice: EdChoiceElement = document.createElement("ed-choice");
+
+          // TODO make it uniques checking for collisions
+          edChoice.label = `Q${i + 1}: ${ul.parentElement.innerText.slice(
+            0,
+            30,
+          )}`;
+          // we don't require to transform md->html
+          edChoice.html = true;
+          edChoice.innerHTML = ul.outerHTML;
+          ul.parentNode.replaceChild(edChoice, ul);
+        } else if (li.innerText.startsWith(":100: ")) {
+          // verify if it is an ed-ans
           this.nAnsTot += 1;
           // replace unorder-list with ed-ans
           // @ts-ignore
@@ -112,25 +132,16 @@ export class EdPbElement extends HTMLElement {
           edAns.label = `Q${i + 1}: ${ul.parentElement.innerText.slice(0, 30)}`;
           edAns.innerHTML = ul.outerHTML;
           ul.parentNode.replaceChild(edAns, ul);
+        } else if (li.innerText.startsWith(":num: ")) {
+          this.nAnsTot += 1;
+          // replace unorder-list with ed-num
+          // @ts-ignore
+          const edNum: EdNumElement = document.createElement("ed-num");
+          // TODO make it uniques checking for collisions
+          edNum.label = `Q${i + 1}: ${ul.parentElement.innerText.slice(0, 30)}`;
+          edNum.innerHTML = edNumRegex.exec(li.innerText).groups.answer;
+          ul.parentNode.replaceChild(edNum, ul);
         }
-        // verify if it a task-list
-        if (ul.querySelector("li > input[type='checkbox']:disabled") === null) {
-          // console.log("Not a task list");
-          return;
-        }
-
-        this.nAnsTot += 1;
-        // replace task-list with ed-choice
-        // @ts-ignore
-        const edChoice: EdChoiceElement = document.createElement("ed-choice");
-
-        // TODO make it uniques checking for collisions
-        edChoice.label = `Q${i + 1}: ${ul.parentElement.innerText.slice(
-          0,
-          30,
-        )}`;
-        edChoice.innerHTML = ul.outerHTML;
-        ul.parentNode.replaceChild(edChoice, ul);
       });
 
     // as a wrapper ed-pb catches events from his ed-components childrens

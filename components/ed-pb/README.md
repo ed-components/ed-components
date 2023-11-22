@@ -19,7 +19,7 @@ Some specific markdown is wrapped inside an adapted ed-components.
 
     You can provide some context, and even include sub-questions.
 
-    Under the hood the two sub-answers here use `<ed-choice>` component.
+    Under the hood the two sub-answers here use `ed-choice` component.
 
     
     1. Subquestion 2.1.
@@ -59,6 +59,12 @@ Some specific markdown is wrapped inside an adapted ed-components.
    - :100: Paris is the capital of France.
    - :100: The capital of France is Paris.
    - :50: Paris.
+
+1. You can also use `ed-num` component for numeric answers.
+
+   How old are you?
+
+   - :num: 18
        
 </ed-pb>
 ```
