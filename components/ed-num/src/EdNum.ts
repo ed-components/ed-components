@@ -1,3 +1,7 @@
+import { EdCheckButtonElement } from "../../common/src/EdCheckButton.js";
+
+EdCheckButtonElement.define();
+
 /**
  * This component implements a numeric interaction activitie as defined in xapi spec
  * ie, any interaction which requires a numeric response from the learner.
@@ -24,13 +28,20 @@ export class EdNumElement extends HTMLElement {
     :host {
       display: block;
     }
-    label, input {
-      display: block;
+    div {
+      display: flex;
+      width: 100%;
+      & > * {font-size: 1.1em;}
+    }
+    input {
+      flex: 1;
     }
     </style>
+    <div class="user-input">
     <input type="number" name="answer" placeholder="Enter number"/>
-    <label for="answer"></label>
-    <button type="submit">Submit</button>
+    <button is="ed-check-button"/>
+    </div>
+    <output name="answer"></out>
     `;
   }
 
@@ -98,20 +109,22 @@ export class EdNumElement extends HTMLElement {
 
     // TODO get unique identifier of html element ie id or // dompath:
     // https://stackoverflow.com/a/69104350
-
     const input = this.shadowRoot.querySelector("input");
+    const button = evt.target as EdCheckButtonElement;
+
+    // TODO find a way to inform user(submit disabled)
+    if (input.value.length === 0) {
+      return;
+    }
     const answer = Number(input.value);
+
     // score calculated as a percentage based on error
     const error = Math.min(
       1,
       Math.abs(answer - this._answer) / Math.abs(this._answer),
     );
     const score = Math.round(100 * (1 - error));
-    let feedback = `You answered <em>${answer}</em>. Score: <strong>${score}%</strong>`;
-    if (score < 100) {
-      feedback += `</br>The correct answer is ${this._answer}`;
-    }
-    this.shadowRoot.querySelector("label").innerHTML = feedback;
+
     const url = this.ownerDocument.location as Location;
     // CustomEvent
     this.dispatchEvent(
@@ -127,6 +140,12 @@ export class EdNumElement extends HTMLElement {
         },
       }),
     );
-    this.setAttribute("readonly", "");
+    // Disable input and button
+    input.setAttribute("disabled", "");
+    button.setAttribute("disabled", "");
+    // output results
+    this.shadowRoot.querySelector(
+      "output",
+    ).innerHTML = `Score: ${score}% the correct answer was: ${this._answer}`;
   }
 }

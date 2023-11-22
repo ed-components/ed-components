@@ -4,8 +4,12 @@ This wrapper component allows to easily write problems with ed-components.
 
 Some specific markdown is wrapped inside an adapted ed-components.
 
-1. Task-list are wrapped into `<ed-choice>`.
-2. Unordered lists with score metadata(`:100:`) are wrapped into `<ed-ans>`.
+1. Task-list are wrapped into `<ed-choice>` for single and multiple-choice
+   answers.
+2. Unordered lists with `score` metadata(`:100:`) are wrapped into `<ed-ans>`
+   for text answers.
+3. Unordered lists with `num` metadata(`:num:`) are wrapped into `<ed-num>` for
+   numeric answers.
 
 ```html
 <ed-pb>

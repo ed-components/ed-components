@@ -66,13 +66,10 @@ export class EdAnsElement extends HTMLElement {
     div {
       display: flex;
       width: 100%;
-      font-size: 1.1em;
+      & > * {font-size: 1.1em;}
     }
     input {
       flex: 1;
-    }
-    label {
-      display: block;
     }
     </style>
     <div class="user-input">
@@ -112,13 +109,14 @@ export class EdAnsElement extends HTMLElement {
       .out(its.value, as.set);
   }
 
-  private _handleResponse() {
+  private _handleResponse(evt: Event) {
     // TODO handle a default base interface(date, url)
 
     // TODO get unique identifier of html element ie id or // dompath:
     // https://stackoverflow.com/a/69104350
-
     const input = this.shadowRoot.querySelector("input");
+    const button = evt.target as EdCheckButtonElement;
+
     const answer = input.value;
     // TODO find a way to inform user(submit disabled)
     if (answer.length === 0) {
@@ -154,8 +152,10 @@ export class EdAnsElement extends HTMLElement {
         },
       }),
     );
-    // Disapble input and output results
+    // Disable input and button
     input.setAttribute("disabled", "");
+    button.setAttribute("disabled", "");
+    // output results
     this.shadowRoot.querySelector(
       "output",
     ).innerHTML = `Score: ${score}% the correct answer was: ${this._answers[0].answer}`;

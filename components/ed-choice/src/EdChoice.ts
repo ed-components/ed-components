@@ -43,25 +43,11 @@ const template = `
     #feedback {
       display: flex;
       justify-content: flex-end;
+      button {
+        font-size: 1.1em;
+      }
     }
 
-    button.check-answer {
-      --_accent: color-mix(in srgb, var(--ed-primary) 75%, white);
-      background-color: var(--ed-primary);
-      border-radius: 0.3em;
-      border: 2px solid var(--_accent);
-      box-shadow: 
-        2px;,
-        0 1px 3px,
-        0 0 0 3px var(--_accent)
-      ;
-      text-shadow: var(--_accent);
-       display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      gap: 0.2ch;
-    }
 
     {* TODO share math style*}
     .math-inline {

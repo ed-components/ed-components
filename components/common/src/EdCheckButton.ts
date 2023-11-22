@@ -5,6 +5,21 @@ export class EdCheckButtonElement extends HTMLButtonElement {
     }
   }
 
+  static get observedAttributes() {
+    return ["disabled"];
+  }
+
+  set disabled(value) {
+    const isDisabled = Boolean(value);
+    if (isDisabled) {
+      this.setAttribute("disabled", "");
+    } else this.removeAttribute("disabled");
+  }
+
+  get disabled() {
+    return this.hasAttribute("disabled");
+  }
+
   connectedCallback() {
     //   add css styles to the button
     // svg icon from bootstrap icons
@@ -25,6 +40,7 @@ export class EdCheckButtonElement extends HTMLButtonElement {
               0 1px 3px,
               0 0 0 3px var(--_accent)
             ;
+            color: currentColor;
             text-shadow: var(--_accent);`;
     this.innerHTML = `
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-checklist" viewBox="0 0 16 16">
