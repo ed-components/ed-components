@@ -92,7 +92,7 @@ licensed CC-BY-SA.
 1. Element class names are on the form `EdXyzElement` and have a static method
    `define` that allow to register element in the custom registry with default
    name `ed-xyz`. See [webcomponents.guide](https://webcomponents.guide/learn/components/).
-2. The documenation of components follows [Custom Element manifest](https://custom-elements-manifest.open-wc.org/analyzer/getting-started/) JSDoc.
+2. The documentation of components follows [Custom Element manifest](https://custom-elements-manifest.open-wc.org/analyzer/getting-started/) JSDoc.
    
 
 
