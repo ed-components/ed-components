@@ -21,6 +21,21 @@ describe("EdPb tests", () => {
       "<p>Hello from here.</p>",
     );
   });
+  it("recognize text answers", async () => {
+    const el = await fixture<EdPbElement>(`<ed-pb label="title">
+    - :100: Paris
+    - :50: Capital
+    </ed-pb>`);
+    await el.connectedCallback();
+    expect(el.shadowRoot.querySelector("ed-ans")).to.exist;
+  });
+  it("recognize numeric answers", async () => {
+    const el = await fixture<EdPbElement>(`<ed-pb label="title">
+    - :num: 20
+    </ed-pb>`);
+    await el.connectedCallback();
+    expect(el.shadowRoot.querySelector("ed-num")).to.exist;
+  });
   it("passes the a11y audit", async () => {
     // TODO fix if no label provided
     const el = await fixture<EdPbElement>(`<ed-pb label="title"></ed-pb>`);

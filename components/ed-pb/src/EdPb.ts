@@ -5,7 +5,7 @@ import { EdChoiceElement } from "../../ed-choice/src/EdChoice.js";
 
 EdProgressBarElement.define();
 
-const edNumRegex = /^:num: (?<answer>\d+)$/gm;
+const edNumRegex = /^:num:\s+(?<answer>\d+)$/m;
 
 /**
  * This component is a wrapper that allows to include multiple questions
@@ -133,14 +133,20 @@ export class EdPbElement extends HTMLElement {
           edAns.innerHTML = ul.outerHTML;
           ul.parentNode.replaceChild(edAns, ul);
         } else if (li.innerText.startsWith(":num: ")) {
-          this.nAnsTot += 1;
-          // replace unorder-list with ed-num
-          // @ts-ignore
-          const edNum: EdNumElement = document.createElement("ed-num");
-          // TODO make it uniques checking for collisions
-          edNum.label = `Q${i + 1}: ${ul.parentElement.innerText.slice(0, 30)}`;
-          edNum.innerHTML = edNumRegex.exec(li.innerText).groups.answer;
-          ul.parentNode.replaceChild(edNum, ul);
+          const answer = edNumRegex.exec(li.innerText)?.groups?.answer;
+          if (answer) {
+            // replace unorder-list with ed-num
+            this.nAnsTot += 1;
+            // @ts-ignore
+            const edNum: EdNumElement = document.createElement("ed-num");
+            // TODO make it uniques checking for collisions
+            edNum.label = `Q${i + 1}: ${ul.parentElement.innerText.slice(
+              0,
+              30,
+            )}`;
+            edNum.innerHTML = answer;
+            ul.parentNode.replaceChild(edNum, ul);
+          }
         }
       });
 

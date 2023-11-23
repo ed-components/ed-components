@@ -65,10 +65,15 @@ Some specific markdown is wrapped inside an adapted ed-components.
    - :50: Paris.
 
 1. You can also use `ed-num` component for numeric answers.
+   
+   1. How many Wonders of the ancient World were present during classical
+      antiquity?
 
-   How old are you?
+      - :num: 7
 
-   - :num: 18
+   1. How many Wonders of the ancient World are still in existence?
+
+      - :num: 1
        
 </ed-pb>
 ```
