@@ -179,32 +179,35 @@ export class EdChoiceElement extends HTMLElement {
     const url = this.ownerDocument.location as Location;
 
     // iterate over all possible answers
+    // count all possible good answers
+    let nChoice = 0;
+    // count selected good answers
     let score = 0;
     let answers = [];
-    // count all choices
-    let nChoice = 0;
     this.shadowRoot.querySelectorAll(`li`).forEach((li: HTMLLIElement) => {
-      nChoice += 1;
       const input: EdInputCheckBox | EdInputRadio =
         this.type === "single"
           ? li.querySelector("ed-input-radio")
           : li.querySelector("ed-input-checkbox");
 
       const good = input.className; // "good-answer / bad-answer"
+
+      nChoice += good === "good-answer" ? 1 : 0;
+
       if (input.checked) {
-        score += good === "good-answer" ? 1 : 0;
+        // add one point if correct and remove 0.5 if not
+        score += good === "good-answer" ? 1 : -0.5;
         answers.push(li.textContent);
-      } else {
-        score += good === "bad-answer" ? 1 : 0;
       }
+
       // disables all inputs
       input.setAttribute("disabled", "");
 
       // stroke all bad answers and higlight good one
       li.setAttribute("class", good);
     });
-    // convert score to percentage
-    score = Math.round((100 * score) / nChoice);
+    // convert score to percentage and zeroes negative scores
+    score = Math.max(0, Math.round((100 * score) / nChoice));
 
     // CustomEvent
     this.dispatchEvent(

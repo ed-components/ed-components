@@ -32,6 +32,7 @@ Some specific markdown is wrapped inside an adapted ed-components.
 
        - [ ] first false answer
        - [x] This is true
+       - [ ] third false answer
     
     1. Subquestion 2.2.
 
