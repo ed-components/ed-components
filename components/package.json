@@ -1,7 +1,7 @@
 {
   "name": "@ed-components/ed-components",
   "description": "A set of web-components for education.",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "author": {
     "name": "Benjamin Abel",
     "email": "dev.abel@free.fr"
