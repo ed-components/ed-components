@@ -20,6 +20,63 @@ export class EdNumElement extends HTMLElement {
     customElements.define(tagName, this);
   }
 
+  get readonly() {
+    return this.hasAttribute("readonly");
+  }
+
+  set readonly(readonly) {
+    if (readonly) {
+      this.setAttribute("readonly", "");
+    } else {
+      this.removeAttribute("readonly");
+    }
+  }
+
+  /**
+   * Evaluation method
+   *
+   * By default calculate percentage of error
+   *
+   * If "exact": 100% if equal 0% if not
+   *
+   * @memberof EdNumElement
+   */
+  get eval() {
+    return this.getAttribute("eval");
+  }
+
+  set eval(val) {
+    this.setAttribute("eval", val);
+  }
+
+  get min() {
+    return Number(this.getAttribute("min"));
+  }
+
+  set min(min: number) {
+    this.setAttribute("min", String(min));
+  }
+
+  get max() {
+    return Number(this.getAttribute("max"));
+  }
+
+  set max(max: number) {
+    this.setAttribute("max", String(max));
+  }
+
+  get step() {
+    return Number(this.getAttribute("step"));
+  }
+
+  set step(step: number) {
+    this.setAttribute("step", String(step));
+  }
+
+  static get observedAttributes() {
+    return ["max", "min", "step", "eval", "readonly"];
+  }
+
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
@@ -64,46 +121,6 @@ export class EdNumElement extends HTMLElement {
     button.addEventListener("click", this._handleResponse.bind(this));
   }
 
-  get readonly() {
-    return this.hasAttribute("readonly");
-  }
-
-  set readonly(readonly) {
-    if (readonly) {
-      this.setAttribute("readonly", "");
-    } else {
-      this.removeAttribute("readonly");
-    }
-  }
-
-  get min() {
-    return Number(this.getAttribute("min"));
-  }
-
-  set min(min: number) {
-    this.setAttribute("min", String(min));
-  }
-
-  get max() {
-    return Number(this.getAttribute("max"));
-  }
-
-  set max(max: number) {
-    this.setAttribute("max", String(max));
-  }
-
-  get step() {
-    return Number(this.getAttribute("step"));
-  }
-
-  set step(step: number) {
-    this.setAttribute("step", String(step));
-  }
-
-  static get observedAttributes() {
-    return ["max", "min", "step", "readonly"];
-  }
-
   private _handleResponse(evt: Event) {
     // TODO handle a default base interface(date, url)
 
@@ -118,12 +135,22 @@ export class EdNumElement extends HTMLElement {
     }
     const answer = Number(input.value);
 
-    // score calculated as a percentage based on error
-    const error = Math.min(
-      1,
-      Math.abs(answer - this._answer) / Math.abs(this._answer),
-    );
-    const score = Math.round(100 * (1 - error));
+    // if answer is 0 can't calculate error!
+    if (this._answer === 0) {
+      this.eval = "exact";
+    }
+
+    // score calculated as a percentage based on error if not exact
+    let score;
+    if (this.eval !== "exact") {
+      const error = Math.min(
+        1,
+        Math.abs(answer - this._answer) / Math.abs(this._answer),
+      );
+      score = Math.round(100 * (1 - error));
+    } else {
+      score = answer === this._answer ? 100 : 0;
+    }
 
     const url = this.ownerDocument.location as Location;
     // CustomEvent
