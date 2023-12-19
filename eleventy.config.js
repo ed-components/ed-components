@@ -1,6 +1,6 @@
-const syntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
+import syntaxHighlight from "@11ty/eleventy-plugin-syntaxhighlight";
 
-module.exports = function (eleventyConfig) {
+export default async function (eleventyConfig) {
   // ignore design files
   eleventyConfig.ignores.add("design/*");
   eleventyConfig.watchIgnores.add("design/*");

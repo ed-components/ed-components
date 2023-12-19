@@ -1,11 +1,16 @@
-const path = require("node:path");
-const fs = require("fs");
-const {
-  customElementsManifestToMarkdown,
-} = require("@custom-elements-manifest/to-markdown");
-var md = require("markdown-it")();
+// convert to es module
+import path from "node:path";
+import { fileURLToPath } from 'url';
+import { readFile } from "node:fs/promises";
+import { customElementsManifestToMarkdown } from "@custom-elements-manifest/to-markdown"
 
-module.exports = {
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+import markdownit from 'markdown-it'
+const md = markdownit()
+
+export default {
   eleventyComputed: {
     // debug: data => { console.log(data) },
     eleventyNavigation: {
@@ -16,11 +21,11 @@ module.exports = {
     isComponent: ({ id }) => id.startsWith("ed-"),
 
     // load data from package.json
-    npmPackage: (data) => {
+    npmPackage: async (data) => {
       if (!data.isComponent) {
         return;
       }
-      return require(path.join(__dirname, data.id, "package.json"));
+      return JSON.parse(await readFile(path.join(__dirname, data.id, "package.json")));
     },
     title: ({ isComponent, id }) => {
       if (isComponent) {
@@ -28,12 +33,12 @@ module.exports = {
       }
     },
     // Retriev data from the custom-elements
-    manifest: ({ isComponent, id }) => {
+    manifest: async ({ isComponent, id }) => {
       if (!isComponent) {
         return;
       }
       const manifest = JSON.parse(
-        fs.readFileSync(`./components/${id}/custom-elements.json`, "utf-8"),
+        await readFile(`./components/${id}/custom-elements.json`, "utf-8"),
       );
       // console.log(manifest.modules[0].declarations[0].members)
       return manifest;

@@ -1,10 +1,11 @@
 {
   "private": true,
+  "type": "module",
   "dependencies": {
     "onchange": "^7.1.0"
   },
   "devDependencies": {
-    "@11ty/eleventy": "^2.0.1",
+    "@11ty/eleventy": "3.0.0-alpha.2",
     "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.0",
     "@custom-elements-manifest/to-markdown": "^0.1.0",
     "@rollup/plugin-commonjs": "^25.0.4",
@@ -15,6 +16,7 @@
     "concurrently": "^8.2.1",
     "cssnano": "^6.0.1",
     "esbuild": "^0.18.20",
+    "markdown-it": "^14.0.0",
     "open-props": "^1.5.15",
     "postcss": "^8.4.29",
     "postcss-cli": "^10.1.0",
