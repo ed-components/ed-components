@@ -16,4 +16,22 @@ describe("md2HTML function", () => {
 `,
     );
   });
+
+  it("Allow citations", async () => {
+    const html = md2HTML(`# hello world
+
+
+> This guy is incredible.
+> He said that everything is ok.
+
+`);
+    expect(html).to.be.equal(
+      `<h1>hello world</h1>
+<blockquote>
+<p>This guy is incredible.
+He said that everything is ok.</p>
+</blockquote>
+`,
+    );
+  });
 });
