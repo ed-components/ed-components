@@ -1,14 +1,13 @@
 // convert to es module
 import path from "node:path";
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from "url";
 import { readFile } from "node:fs/promises";
-import { customElementsManifestToMarkdown } from "@custom-elements-manifest/to-markdown"
-
+import { customElementsManifestToMarkdown } from "@custom-elements-manifest/to-markdown";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-import markdownit from 'markdown-it'
-const md = markdownit()
+import markdownit from "markdown-it";
+const md = markdownit();
 
 export default {
   eleventyComputed: {
@@ -25,7 +24,9 @@ export default {
       if (!data.isComponent) {
         return;
       }
-      return JSON.parse(await readFile(path.join(__dirname, data.id, "package.json")));
+      return JSON.parse(
+        await readFile(path.join(__dirname, data.id, "package.json")),
+      );
     },
     title: ({ isComponent, id }) => {
       if (isComponent) {
