@@ -71,7 +71,7 @@ export class EdChoiceElement extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["type", "html"];
+    return ["type", "isHTML"];
   }
 
   get type() {
@@ -82,15 +82,15 @@ export class EdChoiceElement extends HTMLElement {
     this.setAttribute("type", type);
   }
 
-  get html() {
-    return this.hasAttribute("html");
+  get isHTML() {
+    return this.hasAttribute("isHTML");
   }
 
-  set html(html) {
-    if (html) {
-      this.setAttribute("html", "");
+  set isHTML(isHTML) {
+    if (isHTML) {
+      this.setAttribute("isHTML", "");
     } else {
-      this.removeAttribute("html");
+      this.removeAttribute("isHTML");
     }
   }
 
@@ -101,7 +101,7 @@ export class EdChoiceElement extends HTMLElement {
   }
 
   async connectedCallback() {
-    if (!this.html) {
+    if (!this.isHTML) {
       // parse markdown into html
       const { md2HTML } = await import("../../common/src/index.js");
       const contents = md2HTML(this.innerHTML);

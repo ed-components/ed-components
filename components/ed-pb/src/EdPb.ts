@@ -1,7 +1,7 @@
 import { EdProgressBarElement } from "./_EdProgressBar.js";
-import { EdAnsElement } from "../../ed-ans/src/EdAns.js";
-import { EdNumElement } from "../../ed-num/src/EdNum.js";
-import { EdChoiceElement } from "../../ed-choice/src/EdChoice.js";
+import type { EdAnsElement } from "../../ed-ans/src/EdAns.js";
+import type { EdNumElement } from "../../ed-num/src/EdNum.js";
+import type { EdChoiceElement } from "../../ed-choice/src/EdChoice.js";
 
 EdProgressBarElement.define();
 
@@ -34,7 +34,7 @@ export class EdPbElement extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["label", "description", "html"];
+    return ["label", "description", "isHTML"];
   }
 
   get label() {
@@ -45,8 +45,8 @@ export class EdPbElement extends HTMLElement {
     this.setAttribute("label", value);
   }
 
-  get html() {
-    return this.hasAttribute("html");
+  get isHTML() {
+    return this.hasAttribute("isHTML");
   }
 
   constructor() {
@@ -91,7 +91,7 @@ export class EdPbElement extends HTMLElement {
     }
     // TODO use a template before mounting?
     const article = this.shadowRoot.querySelector("article");
-    if (!this.html) {
+    if (!this.isHTML) {
       // parse markdown into html
       const { md2HTML } = await import("../../common/src/index.js");
       article.innerHTML = md2HTML(this.innerHTML.trim());
@@ -118,7 +118,7 @@ export class EdPbElement extends HTMLElement {
             30,
           )}`;
           // we don't require to transform md->html
-          edChoice.html = true;
+          edChoice.isHTML = true;
           edChoice.innerHTML = ul.outerHTML;
           ul.parentNode.replaceChild(edChoice, ul);
         } else if (li.innerText.startsWith(":100: ")) {

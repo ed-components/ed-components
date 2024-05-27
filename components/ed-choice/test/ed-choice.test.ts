@@ -15,7 +15,7 @@ describe("EdChoiceElement", () => {
   });
   it("Don't convert content if html attribute is true", async () => {
     const el: EdChoiceElement = await fixture<EdChoiceElement>(
-      html`<ed-choice html>Hello **from** here.</ed-choice>`,
+      html`<ed-choice isHTML>Hello **from** here.</ed-choice>`,
     );
     await el.connectedCallback();
     await expect(el.shadowRoot.querySelector("#content").innerHTML).equals(

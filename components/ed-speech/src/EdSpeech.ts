@@ -10,7 +10,7 @@ export class EdSpeechElement extends HTMLElement {
     customElements.define(tagName, this);
   }
   static get observedAttributes() {
-    return ["question", "lang", "html"];
+    return ["question", "lang", "isHTML"];
   }
 
   set lang(lang: string) {
@@ -21,8 +21,8 @@ export class EdSpeechElement extends HTMLElement {
     return this.getAttribute("lang") ?? document.documentElement.lang;
   }
 
-  get html() {
-    return this.hasAttribute("html");
+  get isHTML() {
+    return this.hasAttribute("isHTML");
   }
 
   constructor() {
@@ -119,7 +119,7 @@ export class EdSpeechElement extends HTMLElement {
   async connectedCallback() {
     this.question = this.innerHTML ? this.innerHTML : "Say something!";
     const questionEl = this.shadowRoot.querySelector(".question");
-    if (!this.html) {
+    if (!this.isHTML) {
       // parse markdown into html
       const { md2HTML } = await import("../../common/src/index.js");
       questionEl.innerHTML = md2HTML(this.innerHTML.trim());

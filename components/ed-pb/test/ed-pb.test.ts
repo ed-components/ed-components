@@ -21,7 +21,7 @@ describe("EdPb tests", () => {
   });
   it("Don't convert content if html attribute is true", async () => {
     const el: EdPbElement = await fixture<EdPbElement>(
-      html`<ed-pb label="test" html><p>Hello from here.</p></ed-pb>`,
+      html`<ed-pb label="test" isHTML><p>Hello from here.</p></ed-pb>`,
     );
     await el.connectedCallback();
     await expect(el.shadowRoot.querySelector("article").innerHTML).equals(

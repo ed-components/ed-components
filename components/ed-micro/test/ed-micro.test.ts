@@ -14,7 +14,7 @@ describe("EdMicro tests", () => {
   });
   it("Don't convert content if html attribute is true", async () => {
     const el: EdMicroElement = await fixture<EdMicroElement>(
-      html`<ed-micro label="test" html><p>Hello from here.</p></ed-micro>`,
+      html`<ed-micro label="test" isHTML><p>Hello from here.</p></ed-micro>`,
     );
     await el.connectedCallback();
     await expect(el.shadowRoot.querySelector(".slide").innerHTML).equals(

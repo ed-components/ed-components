@@ -24,11 +24,11 @@ export class EdMicroElement extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["label", "html"];
+    return ["label", "isHTML"];
   }
 
-  get html() {
-    return this.hasAttribute("html");
+  get isHTML() {
+    return this.hasAttribute("isHTML");
   }
 
   get label() {
@@ -319,7 +319,7 @@ dialog {
     }
     const slidesWrapper = this.shadowRoot.querySelector("#slides");
 
-    if (!this.html) {
+    if (!this.isHTML) {
       // parse markdown into html
       const { md2HTML } = await import("../../common/src/index.js");
       slidesWrapper.innerHTML = md2HTML(this.innerHTML.trim());

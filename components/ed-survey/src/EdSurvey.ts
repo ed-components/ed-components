@@ -57,12 +57,12 @@ export class EdSurveyElement extends HTMLElement {
     }
   }
 
-  get html() {
-    return this.hasAttribute("html");
+  get isHTML() {
+    return this.hasAttribute("isHTML");
   }
 
   static get observedAttributes() {
-    return ["type", "question", "choice", "readonly", "html"];
+    return ["type", "question", "choice", "readonly", "isHTML"];
   }
 
   constructor() {
@@ -90,7 +90,7 @@ export class EdSurveyElement extends HTMLElement {
   async connectedCallback() {
     this.question = this.innerHTML ? this.innerHTML : "How are you today?";
     const questionEl = this.shadowRoot.querySelector(".question");
-    if (!this.html) {
+    if (!this.isHTML) {
       // parse markdown into html
       const { md2HTML } = await import("../../common/src/index.js");
       questionEl.innerHTML = md2HTML(this.innerHTML.trim());
