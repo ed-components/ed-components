@@ -51,9 +51,10 @@ describe("EdPb tests", () => {
     await el.connectedCallback();
     expect(el.shadowRoot.querySelector("article > div")).to.exist;
   });
-  
+
   it("Pass content as emd attribute", async () => {
-    const el = await fixture<EdPbElement>(`<ed-pb emd="# hello from \`emd\` attribute
+    const el =
+      await fixture<EdPbElement>(`<ed-pb emd="# hello from \`emd\` attribute
 
 - [x] Yes
 - [ ] No

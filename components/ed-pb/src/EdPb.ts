@@ -44,7 +44,7 @@ export class EdPbElement extends HTMLElement {
   set label(value) {
     this.setAttribute("label", value);
   }
-  
+
   get emd() {
     return this.getAttribute("emd");
   }
@@ -67,8 +67,9 @@ export class EdPbElement extends HTMLElement {
   }
 
   async attributeChangedCallback(name, oldValue, newValue) {
-    if (name==="emd") {
-      await this._processEmd()}
+    if (name === "emd") {
+      await this._processEmd();
+    }
   }
 
   constructor() {
@@ -106,14 +107,17 @@ export class EdPbElement extends HTMLElement {
     </main>
     `;
   }
-  
+
   private async _processEmd() {
     if (this.label) {
       this.shadowRoot.querySelector("#label").innerHTML = this.label;
     }
     // TODO use a template before mounting?
-    const emdContent = this.emd === null || this.emd === "" ? this.innerHTML.trim(): this.emd.trim()
-    
+    const emdContent =
+      this.emd === null || this.emd === ""
+        ? this.innerHTML.trim()
+        : this.emd.trim();
+
     const article = this.shadowRoot.querySelector("article");
     if (!this.isHTML) {
       // parse markdown into html
@@ -128,14 +132,14 @@ export class EdPbElement extends HTMLElement {
       .forEach((ul: HTMLUListElement, i: number) => {
         // type of answer depends on list item type
         const li = ul.querySelector("li");
-  
+
         // task-list is turned into ed-choice component
         if (li.querySelector("input[type='checkbox']:disabled") !== null) {
           this.nAnsTot += 1;
           // replace task-list with ed-choice
           // @ts-ignore
           const edChoice: EdChoiceElement = document.createElement("ed-choice");
-  
+
           // TODO make it uniques checking for collisions
           edChoice.label = `Q${i + 1}: ${ul.parentElement.innerText.slice(
             0,
@@ -151,7 +155,7 @@ export class EdPbElement extends HTMLElement {
           // replace unorder-list with ed-ans
           // @ts-ignore
           const edAns: EdAnsElement = document.createElement("ed-ans");
-  
+
           // TODO make it uniques checking for collisions
           edAns.label = `Q${i + 1}: ${ul.parentElement.innerText.slice(0, 30)}`;
           edAns.innerHTML = ul.outerHTML;
@@ -173,10 +177,9 @@ export class EdPbElement extends HTMLElement {
           }
         }
       });
-    
   }
   async connectedCallback() {
-    await this._processEmd()
+    await this._processEmd();
     const article = this.shadowRoot.querySelector("article");
     // as a wrapper ed-pb catches events from his ed-components childrens
     article.addEventListener("edEvent", this._handleResponse.bind(this));
