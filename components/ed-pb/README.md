@@ -79,6 +79,18 @@ Some specific markdown is wrapped inside an adapted ed-components.
 </ed-pb>
 ```
 
+### `emd` attribute
+
+You can provide the `emd` content as an attribute to allow re-rendering the component on change. In that case, **`innerHTML` content is totally ignored**.
+
+```html
+<ed-pb emd="# Hello emd
+1. Are you happy with educational markdown?
+   - [x] Yes
+   - [ ] No">
+_This content wiil not be used_
+</ed-pb>
+```
 
 ## Credits
 

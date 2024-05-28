@@ -37,7 +37,7 @@ describe("EdPb tests", () => {
 
 </ed-pb>`);
     await el.connectedCallback();
-    await expect(el.shadowRoot.querySelector("article > blockquote")).to.exist;
+    expect(el.shadowRoot.querySelector("article > blockquote")).to.exist;
   });
 
   it("Handle raw html", async () => {
@@ -45,10 +45,21 @@ describe("EdPb tests", () => {
     
 <div>
 <h1>Mardown allows raw html at the beginning of lines</h1>
-<em>Not here</em>
+    <em>Not here</em>
 </div>
     </ed-pb>`);
     await el.connectedCallback();
-    await expect(el.shadowRoot.querySelector("article > div")).to.exist;
+    expect(el.shadowRoot.querySelector("article > div")).to.exist;
+  });
+  
+  it("Pass content as emd attribute", async () => {
+    const el = await fixture<EdPbElement>(`<ed-pb emd="# hello from \`emd\` attribute
+
+- [x] Yes
+- [ ] No
+"></ed-pb>)`);
+    await el.connectedCallback();
+    expect(el.shadowRoot.querySelector("h1")).to.exist;
+    expect(el.shadowRoot.querySelector("ed-choice")).to.exist;
   });
 });

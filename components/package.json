@@ -81,10 +81,9 @@
     "directory": "components"
   },
   "scripts": {
-    "analyze": "for comp in ed-*/;do comp=$(basename $comp) && echo $comp  && cem analyze --outdir $comp/ --globs $comp/src/Ed*.ts;done",
+    "analyze": "for comp in ed-*/;do comp=$(basename $comp) && echo \"Analyze $comp\"  && cem analyze --outdir $comp/ --globs $comp/src/Ed*.ts;done",
     "build": "tsc && rollup -c",
     "lint": "eslint --ext .js,.ts --ignore-path .gitignore .",
-    "postbuild": "pnpm cem",
     "test": "wtr --coverage",
     "test:watch": "wtr --watch"
   },

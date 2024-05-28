@@ -34,7 +34,7 @@ export class EdPbElement extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["label", "description", "isHTML"];
+    return ["label", "description", "emd", "isHTML"];
   }
 
   get label() {
@@ -44,9 +44,31 @@ export class EdPbElement extends HTMLElement {
   set label(value) {
     this.setAttribute("label", value);
   }
+  
+  get emd() {
+    return this.getAttribute("emd");
+  }
+
+  set emd(value) {
+    this._processEmd();
+    this.setAttribute("emd", value);
+  }
 
   get isHTML() {
     return this.hasAttribute("isHTML");
+  }
+
+  set isHTML(isHTML) {
+    if (isHTML) {
+      this.setAttribute("isHTML", "");
+    } else {
+      this.removeAttribute("isHTML");
+    }
+  }
+
+  async attributeChangedCallback(name, oldValue, newValue) {
+    if (name==="emd") {
+      await this._processEmd()}
   }
 
   constructor() {
@@ -84,19 +106,21 @@ export class EdPbElement extends HTMLElement {
     </main>
     `;
   }
-
-  async connectedCallback() {
+  
+  private async _processEmd() {
     if (this.label) {
       this.shadowRoot.querySelector("#label").innerHTML = this.label;
     }
     // TODO use a template before mounting?
+    const emdContent = this.emd === null || this.emd === "" ? this.innerHTML.trim(): this.emd.trim()
+    
     const article = this.shadowRoot.querySelector("article");
     if (!this.isHTML) {
       // parse markdown into html
       const { md2HTML } = await import("../../common/src/index.js");
-      article.innerHTML = md2HTML(this.innerHTML.trim());
+      article.innerHTML = md2HTML(emdContent);
     } else {
-      article.innerHTML = this.innerHTML.trim();
+      article.innerHTML = emdContent;
     }
     // turn lists into ed components
     this.shadowRoot
@@ -104,14 +128,14 @@ export class EdPbElement extends HTMLElement {
       .forEach((ul: HTMLUListElement, i: number) => {
         // type of answer depends on list item type
         const li = ul.querySelector("li");
-
+  
         // task-list is turned into ed-choice component
         if (li.querySelector("input[type='checkbox']:disabled") !== null) {
           this.nAnsTot += 1;
           // replace task-list with ed-choice
           // @ts-ignore
           const edChoice: EdChoiceElement = document.createElement("ed-choice");
-
+  
           // TODO make it uniques checking for collisions
           edChoice.label = `Q${i + 1}: ${ul.parentElement.innerText.slice(
             0,
@@ -127,7 +151,7 @@ export class EdPbElement extends HTMLElement {
           // replace unorder-list with ed-ans
           // @ts-ignore
           const edAns: EdAnsElement = document.createElement("ed-ans");
-
+  
           // TODO make it uniques checking for collisions
           edAns.label = `Q${i + 1}: ${ul.parentElement.innerText.slice(0, 30)}`;
           edAns.innerHTML = ul.outerHTML;
@@ -149,7 +173,11 @@ export class EdPbElement extends HTMLElement {
           }
         }
       });
-
+    
+  }
+  async connectedCallback() {
+    await this._processEmd()
+    const article = this.shadowRoot.querySelector("article");
     // as a wrapper ed-pb catches events from his ed-components childrens
     article.addEventListener("edEvent", this._handleResponse.bind(this));
   }
