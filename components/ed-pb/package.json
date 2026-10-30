@@ -14,16 +14,16 @@
     "common": "workspace:*"
   },
   "devDependencies": {
-    "@custom-elements-manifest/analyzer": "^0.4.17",
-    "@open-wc/testing": "^3.2.0",
-    "@rollup/plugin-commonjs": "^25.0.4",
-    "@rollup/plugin-replace": "^5.0.2",
-    "@types/jest": "^29.5.4",
-    "@web/dev-server-esbuild": "^0.4.1",
-    "@web/dev-server-rollup": "^0.5.2",
-    "@web/test-runner": "^0.17.1",
-    "tslib": "^2.6.2",
-    "typescript": "^5.2.2"
+    "@custom-elements-manifest/analyzer": "catalog:",
+    "@open-wc/testing": "catalog:",
+    "@rollup/plugin-commonjs": "catalog:",
+    "@rollup/plugin-replace": "catalog:",
+    "@types/jest": "catalog:",
+    "@web/dev-server-esbuild": "catalog:",
+    "@web/dev-server-rollup": "catalog:",
+    "@web/test-runner": "catalog:",
+    "tslib": "catalog:",
+    "typescript": "catalog:"
   },
   "exports": {
     ".": "./dist/index.js",

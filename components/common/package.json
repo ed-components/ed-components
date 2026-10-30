@@ -10,21 +10,21 @@
   ],
   "type": "module",
   "dependencies": {
-    "micromark": "^4.0.0",
+    "micromark": "catalog:",
     "micromark-extension-directive": "^3.0.0",
-    "micromark-extension-gfm": "^3.0.0",
-    "micromark-extension-math": "^3.0.0"
+    "micromark-extension-gfm": "catalog:",
+    "micromark-extension-math": "catalog:"
   },
   "devDependencies": {
-    "@open-wc/testing": "^3.2.0",
-    "@rollup/plugin-commonjs": "^25.0.4",
-    "@rollup/plugin-replace": "^5.0.2",
-    "@types/jest": "^29.5.4",
-    "@web/dev-server-esbuild": "^0.4.1",
-    "@web/dev-server-rollup": "^0.5.2",
-    "@web/test-runner": "^0.17.1",
-    "tslib": "^2.6.2",
-    "typescript": "^5.2.2"
+    "@open-wc/testing": "catalog:",
+    "@rollup/plugin-commonjs": "catalog:",
+    "@rollup/plugin-replace": "catalog:",
+    "@types/jest": "catalog:",
+    "@web/dev-server-esbuild": "catalog:",
+    "@web/dev-server-rollup": "catalog:",
+    "@web/test-runner": "catalog:",
+    "tslib": "catalog:",
+    "typescript": "catalog:"
   },
   "exports": {
     ".": "./dist/src/common.js"

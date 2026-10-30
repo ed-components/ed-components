@@ -2,6 +2,25 @@ packages:
   - "components"
   - "components/*"
 
+# versions shared between workspace packages, referenced as "catalog:"
+catalog:
+  "@custom-elements-manifest/analyzer": ^0.8.4
+  "@open-wc/testing": ^3.2.0
+  "@rollup/plugin-commonjs": ^25.0.4
+  "@rollup/plugin-replace": ^5.0.2
+  "@types/jest": ^29.5.5
+  "@web/dev-server-esbuild": ^0.4.1
+  "@web/dev-server-rollup": ^0.5.2
+  "@web/test-runner": ^0.17.1
+  "esbuild": ^0.19.4
+  "micromark": ^4.0.0
+  "micromark-extension-gfm": ^3.0.0
+  "micromark-extension-math": ^3.0.0
+  "tslib": ^2.6.2
+  "typescript": ^5.2.2
+  "wink-eng-lite-web-model": ^1.5.2
+  "wink-nlp": ^1.14.3
+
 allowBuilds:
   esbuild: true
 
