@@ -1,4 +1,4 @@
-import { html, fixture, expect } from "@open-wc/testing";
+import { html, fixture, expect, oneEvent } from "@open-wc/testing";
 import { EdChoiceElement } from "../src/EdChoice.js";
 
 import "../src/ed-choice.js";
@@ -27,5 +27,28 @@ describe("EdChoiceElement", () => {
       html`<ed-choice></ed-choice>`,
     );
     await expect(el).shadowDom.to.be.accessible();
+  });
+  it("Single choice is only checked when an answer is selected", async () => {
+    const el = await fixture<EdChoiceElement>(`<ed-choice>
+Question
+
+- [ ] A
+- [x] B
+</ed-choice>`);
+    await el.connectedCallback();
+    let responded = false;
+    el.addEventListener("edEvent", () => {
+      responded = true;
+    });
+    // clicking on the question text must not trigger correction
+    (el.shadowRoot.querySelector("#content p") as HTMLElement).click();
+    expect(responded).to.be.false;
+
+    const radio: HTMLElement = el.shadowRoot.querySelector(
+      "ed-input-radio.good-answer",
+    );
+    setTimeout(() => radio.click());
+    const { detail } = await oneEvent(el, "edEvent");
+    expect(detail.score).to.equal(100);
   });
 });

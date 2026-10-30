@@ -1,6 +1,8 @@
-import { fixture, expect, html } from "@open-wc/testing";
+import { fixture, expect, html, oneEvent, waitUntil } from "@open-wc/testing";
 import { EdPbElement } from "../src/EdPb.js";
 import "../src/ed-pb.js";
+// ed-pb wraps questions in ed-choice components
+import "../../ed-choice/src/ed-choice.js";
 
 describe("EdPb tests", () => {
   it("passes the a11y audit", async () => {
@@ -62,5 +64,50 @@ describe("EdPb tests", () => {
     await el.connectedCallback();
     expect(el.shadowRoot.querySelector("h1")).to.exist;
     expect(el.shadowRoot.querySelector("ed-choice")).to.exist;
+  });
+
+  it("Count questions once when content is passed as emd attribute", async () => {
+    const el = await fixture<EdPbElement>(`<ed-pb emd="# Question
+
+- [x] Yes
+- [ ] No
+"></ed-pb>`);
+    await waitUntil(
+      () =>
+        el.shadowRoot
+          .querySelector("ed-choice")
+          ?.shadowRoot.querySelector("ed-input-radio.good-answer"),
+    );
+    const radio: HTMLElement = el.shadowRoot
+      .querySelector("ed-choice")
+      .shadowRoot.querySelector("ed-input-radio.good-answer");
+    setTimeout(() => radio.click());
+    const { detail } = await oneEvent(el, "edEvent");
+    expect(detail.verb).to.equal("COMPLETED");
+    expect(detail.score).to.equal(100);
+    expect(
+      el.shadowRoot.querySelector("#bar-progress").getAttribute("percent"),
+    ).to.equal("100");
+  });
+
+  it("Accept decimal, negative and exponent numeric answers", async () => {
+    const el = await fixture<EdPbElement>(`<ed-pb>
+Q1
+
+- :num: 3.14
+
+Q2
+
+- :num: -2,5
+
+Q3
+
+- :num: 6.02e23
+</ed-pb>`);
+    await waitUntil(() => el.shadowRoot.querySelectorAll("ed-num").length > 0);
+    const answers = Array.from(el.shadowRoot.querySelectorAll("ed-num")).map(
+      (num) => num.innerHTML,
+    );
+    expect(answers).to.deep.equal(["3.14", "-2,5", "6.02e23"]);
   });
 });

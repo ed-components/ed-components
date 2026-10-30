@@ -5,7 +5,9 @@ import type { EdChoiceElement } from "../../ed-choice/src/EdChoice.js";
 
 EdProgressBarElement.define();
 
-const edNumRegex = /^:num:\s+(?<answer>\d+)$/m;
+// integers, decimals (dot or comma) and scientific notation: 42, -3.14, 6,02e23
+const edNumRegex =
+  /^:num:\s+(?<answer>[-+]?\d+(?:[.,]\d+)?(?:e[-+]?\d+)?)\s*$/im;
 
 /**
  * This component is a wrapper that allows to include multiple questions
@@ -50,7 +52,7 @@ export class EdPbElement extends HTMLElement {
   }
 
   set emd(value) {
-    this._processEmd();
+    // content is processed by attributeChangedCallback
     this.setAttribute("emd", value);
   }
 
@@ -67,7 +69,8 @@ export class EdPbElement extends HTMLElement {
   }
 
   async attributeChangedCallback(name, oldValue, newValue) {
-    if (name === "emd") {
+    // before connection, connectedCallback takes care of processing
+    if (name === "emd" && this.isConnected) {
       await this._processEmd();
     }
   }
@@ -106,6 +109,11 @@ export class EdPbElement extends HTMLElement {
     <article></article>
     </main>
     `;
+    // as a wrapper ed-pb catches events from his ed-components childrens
+    // (registered once here, connectedCallback may run several times)
+    this.shadowRoot
+      .querySelector("article")
+      .addEventListener("edEvent", this._handleResponse.bind(this));
   }
 
   private async _processEmd() {
@@ -118,14 +126,23 @@ export class EdPbElement extends HTMLElement {
         ? this.innerHTML.trim()
         : this.emd.trim();
 
+    // parse markdown into html
+    const { md2HTML } = this.isHTML
+      ? { md2HTML: (s: string) => s }
+      : await import("../../common/src/index.js");
+
+    // Content may be processed several times (emd changes, attributeChangedCallback
+    // and connectedCallback racing on upgrade): reset state after the await so
+    // that rebuilding the article and counting answers stay atomic.
+    this.nAnsTot = 0;
+    this.nAns = 0;
+    this.score = 0;
+    this.shadowRoot
+      .querySelectorAll("ed-progress-bar")
+      .forEach((bar) => bar.setAttribute("percent", "0"));
+
     const article = this.shadowRoot.querySelector("article");
-    if (!this.isHTML) {
-      // parse markdown into html
-      const { md2HTML } = await import("../../common/src/index.js");
-      article.innerHTML = md2HTML(emdContent);
-    } else {
-      article.innerHTML = emdContent;
-    }
+    article.innerHTML = md2HTML(emdContent);
     // turn lists into ed components
     this.shadowRoot
       .querySelectorAll("ul")
@@ -180,9 +197,6 @@ export class EdPbElement extends HTMLElement {
   }
   async connectedCallback() {
     await this._processEmd();
-    const article = this.shadowRoot.querySelector("article");
-    // as a wrapper ed-pb catches events from his ed-components childrens
-    article.addEventListener("edEvent", this._handleResponse.bind(this));
   }
 
   private _handleResponse(evt: Event) {

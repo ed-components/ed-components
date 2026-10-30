@@ -2,6 +2,9 @@ import { EdCheckButtonElement } from "../../common/src/EdCheckButton.js";
 
 EdCheckButtonElement.define();
 
+// accept french decimal separator: "3,14" -> 3.14
+const parseNumber = (s: string) => Number(s.trim().replace(",", "."));
+
 /**
  * This component implements a numeric interaction activitie as defined in xapi spec
  * ie, any interaction which requires a numeric response from the learner.
@@ -104,20 +107,22 @@ export class EdNumElement extends HTMLElement {
 
   connectedCallback() {
     // this.innerHTML contains answer
-    this._answer = Number(this.innerHTML);
+    this._answer = parseNumber(this.innerHTML);
 
     const button = this.shadowRoot.querySelector("button");
     // pass attributes to input
     const input = this.shadowRoot.querySelector("input");
-    if (this.min) {
+    if (this.hasAttribute("min")) {
       input.setAttribute("min", String(this.min));
     }
-    if (this.max) {
+    if (this.hasAttribute("max")) {
       input.setAttribute("max", String(this.max));
     }
-    if (this.step) {
-      input.setAttribute("step", String(this.step));
-    }
+    // default step is 1, which would flag decimal answers as invalid
+    input.setAttribute(
+      "step",
+      this.hasAttribute("step") ? String(this.step) : "any",
+    );
     button.addEventListener("click", this._handleResponse.bind(this));
   }
 
@@ -133,16 +138,14 @@ export class EdNumElement extends HTMLElement {
     if (input.value.length === 0) {
       return;
     }
-    const answer = Number(input.value);
+    const answer = parseNumber(input.value);
 
     // if answer is 0 can't calculate error!
-    if (this._answer === 0) {
-      this.eval = "exact";
-    }
+    const exact = this.eval === "exact" || this._answer === 0;
 
     // score calculated as a percentage based on error if not exact
     let score;
-    if (this.eval !== "exact") {
+    if (!exact) {
       const error = Math.min(
         1,
         Math.abs(answer - this._answer) / Math.abs(this._answer),

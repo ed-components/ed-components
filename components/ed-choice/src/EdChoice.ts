@@ -153,17 +153,12 @@ export class EdChoiceElement extends HTMLElement {
         });
         this.shadowRoot.querySelector("#feedback").appendChild(button);
       } else {
-        // add event listener to this to check response
-        this.addEventListener("click", this._handleResponse.bind(this), {
+        // check response once a radio is selected, clicks elsewhere are ignored
+        ul.addEventListener("change", this._handleResponse.bind(this), {
           once: true,
         });
       }
     });
-  }
-
-  disconnectedCallback() {
-    // remove event listener to this to check response
-    this.removeEventListener("click", this._handleResponse.bind(this));
   }
 
   /**
