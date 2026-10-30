@@ -16,12 +16,6 @@
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "catalog:",
-    "@open-wc/testing": "catalog:",
-    "@rollup/plugin-commonjs": "catalog:",
-    "@rollup/plugin-replace": "catalog:",
-    "@types/mocha": "catalog:",
-    "@web/dev-server-rollup": "catalog:",
-    "tslib": "catalog:",
     "typescript": "catalog:"
   },
   "exports": {

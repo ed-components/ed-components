@@ -11,19 +11,10 @@
   "type": "module",
   "dependencies": {
     "micromark": "catalog:",
-    "micromark-extension-directive": "^4.0.0",
     "micromark-extension-gfm": "catalog:",
     "micromark-extension-math": "catalog:"
   },
   "devDependencies": {
-    "@open-wc/testing": "catalog:",
-    "@rollup/plugin-commonjs": "catalog:",
-    "@rollup/plugin-replace": "catalog:",
-    "@types/mocha": "catalog:",
-    "@web/dev-server-esbuild": "catalog:",
-    "@web/dev-server-rollup": "catalog:",
-    "@web/test-runner": "catalog:",
-    "tslib": "catalog:",
     "typescript": "catalog:"
   },
   "exports": {

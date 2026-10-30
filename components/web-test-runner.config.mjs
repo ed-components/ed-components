@@ -8,7 +8,6 @@ import rollupCommonjs from "@rollup/plugin-commonjs";
 import rollupResolve from "@rollup/plugin-node-resolve";
 import rollupJson from "@rollup/plugin-json";
 
-// const replace = fromRollup(rollupReplace);
 const resolve = fromRollup(rollupResolve);
 const commonjs = fromRollup(rollupCommonjs);
 const json = fromRollup(rollupJson);
@@ -61,12 +60,6 @@ export default /** @type {import("@web/test-runner").TestRunnerConfig} */ ({
       exclude: ["**/node_modules/axe-core/**/*"],
     }),
     json(),
-    // replace({
-    //   values: {
-    //     "process.env.NODE_ENV": '"DEVELOPMENT"',
-    //   },
-    //   preventAssignment: true,
-    // }),
   ],
 
   /** Amount of browsers to run concurrently */

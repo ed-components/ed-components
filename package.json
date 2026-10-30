@@ -8,11 +8,6 @@
     "@11ty/eleventy": "3.1.7",
     "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.2",
     "@custom-elements-manifest/to-markdown": "^0.1.0",
-    "@rollup/plugin-commonjs": "catalog:",
-    "@rollup/plugin-replace": "catalog:",
-    "@web/dev-server-esbuild": "catalog:",
-    "@web/dev-server-rollup": "catalog:",
-    "@web/test-runner": "catalog:",
     "concurrently": "^10.0.6",
     "cssnano": "^9.9.0",
     "esbuild": "catalog:",
@@ -22,11 +17,8 @@
     "postcss-cli": "^12.0.0",
     "postcss-combine-duplicated-selectors": "^11.0.0",
     "postcss-import": "^17.0.1",
-    "postcss-nesting": "^14.0.3",
     "postcss-preset-env": "^11.6.1",
-    "prettier": "^3.9.10",
-    "prismjs": "^1.30.0",
-    "remark": "^15.0.1"
+    "prettier": "^3.9.10"
   },
   "packageManager": "pnpm@12.16.1",
   "scripts": {

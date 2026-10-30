@@ -15,14 +15,6 @@
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "catalog:",
-    "@open-wc/testing": "catalog:",
-    "@rollup/plugin-commonjs": "catalog:",
-    "@rollup/plugin-replace": "catalog:",
-    "@types/mocha": "catalog:",
-    "@web/dev-server-esbuild": "catalog:",
-    "@web/dev-server-rollup": "catalog:",
-    "@web/test-runner": "catalog:",
-    "tslib": "catalog:",
     "typescript": "catalog:"
   },
   "exports": {
