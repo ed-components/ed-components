@@ -153,7 +153,6 @@ export class EdSpeechElement extends HTMLElement {
       // webspeech available
       this.showInfo("start");
       this.startButton.style.display = "inline-block";
-      // eslint-disable-next-line new-cap
       this.recognition = new webkitSpeechRecognition() as SpeechRecognition;
       this.recognition.continuous = true;
       this.recognition.interimResults = true;

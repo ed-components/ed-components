@@ -35,7 +35,6 @@
   "repository": "https://github.com/ed-components/ed-components",
   "scripts": {
     "build": "tsc",
-    "lint": "eslint --ext .ts,.html . --ignore-path .gitignore",
     "start": "tsc && tsc --watch --preserveWatchOutput",
     "test": "cd .. && npm run test -- --group $npm_package_name",
     "test:watch": "cd .. && npm run test -- --watch --group $npm_package_name"
