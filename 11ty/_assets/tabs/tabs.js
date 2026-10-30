@@ -1,89 +1,41 @@
-// from https://github.com/argyleink/gui-challenges/blob/main/tabs/app/js/index.js
+// Tabs showing one panel at a time, adapted from
+// https://github.com/argyleink/gui-challenges/blob/main/tabs/app/js/index.js
+//
+// Panels are hidden instead of being scrolled horizontally: a scrolling
+// container would break position: sticky in the panels (ed-pb progress bars).
 
-import "https://argyleink.github.io/scroll-timeline/dist/scroll-timeline.js";
-
-const { matches: motionOK } = window.matchMedia(
-  "(prefers-reduced-motion: no-preference)",
-);
-
-// grab and stash elements
 const tabgroup = document.querySelector("snap-tabs");
-const tabsection = tabgroup.querySelector(":scope > section");
 const tabnav = tabgroup.querySelector(":scope nav");
-const tabnavitems = tabnav.querySelectorAll(":scope a");
-const tabindicator = tabgroup.querySelector(":scope .snap-indicator");
+const tabnavitems = [...tabnav.querySelectorAll(":scope a")];
+const panels = [...tabgroup.querySelectorAll(":scope > section > article")];
 
-/* 
-  shared timeline for .indicator 
-  and nav > a colors */
-const sectionScrollTimeline = new ScrollTimeline({
-  scrollSource: tabsection,
-  orientation: "inline",
-  fill: "both",
-});
-
-/*
-  for each nav link
-  - animate color based on the scroll timeline
-  - color is active when its the current index*/
-tabnavitems.forEach((navitem) => {
-  navitem.animate(
-    {
-      color: [...tabnavitems].map((item) =>
-        item === navitem ? `var(--text-active-color)` : `var(--text-color)`,
-      ),
-    },
-    {
-      duration: 1000,
-      fill: "both",
-      timeline: sectionScrollTimeline,
-    },
-  );
-});
-
-if (motionOK) {
-  tabindicator.animate(
-    {
-      transform: [...tabnavitems].map(
-        ({ offsetLeft }) => `translateX(${offsetLeft}px)`,
-      ),
-      width: [...tabnavitems].map(({ offsetWidth }) => `${offsetWidth}px`),
-    },
-    {
-      duration: 1000,
-      fill: "both",
-      timeline: sectionScrollTimeline,
-    },
-  );
-}
-
-const setActiveTab = (tabbtn) => {
-  tabnav.querySelector(":scope a[active]").removeAttribute("active");
-
-  tabbtn.setAttribute("active", "");
-  tabbtn.scrollIntoView();
-};
-
-const determineActiveTabSection = () => {
-  const i = tabsection.scrollLeft / tabsection.clientWidth;
-  const matchingNavItem = tabnavitems[i];
-
-  matchingNavItem && setActiveTab(matchingNavItem);
+// show the tab matching a hash, or the first one
+const showTab = (hash) => {
+  const active =
+    tabnavitems.find((item) => item.hash === hash) ?? tabnavitems[0];
+  tabnavitems.forEach((item) => {
+    item.toggleAttribute("active", item === active);
+    if (item === active) {
+      item.setAttribute("aria-current", "page");
+    } else {
+      item.removeAttribute("aria-current");
+    }
+  });
+  panels.forEach((panel) => {
+    panel.hidden = `#${panel.id}` !== active.hash;
+  });
 };
 
 tabnav.addEventListener("click", (e) => {
-  if (e.target.nodeName !== "A") return;
-  setActiveTab(e.target);
+  const item = e.target.closest("a");
+  if (!item) return;
+  // keep the hash for shared links without jumping to the panel
+  e.preventDefault();
+  history.replaceState(null, "", item.hash);
+  showTab(item.hash);
 });
 
-tabsection.addEventListener("scroll", () => {
-  clearTimeout(tabsection.scrollEndTimer);
-  tabsection.scrollEndTimer = setTimeout(determineActiveTabSection, 100);
-});
+// links to a tab elsewhere in the page; other anchors are in the first tab
+window.addEventListener("hashchange", () => showTab(location.hash));
 
-window.onload = () => {
-  if (location.hash)
-    tabsection.scrollLeft = document.querySelector(location.hash).offsetLeft;
-
-  determineActiveTabSection();
-};
+showTab(location.hash);

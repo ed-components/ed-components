@@ -6,7 +6,7 @@ snap-tabs {
   display: flex;
   flex-direction: column;
 
-  overflow: hidden;
+  /* no overflow here: it would break position: sticky in the panels */
   position: relative;
 
   & :matches(header, nav, section, article, a) {
@@ -50,6 +50,10 @@ snap-tabs > header {
 
   & a {
     scroll-snap-align: start;
+    border-block-end: var(--indicator-size) solid hsl(var(--accent) / 0%);
+    transition:
+      color 0.7s ease,
+      border-color 0.5s ease;
 
     display: inline-flex;
     align-items: center;
@@ -70,57 +74,17 @@ snap-tabs > header {
       background: hsl(var(--accent) / 5%);
     }
 
+    &[active] {
+      color: var(--text-active-color);
+      border-block-end-color: hsl(var(--accent));
+    }
+
     &:focus {
       outline-offset: -0.5ch;
     }
   }
-
-  & > .snap-indicator {
-    inline-size: 0;
-    block-size: var(--indicator-size);
-    border-radius: var(--indicator-size);
-    background: hsl(var(--accent));
-  }
 }
 
-snap-tabs > section {
-  block-size: 100%;
-
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 100%;
-
-  & > article {
-    scroll-snap-align: start;
-    overflow-y: auto;
-    overscroll-behavior-y: contain;
-
-    padding: var(--size-3) var(--size-5);
-  }
-}
-
-@media (--motionNotOK) {
-  /* 
-    - swap to border-bottom styles
-    - transition colors
-    - hide the animated .indicator 
-  */
-
-  snap-tabs {
-    & > header a {
-      border-block-end: var(--indicator-size) solid hsl(var(--accent) / 0%);
-      transition:
-        color 0.7s ease,
-        border-color 0.5s ease;
-
-      &:matches(:target, :active, [active]) {
-        color: var(--text-active-color);
-        border-block-end-color: hsl(var(--accent));
-      }
-    }
-
-    & .snap-indicator {
-      visibility: hidden;
-    }
-  }
+snap-tabs > section > article {
+  padding: var(--size-3) var(--size-5);
 }

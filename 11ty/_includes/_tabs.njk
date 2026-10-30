@@ -1,23 +1,24 @@
 <snap-tabs>
-        <header class="scroll-snap-x"> 
+        <header class="scroll-snap-x">
           <nav>
-            <a active href="#start">Get started</a>
+            <a active aria-current="page" href="#start">Get started</a>
             <a href="#api">API</a>
             <a href="#playground">Playground</a>
           </nav>
-          <span class="snap-indicator"></span>
         </header>
-        <section class="scroll-snap-x">
+        {# panels are shown one at a time (tabs.js): no scrolling container, which
+        would break position: sticky in the demos (ed-pb progress bars) #}
+        <section>
           <article id="start">
             {# generated from readme.md #}
             {{ content | safe }}
           </article>
-          <article id="api">
+          <article id="api" hidden>
             <h2>API</h2>
             <p>Generated with <a href="https://github.com/open-wc/custom-elements-manifest/tree/master/packages/to-markdown"><code>@custom-elements-manifest</code></a></p>
             {{ htmlAPI | safe }}
           </article>
-          <article id="playground">
+          <article id="playground" hidden>
             {% include "_playground.njk" %}
           </article>
         </section>
