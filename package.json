@@ -29,6 +29,7 @@
     "remark": "^15.0.1",
     "syncpack": "^11.2.1"
   },
+  "packageManager": "pnpm@12.16.1",
   "scripts": {
     "analyze": "pnpm --filter ed-components analyze",
     "build": "npx concurrently \"npm:analyze\" \"npm:build:css\" \"npm:build:js\" && pnpm build:html",

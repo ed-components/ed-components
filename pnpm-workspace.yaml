@@ -1,2 +1,10 @@
 packages:
   - "components"
+
+allowBuilds:
+  esbuild: true
+
+overrides:
+  # yargs < 17.7.3 can't be required with node >= 26 (extensionless CJS file
+  # in a "type": "module" package), breaking wtr, concurrently and postcss-cli
+  "yargs@17": "^17.7.3"
