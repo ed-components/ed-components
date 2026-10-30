@@ -1,6 +1,4 @@
-import { EdCheckButtonElement } from "../../common/src/EdCheckButton.js";
-
-EdCheckButtonElement.define();
+import { checkButtonHTML } from "../../common/src/checkButton.js";
 
 // accept french decimal separator: "3,14" -> 3.14
 const parseNumber = (s: string) => Number(s.trim().replace(",", "."));
@@ -24,7 +22,10 @@ export class EdNumElement extends HTMLElement {
   _answer = NaN;
 
   static define(tagName = "ed-num") {
-    customElements.define(tagName, this);
+    // the element may be defined by several bundles or calls
+    if (!customElements.get(tagName)) {
+      customElements.define(tagName, this);
+    }
   }
 
   get readonly() {
@@ -103,17 +104,20 @@ export class EdNumElement extends HTMLElement {
     </style>
     <div class="user-input">
     <input type="number" name="answer" placeholder="Enter number"/>
-    <button is="ed-check-button"></button>
+    ${checkButtonHTML}
     </div>
     <output name="answer"></output>
     `;
+    // registered once: connectedCallback may run several times
+    this.shadowRoot
+      .querySelector("button")!
+      .addEventListener("click", this._handleResponse.bind(this));
   }
 
   connectedCallback() {
     // this.innerHTML contains answer
     this._answer = parseNumber(this.innerHTML);
 
-    const button = this.shadowRoot.querySelector("button")!;
     // pass attributes to input
     const input = this.shadowRoot.querySelector("input")!;
     if (this.hasAttribute("min")) {
@@ -127,16 +131,16 @@ export class EdNumElement extends HTMLElement {
       "step",
       this.hasAttribute("step") ? String(this.step) : "any",
     );
-    button.addEventListener("click", this._handleResponse.bind(this));
   }
 
-  private _handleResponse(evt: Event) {
+  private _handleResponse() {
     // TODO handle a default base interface(date, url)
 
     // TODO get unique identifier of html element ie id or // dompath:
     // https://stackoverflow.com/a/69104350
     const input = this.shadowRoot.querySelector("input")!;
-    const button = evt.target as EdCheckButtonElement;
+    // not evt.target, which may be the button icon
+    const button = this.shadowRoot.querySelector("button")!;
 
     // TODO find a way to inform user(submit disabled)
     if (input.value.length === 0) {

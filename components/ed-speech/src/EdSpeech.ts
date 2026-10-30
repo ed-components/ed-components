@@ -25,10 +25,14 @@ export class EdSpeechElement extends HTMLElement {
   private recognizing = false;
 
   static define(tagName = "ed-speech") {
-    customElements.define(tagName, this);
+    // the element may be defined by several bundles or calls
+    if (!customElements.get(tagName)) {
+      customElements.define(tagName, this);
+    }
   }
   static get observedAttributes() {
-    return ["question", "lang", "isHTML"];
+    // HTML lowercases attribute names: isHTML is observed as ishtml
+    return ["question", "lang", "ishtml"];
   }
 
   set lang(lang: string) {
@@ -57,15 +61,15 @@ export class EdSpeechElement extends HTMLElement {
       --bs-alert-margin-bottom: 1rem;
       --bs-alert-color: inherit;
       --bs-alert-border-color: transparent;
-      --bs-alert-border: var(--border-size-1) solid var(--gray-1);
-      --bs-alert-border-radius: var(--border-radius-3);
+      --bs-alert-border: var(--border-size-1, 1px) solid var(--gray-1, #f1f3f5);
+      --bs-alert-border-radius: var(--radius-3, 1rem);
       --bs-alert-link-color: inherit;
     }
     main {
       display: flex;
     }
     #mic-button {
-      background-color: var(--red-5);
+      background-color: var(--red-5, #ff6b6b);
       color: white;
       &.recording {
         background-color: initial;
@@ -93,23 +97,23 @@ export class EdSpeechElement extends HTMLElement {
       border: var(--bs-alert-border);
       border-radius: var(--bs-alert-border-radius);
       &.warning {
-         --bs-alert-color: var(--orange-5);
-         --bs-alert-bg: var(--orange-1);
-         --bs-alert-border-color: var(--orange-3);
-         --bs-alert-link-color: var(--orange-1);
+         --bs-alert-color: var(--orange-5, #ff922b);
+         --bs-alert-bg: var(--orange-1, #ffe8cc);
+         --bs-alert-border-color: var(--orange-3, #ffc078);
+         --bs-alert-link-color: var(--orange-1, #ffe8cc);
       }
       &.success {
-        --bs-alert-color: var(--blue-5);
-         --bs-alert-bg: var(--blue-1);
-         --bs-alert-border-color: var(--blue-3);
-         --bs-alert-link-color: var(--blue-1);
+        --bs-alert-color: var(--blue-5, #339af0);
+         --bs-alert-bg: var(--blue-1, #d0ebff);
+         --bs-alert-border-color: var(--blue-3, #74c0fc);
+         --bs-alert-link-color: var(--blue-1, #d0ebff);
       }
     }
     .final {
-        font-weight: var(--font-weight-8);
+        font-weight: var(--font-weight-8, 800);
       }
       .interim {
-        color: var(--blue-5);
+        color: var(--blue-5, #339af0);
       }
     </style>
     <div id="info"></div>

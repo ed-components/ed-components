@@ -1,4 +1,5 @@
-import { fixture, expect, html } from "@open-wc/testing";
+import { aTimeout, fixture, expect, html } from "@open-wc/testing";
+import { moveInDom } from "../../common/test/helpers.js";
 import { EdMicroElement } from "../src/EdMicro.js";
 import "../src/ed-micro.js";
 
@@ -52,5 +53,37 @@ First slide
   it("passes the a11y audit", async () => {
     const el = await fixture<EdMicroElement>(`<ed-micro></ed-micro>`);
     await expect(el).shadowDom.to.be.accessible();
+  });
+  it("Keeps the title out of the slides when moved in the DOM", async () => {
+    const el = await fixture<EdMicroElement>(`<ed-micro>
+# Title
+
+First slide
+
+# Second
+
+Hello
+</ed-micro>`);
+    await aTimeout(0);
+    await moveInDom(el);
+    expect(el.shadowRoot.querySelector(".slide")!.textContent).not.to.contain(
+      "Title",
+    );
+  });
+  it("Uses buttons to open and navigate", async () => {
+    const el = await fixture<EdMicroElement>(`<ed-micro label="test">
+# First
+
+Hello
+
+# Second
+
+World
+</ed-micro>`);
+    await aTimeout(0);
+    expect(el.shadowRoot.querySelector("#open-label button")).to.exist;
+    el.shadowRoot.querySelectorAll(".carousel-arrow").forEach((arrow) => {
+      expect(arrow.tagName).to.equal("BUTTON");
+    });
   });
 });

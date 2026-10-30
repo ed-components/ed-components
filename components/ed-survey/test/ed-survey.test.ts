@@ -1,5 +1,6 @@
 import { fixture, expect } from "@open-wc/testing";
 import { EdSurveyElement } from "../src/EdSurvey.js";
+import { moveInDom } from "../../common/test/helpers.js";
 import "../src/ed-survey.js";
 
 describe("EdSurveyElement", () => {
@@ -37,5 +38,25 @@ describe("EdSurveyElement", () => {
   it("passes the a11y audit", async () => {
     const el = await fixture<EdSurveyElement>(`<ed-survey></ed-survey>`);
     await expect(el).shadowDom.to.be.accessible();
+  });
+
+  it("Sends a single response when moved in the DOM", async () => {
+    const el = await fixture<EdSurveyElement>(`<ed-survey></ed-survey>`);
+    await moveInDom(el);
+    let responses = 0;
+    el.addEventListener("edEvent", () => {
+      responses += 1;
+    });
+    el.shadowRoot
+      .querySelector("ed-smiley")!
+      .shadowRoot.querySelector("button")!
+      .click();
+    expect(responses).to.equal(1);
+  });
+
+  it("Smiley renders its buttons once when moved in the DOM", async () => {
+    const smiley = await fixture<HTMLElement>(`<ed-smiley></ed-smiley>`);
+    await moveInDom(smiley);
+    expect(smiley.shadowRoot!.querySelectorAll("button").length).to.equal(3);
   });
 });

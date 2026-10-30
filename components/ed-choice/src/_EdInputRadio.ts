@@ -96,7 +96,10 @@ export class EdInputRadio extends HTMLElement {
   declare readonly shadowRoot: ShadowRoot;
 
   static define(tagName = "ed-input-radio") {
-    customElements.define(tagName, this);
+    // the element may be defined by several bundles or calls
+    if (!customElements.get(tagName)) {
+      customElements.define(tagName, this);
+    }
   }
 
   constructor() {
@@ -105,6 +108,8 @@ export class EdInputRadio extends HTMLElement {
     if (!this.shadowRoot) {
       this.attachShadow({ mode: "open" });
     }
+    // rendered once: connectedCallback may run several times
+    this.shadowRoot.appendChild(template.content.cloneNode(true));
   }
 
   static get observedAttributes() {
@@ -112,21 +117,34 @@ export class EdInputRadio extends HTMLElement {
   }
 
   connectedCallback() {
-    this.shadowRoot.appendChild(template.content.cloneNode(true));
     // // calculate pathlength for animation
     // let svgPath: SVGPathElement =
     //   this.shadowRoot.querySelector("svg > path.check");
     // console.log(svgPath.getTotalLength());
 
-    if (!this.hasAttribute("role")) this.setAttribute("role", "checkbox");
+    if (!this.hasAttribute("role")) this.setAttribute("role", "radio");
+    // keyboard reachable, unless disabled
+    if (!this.hasAttribute("tabindex") && !this.disabled) {
+      this.setAttribute("tabindex", "0");
+    }
 
     this._upgradeProperty("checked");
     this._upgradeProperty("disabled");
     this.addEventListener("click", this._toggleChecked);
+    this.addEventListener("keydown", this._onKeyDown);
   }
 
   disconnectedCallback() {
     this.removeEventListener("click", this._toggleChecked);
+    this.removeEventListener("keydown", this._onKeyDown);
+  }
+
+  // space toggles the input, as for a native checkbox
+  _onKeyDown(evt: KeyboardEvent) {
+    if (evt.key !== " " || evt.altKey) return;
+    // don't scroll the page
+    evt.preventDefault();
+    this._toggleChecked();
   }
 
   // a property set before the element upgrade shadows the class accessor:
@@ -186,6 +204,13 @@ export class EdInputRadio extends HTMLElement {
         break;
       case "disabled":
         this.setAttribute("aria-disabled", String(hasValue));
+        // a disabled input leaves the tab order
+        if (hasValue) {
+          this.removeAttribute("tabindex");
+          this.blur();
+        } else {
+          this.setAttribute("tabindex", "0");
+        }
         break;
       default:
         break;

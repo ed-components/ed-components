@@ -15,7 +15,10 @@ export class EdSurveyElement extends HTMLElement {
   declare readonly shadowRoot: ShadowRoot;
 
   static define(tagName = "ed-survey") {
-    customElements.define(tagName, this);
+    // the element may be defined by several bundles or calls
+    if (!customElements.get(tagName)) {
+      customElements.define(tagName, this);
+    }
   }
 
   get type() {
@@ -65,7 +68,8 @@ export class EdSurveyElement extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["type", "question", "choice", "readonly", "isHTML"];
+    // HTML lowercases attribute names: isHTML is observed as ishtml
+    return ["type", "question", "choice", "readonly", "ishtml"];
   }
 
   constructor() {
@@ -88,6 +92,10 @@ export class EdSurveyElement extends HTMLElement {
     <p class="question" aria-description="question"></p>
     <div></div>
     `;
+    // registered once: connectedCallback may run several times
+    this.shadowRoot
+      .querySelector("div")!
+      .addEventListener("click", this._handleResponse.bind(this));
   }
 
   async connectedCallback() {
@@ -115,7 +123,6 @@ export class EdSurveyElement extends HTMLElement {
     if (readonly) {
       // div.firstChild.setAttribue("readonly", "");
     }
-    div.addEventListener("click", this._handleResponse.bind(this));
   }
 
   private _handleResponse(evt: Event) {

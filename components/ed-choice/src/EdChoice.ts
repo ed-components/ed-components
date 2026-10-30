@@ -1,10 +1,9 @@
-import { EdCheckButtonElement } from "../../common/src/EdCheckButton.js";
+import { checkButtonHTML } from "../../common/src/checkButton.js";
 import { EdInputCheckBox } from "./_EdInputCheckBox.js";
 import { EdInputRadio } from "./_EdInputRadio.js";
 
 EdInputCheckBox.define();
 EdInputRadio.define();
-EdCheckButtonElement.define();
 
 const template = `
   <style>
@@ -70,11 +69,15 @@ export class EdChoiceElement extends HTMLElement {
   label?: string;
 
   static define(tagName = "ed-choice") {
-    customElements.define(tagName, this);
+    // the element may be defined by several bundles or calls
+    if (!customElements.get(tagName)) {
+      customElements.define(tagName, this);
+    }
   }
 
   static get observedAttributes() {
-    return ["type", "isHTML"];
+    // HTML lowercases attribute names: isHTML is observed as ishtml
+    return ["type", "ishtml"];
   }
 
   get type(): string | null {
@@ -104,15 +107,17 @@ export class EdChoiceElement extends HTMLElement {
   }
 
   async connectedCallback() {
-    if (!this.isHTML) {
-      // parse markdown into html
-      const { md2HTML } = await import("../../common/src/index.js");
-      const contents = md2HTML(this.innerHTML);
-      // work on the DocumentFragment content before mounting it
-      this.shadowRoot.querySelector("#content")!.innerHTML = contents.trim();
-    } else {
-      this.shadowRoot.querySelector("#content")!.innerHTML = this.innerHTML;
-    }
+    // parse markdown into html
+    const contents = this.isHTML
+      ? this.innerHTML
+      : (await import("../../common/src/index.js"))
+          .md2HTML(this.innerHTML)
+          .trim();
+
+    // render after the await: connectedCallback may run several times
+    this.shadowRoot.querySelector("#content")!.innerHTML = contents;
+    const feedback = this.shadowRoot.querySelector("#feedback")!;
+    feedback.innerHTML = "";
 
     // prepare html
     this.shadowRoot.querySelectorAll("ul").forEach((ul: HTMLUListElement) => {
@@ -144,20 +149,23 @@ export class EdChoiceElement extends HTMLElement {
             : document.createElement("ed-input-checkbox");
         // is it a good answer?
         edInput.className = isCorrect ? "good-answer" : "bad-answer";
+        // accessible name from the answer text
+        edInput.setAttribute(
+          "aria-label",
+          input.parentElement?.textContent?.trim() ?? "",
+        );
 
         input.replaceWith(edInput);
       });
       // add check answer if multiple-choice
       if (this.type === "multiple") {
-        const button = document.createElement("button", {
-          is: "ed-check-button",
-        });
-
+        feedback.insertAdjacentHTML("beforeend", checkButtonHTML);
         // add event listener to button check response
-        button.addEventListener("click", this._handleResponse.bind(this), {
-          once: true,
-        });
-        this.shadowRoot.querySelector("#feedback")!.appendChild(button);
+        feedback.lastElementChild!.addEventListener(
+          "click",
+          this._handleResponse.bind(this),
+          { once: true },
+        );
       } else {
         // check response once a radio is selected, clicks elsewhere are ignored
         ul.addEventListener("change", this._handleResponse.bind(this), {

@@ -61,12 +61,17 @@ export class EdProgressBarElement extends HTMLElement {
   declare readonly shadowRoot: ShadowRoot;
 
   static define(tagName = "ed-progress-bar") {
-    customElements.define(tagName, this);
+    // the element may be defined by several bundles or calls
+    if (!customElements.get(tagName)) {
+      customElements.define(tagName, this);
+    }
   }
 
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+    // rendered once: connectedCallback may run several times
+    this.shadowRoot.appendChild(template.content.cloneNode(true));
   }
 
   connectedCallback() {
@@ -75,7 +80,6 @@ export class EdProgressBarElement extends HTMLElement {
     if (!this.hasAttribute("percent")) {
       this.percent = "0";
     }
-    this.shadowRoot.appendChild(template.content.cloneNode(true));
     this.shadowRoot.querySelector("#label")!.innerHTML = this.label ?? "";
 
     const progress =

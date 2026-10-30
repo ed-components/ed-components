@@ -3,14 +3,12 @@ import winkNLP from "wink-nlp";
 import similarity from "wink-nlp/utilities/similarity";
 import model from "wink-eng-lite-web-model";
 
-import { EdCheckButtonElement } from "../../common/src/EdCheckButton.js";
+import { checkButtonHTML } from "../../common/src/checkButton.js";
 
 const nlp = winkNLP(model);
 // Acquire "its" and "as" helpers from nlp.
 const { its } = nlp;
 const { as } = nlp;
-
-EdCheckButtonElement.define();
 
 // Match score and ans as regexp
 const regexScoreAns = /^:(?<score>\d+):\s(?<answer>.*$)/;
@@ -46,8 +44,14 @@ export class EdAnsElement extends HTMLElement {
 
   private _answers: answerData[] = [];
 
+  // authored content, kept as connectedCallback replaces innerHTML with html
+  private _source?: string;
+
   static define(tagName = "ed-ans") {
-    customElements.define(tagName, this);
+    // the element may be defined by several bundles or calls
+    if (!customElements.get(tagName)) {
+      customElements.define(tagName, this);
+    }
   }
 
   static get observedAttributes() {
@@ -77,19 +81,26 @@ export class EdAnsElement extends HTMLElement {
     </style>
     <div class="user-input">
     <input type="text" name="answer" placeholder="Enter your answer"/>
-    <button is="ed-check-button"></button>
+    ${checkButtonHTML}
     </div>
     <output name="answer"></output>
     `;
+    // registered once: connectedCallback may run several times
+    this.shadowRoot
+      .querySelector("button")!
+      .addEventListener("click", this._handleResponse.bind(this));
   }
 
   async connectedCallback() {
-    if (!this.html) {
-      // parse markdown into html
-      const { md2HTML } = await import("../../common/src/index.js");
-      this.innerHTML = md2HTML(this.innerHTML);
-    }
+    this._source ??= this.innerHTML;
+    // parse markdown into html
+    const { md2HTML } = this.html
+      ? { md2HTML: (s: string) => s }
+      : await import("../../common/src/index.js");
 
+    // rebuild after the await: connectedCallback may run several times
+    this.innerHTML = md2HTML(this._source);
+    this._answers = [];
     this.querySelectorAll<HTMLLIElement>("ul > li").forEach((el) => {
       const m = regexScoreAns.exec(el.innerText);
       if (m === null) {
@@ -99,9 +110,6 @@ export class EdAnsElement extends HTMLElement {
       const bow = new Set(this._bagOfWords(answer));
       this._answers.push({ score: Number(score), answer, bow });
     });
-
-    const button = this.shadowRoot.querySelector("button")!;
-    button.addEventListener("click", this._handleResponse.bind(this));
   }
 
   private _bagOfWords(s: string) {
@@ -112,13 +120,14 @@ export class EdAnsElement extends HTMLElement {
       .out(its.value, as.set);
   }
 
-  private _handleResponse(evt: Event) {
+  private _handleResponse() {
     // TODO handle a default base interface(date, url)
 
     // TODO get unique identifier of html element ie id or // dompath:
     // https://stackoverflow.com/a/69104350
     const input = this.shadowRoot.querySelector("input")!;
-    const button = evt.target as EdCheckButtonElement;
+    // not evt.target, which may be the button icon
+    const button = this.shadowRoot.querySelector("button")!;
 
     const answer = input.value;
     // TODO find a way to inform user(submit disabled)
@@ -161,7 +170,9 @@ export class EdAnsElement extends HTMLElement {
     // output results
     this.shadowRoot.querySelector(
       "output",
-    )!.innerHTML = `Score: ${score}% the correct answer was: ${this._answers[0].answer}`;
+    )!.innerHTML = `Score: ${score}% the correct answer was: ${
+      this._answers[0]?.answer ?? ""
+    }`;
   }
 }
 

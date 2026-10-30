@@ -32,11 +32,15 @@ export class EdPbElement extends HTMLElement {
   private score = 0;
 
   static define(tagName = "ed-pb") {
-    customElements.define(tagName, this);
+    // the element may be defined by several bundles or calls
+    if (!customElements.get(tagName)) {
+      customElements.define(tagName, this);
+    }
   }
 
   static get observedAttributes() {
-    return ["label", "description", "emd", "isHTML"];
+    // HTML lowercases attribute names: isHTML is observed as ishtml
+    return ["label", "description", "emd", "ishtml"];
   }
 
   get label(): string | null {
@@ -174,6 +178,8 @@ export class EdPbElement extends HTMLElement {
           // replace unorder-list with ed-ans
           const edAns = document.createElement("ed-ans");
           edAns.label = label;
+          // content is already parsed (ed-ans names this attribute html)
+          edAns.setAttribute("html", "");
           edAns.innerHTML = ul.outerHTML;
           ul.replaceWith(edAns);
         } else if (li.innerText.startsWith(":num: ")) {
@@ -224,6 +230,7 @@ export class EdPbElement extends HTMLElement {
           date: new Date().toISOString(),
           url: url.host + url.pathname,
           tag: this.tagName,
+          label: this.label,
           verb: "COMPLETED",
           score,
         },

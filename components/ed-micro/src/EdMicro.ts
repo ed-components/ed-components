@@ -6,6 +6,8 @@ const microSvg = `<svg xmlns="http://www.w3.org/2000/svg"
   <text x="4.1194029" y="7.8606968" id="text2">µ</text>
   </svg>`;
 
+const openButton = `<button type="button" class="open-button" aria-label="Open micro-learning content">${microSvg}</button>`;
+
 /**
  * This component allows to present chunks of educational content
  * in a modal carousel to allow easy navigation and remove unecesary distraction.
@@ -23,11 +25,15 @@ export class EdMicroElement extends HTMLElement {
   declare readonly shadowRoot: ShadowRoot;
 
   static define(tagName = "ed-micro") {
-    customElements.define(tagName, this);
+    // the element may be defined by several bundles or calls
+    if (!customElements.get(tagName)) {
+      customElements.define(tagName, this);
+    }
   }
 
   static get observedAttributes() {
-    return ["label", "isHTML"];
+    // HTML lowercases attribute names: isHTML is observed as ishtml
+    return ["label", "ishtml"];
   }
 
   get isHTML() {
@@ -52,6 +58,18 @@ export class EdMicroElement extends HTMLElement {
       display: block;
       --ed-primary: var(--blue-7, #1c7ed6);
     }
+    /* Open Props keyframes, needed by the animations in shadow DOM */
+    @keyframes scale-down { to { transform: scale(.75) } }
+    @keyframes slide-in-up { from { transform: translateY(100%) } }
+    @keyframes slide-out-down { to { transform: translateY(100%) } }
+    .open-button {
+      background: none;
+      border: none;
+      padding: 0;
+      color: inherit;
+      font: inherit;
+      cursor: pointer;
+    }
     html:has(dialog[open][modal-mode="mega"]) {
   overflow: hidden;
 }
@@ -59,37 +77,37 @@ export class EdMicroElement extends HTMLElement {
 dialog {
   display: grid;
   align-content: start;
-  background: var(--surface-2);
-  color: var(--text-1);
-  max-inline-size: min(90vw, var(--size-content-3));
+  background: var(--surface-2, #e9ecef);
+  color: var(--text-1, #212529);
+  max-inline-size: min(90vw, var(--size-content-3, 60ch));
   margin: auto;
   padding: 0;
   position: fixed;
   inset: 0;
-  border-radius: var(--radius-3);
-  box-shadow: var(--shadow-6);
-  z-index: var(--layer-important);
+  border-radius: var(--radius-3, 1rem);
+  box-shadow: var(--shadow-6, 0 -1px 2px 0 hsl(220 3% 15% / 3%), 0 3px 2px -2px hsl(220 3% 15% / 4%), 0 7px 5px -2px hsl(220 3% 15% / 4%), 0 12px 10px -2px hsl(220 3% 15% / 5%), 0 22px 18px -2px hsl(220 3% 15% / 6%), 0 41px 33px -2px hsl(220 3% 15% / 7%), 0 100px 80px -2px hsl(220 3% 15% / 8%));
+  z-index: var(--layer-important, 2147483647);
   overflow: hidden;
-  transition: opacity .5s var(--ease-3);
+  transition: opacity .5s var(--ease-3, cubic-bezier(.25, 0, .3, 1));
   
-  @media (--motionOK) {
-    animation: var(--animation-scale-down) forwards;
-    animation-timing-function: var(--ease-squish-3);
+  @media (prefers-reduced-motion: no-preference) {
+    animation: var(--animation-scale-down, scale-down .5s var(--ease-3, cubic-bezier(.25, 0, .3, 1))) forwards;
+    animation-timing-function: var(--ease-squish-3, cubic-bezier(.5, -.5, .1, 1.5));
   }
 
-  @media (--OSdark) {
-    border-block-start: var(--border-size-1) solid var(--surface-3);
+  @media (prefers-color-scheme: dark) {
+    border-block-start: var(--border-size-1, 1px) solid var(--surface-3, #dee2e6);
   }
 
-  @media (--md-n-below) {
+  @media (max-width: 767px) {
     &[modal-mode="mega"] {
       margin-block-end: 0;
       border-end-end-radius: 0;
       border-end-start-radius: 0;
       
-      @media (--motionOK) {
-        animation: var(--animation-slide-out-down) forwards;
-        animation-timing-function: var(--ease-squish-2);
+      @media (prefers-reduced-motion: no-preference) {
+        animation: var(--animation-slide-out-down, slide-out-down .5s var(--ease-3, cubic-bezier(.25, 0, .3, 1))) forwards;
+        animation-timing-function: var(--ease-squish-2, cubic-bezier(.5, -.3, .1, 1.5));
       }
     }
   }
@@ -116,8 +134,8 @@ dialog {
   }
 
   &[open] {
-    @media (--motionOK) {
-      animation: var(--animation-slide-in-up) forwards;
+    @media (prefers-reduced-motion: no-preference) {
+      animation: var(--animation-slide-in-up, slide-in-up .5s var(--ease-3, cubic-bezier(.25, 0, .3, 1))) forwards;
     }
   }
 
@@ -134,35 +152,35 @@ dialog {
       overscroll-behavior-y: contain;
       display: grid;
       justify-items: flex-start;
-      gap: var(--size-3);
-      box-shadow: var(--shadow-2);
-      z-index: var(--layer-1);
-      padding-inline: var(--size-5);
-      padding-block: var(--size-3);
+      gap: var(--size-3, 1rem);
+      box-shadow: var(--shadow-2, 0 3px 5px -2px hsl(220 3% 15% / 4%), 0 7px 14px -5px hsl(220 3% 15% / 6%));
+      z-index: var(--layer-1, 1);
+      padding-inline: var(--size-5, 1.5rem);
+      padding-block: var(--size-3, 1rem);
 
-      @media (--OSlight) {
-        background: var(--surface-1);
+      @media (prefers-color-scheme: light) {
+        background: var(--surface-1, #f8f9fa);
 
         &::-webkit-scrollbar {
-          background: var(--surface-1);
+          background: var(--surface-1, #f8f9fa);
         }
       }
 
-      @media (--OSdark) {
-        border-block-start: var(--border-size-1) solid var(--surface-3);
+      @media (prefers-color-scheme: dark) {
+        border-block-start: var(--border-size-1, 1px) solid var(--surface-3, #dee2e6);
       }
     }
 
     & > header {
       display: flex;
-      gap: var(--size-3);
+      gap: var(--size-3, 1rem);
       justify-content: space-between;
       align-items: flex-start;
-      padding-block: var(--size-3);
-      padding-inline: var(--size-5);
+      padding-block: var(--size-3, 1rem);
+      padding-inline: var(--size-5, 1.5rem);
 
       & > button {
-        border-radius: var(--radius-round);
+        border-radius: var(--radius-round, 1e5px);
         padding: .75ch;
         aspect-ratio: 1;
         flex-shrink: 0;
@@ -175,16 +193,16 @@ dialog {
     & > footer {
       display: flex;
       flex-wrap: wrap;
-      gap: var(--size-3);
+      gap: var(--size-3, 1rem);
       justify-content: space-between;
       align-items: flex-start;
-      padding-inline: var(--size-5);
-      padding-block: var(--size-3);
+      padding-inline: var(--size-5, 1.5rem);
+      padding-block: var(--size-3, 1rem);
 
       & > menu {
         display: flex;
         flex-wrap: wrap;
-        gap: var(--size-3);
+        gap: var(--size-3, 1rem);
         padding-inline-start: 0;
 
         &:only-child {
@@ -200,15 +218,15 @@ dialog {
     }
 
     & > :is(header, footer) {
-      background-color: var(--surface-2);
+      background-color: var(--surface-2, #e9ecef);
 
-      @media (--OSdark) {
-        background-color: var(--surface-1);
+      @media (prefers-color-scheme: dark) {
+        background-color: var(--surface-1, #f8f9fa);
       }
     }
     
     svg {
-      --_icon-size: var(--size-fluid-3);
+      --_icon-size: var(--size-fluid-3, clamp(1.5rem, 3vw, 2rem));
       block-size: var(--_icon-size);
       filter: drop-shadow(var(--_ink-shadow));
       flex-shrink: 0;
@@ -218,7 +236,7 @@ dialog {
       stroke-linecap: round;
       stroke-linejoin: round;
     }
-    header {background-color: var(--surface-1);}
+    header {background-color: var(--surface-1, #f8f9fa);}
 
     /* slider part*/
     #slides {
@@ -311,7 +329,7 @@ dialog {
     </dialog>
     <section id="open-label">
       Open micro-learning content
-      ${microSvg}
+      ${openButton}
     </section>
     `;
   }
@@ -330,15 +348,15 @@ dialog {
       slidesWrapper.innerHTML = this.innerHTML.trim();
     }
 
-    // if no label is provided use first element
-    if (this.label === null) {
+    // if no label is provided use first element (not stored in the label
+    // attribute: connectedCallback may run several times)
+    let label = this.label;
+    if (label === null) {
       const firstChild = slidesWrapper.firstElementChild;
-      if (firstChild !== null) {
-        this.label = firstChild.outerHTML;
-        firstChild.remove();
-      }
+      label = firstChild?.outerHTML ?? "";
+      firstChild?.remove();
     }
-    this._updateLabel(this.label ?? "");
+    this._updateLabel(label);
 
     // wrap headers inside slide units
     // first add hr before headings
@@ -363,13 +381,17 @@ dialog {
 
     // add arrows navigation if more than one slide
     if (nSlide > 1) {
-      let prevButton = document.createElement("span");
+      const prevButton = document.createElement("button");
+      prevButton.type = "button";
       prevButton.className = "carousel-arrow carousel-arrow--prev";
+      prevButton.ariaLabel = "Previous slide";
       prevButton.innerHTML = "&#8249;";
       prevButton.addEventListener("click", this._handleCarouselMove.bind(this));
       slidesWrapper.insertAdjacentElement("beforeend", prevButton);
-      let nextButton = document.createElement("span");
+      const nextButton = document.createElement("button");
+      nextButton.type = "button";
       nextButton.className = "carousel-arrow carousel-arrow--next";
+      nextButton.ariaLabel = "Next slide";
       nextButton.innerHTML = "&#8250;";
       nextButton.addEventListener("click", this._handleCarouselMove.bind(this));
       slidesWrapper.insertAdjacentElement("beforeend", nextButton);
@@ -379,7 +401,7 @@ dialog {
   private _handleCarouselMove(evt: Event) {
     const carousel = this.shadowRoot.querySelector("#slides")!;
     const slideWidth = this.shadowRoot.querySelector(".slide")!.clientWidth;
-    const arrow = evt.target as HTMLElement;
+    const arrow = evt.currentTarget as HTMLElement;
     carousel.scrollLeft = arrow.classList.contains("carousel-arrow--next")
       ? carousel.scrollLeft + slideWidth
       : carousel.scrollLeft - slideWidth;
@@ -390,11 +412,11 @@ dialog {
     const openLabel = this.shadowRoot.querySelector("#open-label")!;
     openLabel.innerHTML = label;
     if (openLabel.firstElementChild !== null) {
-      openLabel.firstElementChild.insertAdjacentHTML("beforeend", microSvg);
+      openLabel.firstElementChild.insertAdjacentHTML("beforeend", openButton);
     } else {
-      openLabel.innerHTML += microSvg;
+      openLabel.innerHTML += openButton;
     }
-    openLabel.querySelector("svg")!.addEventListener("click", () => {
+    openLabel.querySelector(".open-button")!.addEventListener("click", () => {
       this.shadowRoot.querySelector("dialog")!.showModal();
       // move slider to the left on each opening
       this.shadowRoot.querySelector("#slides")!.scrollTo(0, 0);

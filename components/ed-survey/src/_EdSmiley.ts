@@ -6,18 +6,18 @@ template.innerHTML = `
     }
     div {
       display: flex;
-      gap: var(--font-size-fluid-2);
+      gap: var(--font-size-fluid-2, clamp(1.5rem, 6vw, 2.5rem));
     }
     button {
-      font-size: var(--font-size-fluid-2);
-      border-radius: var(--font-size-fluid-2);
+      font-size: var(--font-size-fluid-2, clamp(1.5rem, 6vw, 2.5rem));
+      border-radius: var(--font-size-fluid-2, clamp(1.5rem, 6vw, 2.5rem));
       border: none;
     }
   </style>
   <div>
-    <button alt="CONFUSED FACE" data-value="1">&#128533;</button>
-    <button alt="NEUTRAL FACE" data-value="2">&#128528;</button>
-    <button alt="GRINNING FACE" data-value="3">&#128512;</button>
+    <button type="button" aria-label="Confused face" data-value="1">&#128533;</button>
+    <button type="button" aria-label="Neutral face" data-value="2">&#128528;</button>
+    <button type="button" aria-label="Grinning face" data-value="3">&#128512;</button>
   </div>
   `;
 
@@ -26,23 +26,20 @@ export class EdSmiley extends HTMLElement {
   declare readonly shadowRoot: ShadowRoot;
 
   static define(tagName = "ed-smiley") {
-    customElements.define(tagName, this);
+    // the element may be defined by several bundles or calls
+    if (!customElements.get(tagName)) {
+      customElements.define(tagName, this);
+    }
   }
 
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
-  }
-
-  connectedCallback() {
+    // rendered once: connectedCallback may run several times
     this.shadowRoot.appendChild(template.content.cloneNode(true));
     this.shadowRoot
       .querySelector("div")!
       .addEventListener("click", this._clickHandler.bind(this));
-    // FIX called multiple times
-    // this.shadowRoot.querySelector('div').addEventListener('keyup', this._clickHandler, {
-    //   once: true,
-    // })
   }
 
   // rating value between 1 and 3

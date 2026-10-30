@@ -1,4 +1,12 @@
-import { fixture, expect, html, oneEvent, waitUntil } from "@open-wc/testing";
+import {
+  aTimeout,
+  fixture,
+  expect,
+  html,
+  oneEvent,
+  waitUntil,
+} from "@open-wc/testing";
+import { moveInDom } from "../../common/test/helpers.js";
 import { EdPbElement } from "../src/EdPb.js";
 import "../src/ed-pb.js";
 import { EdProgressBarElement } from "../src/_EdProgressBar.js";
@@ -118,5 +126,31 @@ Q3
     document.body.appendChild(bar);
     expect(bar.getAttribute("percent")).to.equal("0");
     bar.remove();
+  });
+
+  it("Progress bar renders its template once when moved in the DOM", async () => {
+    const bar = await fixture<EdProgressBarElement>(
+      `<ed-progress-bar label="Progress"></ed-progress-bar>`,
+    );
+    await moveInDom(bar);
+    expect(bar.shadowRoot.querySelectorAll("#label").length).to.equal(1);
+  });
+
+  it("Passes parsed HTML to ed-ans", async () => {
+    const el = await fixture<EdPbElement>(`<ed-pb>
+Question
+
+- :100: answer
+</ed-pb>`);
+    await aTimeout(0);
+    expect(el.shadowRoot.querySelector("ed-ans")!.hasAttribute("html")).to.be
+      .true;
+  });
+
+  it("Can be defined twice", () => {
+    expect(() => {
+      EdPbElement.define();
+      EdProgressBarElement.define();
+    }).not.to.throw();
   });
 });
