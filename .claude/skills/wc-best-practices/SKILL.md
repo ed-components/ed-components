@@ -99,8 +99,15 @@ Every rule below comes from a bug found in this repo.
     (--motionOK)`), and give a fallback to Open Props variables
     (`var(--blue-7, #1c7ed6)`).
 
+20. **Styles are shared stylesheets, not `<style>` in templates**: create the
+    element's sheet once at module level with `stylesheet()` and adopt it after
+    the common one in the constructor:
+    `this.shadowRoot.adoptedStyleSheets = [commonSheet, sheet];`
+    (`common/src/styles.ts`). Values used by several components (colors, font,
+    math, check button, `.user-input`) go in `commonSheet`.
+
 ## Markdown content
 
-20. Content is markdown unless `isHTML` is set: parse it with the dynamically
+21. Content is markdown unless `isHTML` is set: parse it with the dynamically
     imported `md2HTML` from `common/src/index.js`. A wrapper that passes
     already parsed HTML to a child component must set `isHTML` on it.

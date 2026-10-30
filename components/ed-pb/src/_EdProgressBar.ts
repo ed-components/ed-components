@@ -1,53 +1,56 @@
+import { commonSheet, stylesheet } from "../../common/src/styles.js";
 /** @module EdProgressBar
  *  Source: bootstrap 5
  *
  */
 
+// shared by all instances (adoptedStyleSheets)
+const sheet = stylesheet(`
+:host {
+  display: block;
+  border-radius: 0.3em;
+}
+#wrapper {
+  display: flex;
+  font: bold 1.1em var(--font-sans-serif, sans-serif);
+  margin: 0.3em 0;      
+}
+#label {
+  padding-left: 0.3em;
+  padding-right:0.5em ;
+  min-width: 7ch;
+}
+#progress {
+        background-color: var(--gray-6, #868e96);
+        border-radius: 0.25em;
+        display: flex;
+        font-size: .75rem;
+        width: 100%;
+    }
+
+#progress-bar {
+        animation: 1s linear infinite progress-bar-stripes;
+        background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+        background-size: 1em 1em;
+        border-radius: 0.3em;
+        display: flex;
+        flex-direction: column;
+        font-size: .75rem;
+        justify-content: center;
+        text-align: center;
+        white-space: nowrap;
+        transition: width .6s ease;
+}
+@keyframes progress-bar-stripes {
+        0% {
+            background-position-x:1rem
+            }
+}
+
+`);
+
 const template = document.createElement("template");
 template.innerHTML = `
-  <style>
-    :host {
-      display: block;
-      border-radius: 0.3em;
-    }
-    #wrapper {
-      display: flex;
-      font: bold 1.1em var(--font-sans-serif, sans-serif);
-      margin: 0.3em 0;      
-    }
-    #label {
-      padding-left: 0.3em;
-      padding-right:0.5em ;
-      min-width: 7ch;
-    }
-    #progress {
-            background-color: var(--gray-6, #868e96);
-            border-radius: 0.25em;
-            display: flex;
-            font-size: .75rem;
-            width: 100%;
-        }
- 
-    #progress-bar {
-            animation: 1s linear infinite progress-bar-stripes;
-            background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
-            background-size: 1em 1em;
-            border-radius: 0.3em;
-            display: flex;
-            flex-direction: column;
-            font-size: .75rem;
-            justify-content: center;
-            text-align: center;
-            white-space: nowrap;
-            transition: width .6s ease;
-    }
-    @keyframes progress-bar-stripes {
-            0% {
-                background-position-x:1rem
-                }
-    }
-    
-  </style>
   <div id="wrapper">
       <div id="label"></div>
       <div id="progress">
@@ -70,6 +73,7 @@ export class EdProgressBarElement extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+    this.shadowRoot.adoptedStyleSheets = [commonSheet, sheet];
     // rendered once: connectedCallback may run several times
     this.shadowRoot.appendChild(template.content.cloneNode(true));
   }

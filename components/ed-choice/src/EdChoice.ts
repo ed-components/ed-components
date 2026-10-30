@@ -1,61 +1,53 @@
 import { checkButtonHTML } from "../../common/src/checkButton.js";
 import { EdInputCheckBox } from "./_EdInputCheckBox.js";
 import { EdInputRadio } from "./_EdInputRadio.js";
+import { commonSheet, stylesheet } from "../../common/src/styles.js";
 
 EdInputCheckBox.define();
 EdInputRadio.define();
 
-const template = `
-  <style>
-  :host {
-      display: block;
-      --ed-primary: var(--blue-7, #1c7ed6);
-      --ed-success: var(--green-7, #37b24d);
-      --ed-danger: var(--red-7, #f03e3e);
-    }
+// shared by all instances (adoptedStyleSheets)
+const sheet = stylesheet(`
+:host {
+    display: block;
+  }
 
-    article {
-      font-family: var(--font-sans, system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif);
-      margin-top: 1rem;
-      margin-bottom: 1rem;
-      border-style: solid;
-      border-color: rgb(192, 192, 192);
-      border-radius: 2em;
-      padding: 0em 1em;
-    }
+  article {
+    font-family: var(--ed-font-sans);
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border-style: solid;
+    border-color: rgb(192, 192, 192);
+    border-radius: 2em;
+    padding: 0em 1em;
+  }
 
-    li {
+  li {
+    font-size: 1.1em;
+    list-style-type: none;
+  }
+  
+  li.bad-answer {
+    text-decoration: line-through;
+  }
+
+  li.good-answer {
+    text-decoration: underline solid var(--ed-success);
+    font-size: 1.5em;
+    transition: font-size 0.3s linear;
+  }
+
+  #feedback {
+    display: flex;
+    justify-content: flex-end;
+    button {
       font-size: 1.1em;
-      list-style-type: none;
     }
-    
-    li.bad-answer {
-      text-decoration: line-through;
-    }
+  }
 
-    li.good-answer {
-      text-decoration: underline solid var(--ed-success);
-      font-size: 1.5em;
-      transition: font-size 0.3s linear;
-    }
+`);
 
-    #feedback {
-      display: flex;
-      justify-content: flex-end;
-      button {
-        font-size: 1.1em;
-      }
-    }
-
-
-    /* TODO share math style */
-    .math-inline {
-      font-size: 1.3em;
-    }
-    .math-display {
-      font-size: 1.5em;
-    }
-  </style>
+const template = `
   <article>
   <section id="content"></section>
   <section id="feedback"></section>
@@ -103,6 +95,7 @@ export class EdChoiceElement extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+    this.shadowRoot.adoptedStyleSheets = [commonSheet, sheet];
     this.shadowRoot.innerHTML = template;
   }
 

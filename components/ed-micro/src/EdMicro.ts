@@ -1,3 +1,5 @@
+import { commonSheet, stylesheet } from "../../common/src/styles.js";
+
 // adapted from bootstrap icons https://icons.getbootstrap.com/icons/chat-left-quote/
 const microSvg = `<svg xmlns="http://www.w3.org/2000/svg"
   width="16" height="16" fill="var(--ed-primary)" viewBox="0 0 16 16"
@@ -8,55 +10,10 @@ const microSvg = `<svg xmlns="http://www.w3.org/2000/svg"
 
 const openButton = `<button type="button" class="open-button" aria-label="Open micro-learning content">${microSvg}</button>`;
 
-/**
- * This component allows to present chunks of educational content
- * in a modal carousel to allow easy navigation and remove unecesary distraction.
- *
- * Heavily inspired from https://github.com/argyleink/gui-challenges/tree/main/dialog
- * and https://css-tricks.com/css-only-carousel/
- * and https://webdesign.tutsplus.com/easy-slider-carousel-with-pure-css--cms-107626t
- *
- * @export
- * @class EdMicroElement
- * @extends {HTMLElement}
- */
-export class EdMicroElement extends HTMLElement {
-  // attached in the constructor, never null
-  declare readonly shadowRoot: ShadowRoot;
-
-  static define(tagName = "ed-micro") {
-    // the element may be defined by several bundles or calls
-    if (!customElements.get(tagName)) {
-      customElements.define(tagName, this);
-    }
-  }
-
-  static get observedAttributes() {
-    // HTML lowercases attribute names: isHTML is observed as ishtml
-    return ["label", "ishtml"];
-  }
-
-  get isHTML() {
-    return this.hasAttribute("isHTML");
-  }
-
-  get label(): string | null {
-    return this.getAttribute("label");
-  }
-
-  set label(value: string) {
-    this._updateLabel(value);
-    this.setAttribute("label", value);
-  }
-
-  constructor() {
-    super();
-    this.attachShadow({ mode: "open" });
-    this.shadowRoot.innerHTML = `
-    <style>
+// shared by all instances (adoptedStyleSheets)
+const sheet = stylesheet(`
     :host {
       display: block;
-      --ed-primary: var(--blue-7, #1c7ed6);
     }
     /* Open Props keyframes, needed by the animations in shadow DOM */
     @keyframes scale-down { to { transform: scale(.75) } }
@@ -310,7 +267,54 @@ dialog {
 .carousel-arrow--next {
   right: 0;
 }
-    </style>
+`);
+
+/**
+ * This component allows to present chunks of educational content
+ * in a modal carousel to allow easy navigation and remove unecesary distraction.
+ *
+ * Heavily inspired from https://github.com/argyleink/gui-challenges/tree/main/dialog
+ * and https://css-tricks.com/css-only-carousel/
+ * and https://webdesign.tutsplus.com/easy-slider-carousel-with-pure-css--cms-107626t
+ *
+ * @export
+ * @class EdMicroElement
+ * @extends {HTMLElement}
+ */
+export class EdMicroElement extends HTMLElement {
+  // attached in the constructor, never null
+  declare readonly shadowRoot: ShadowRoot;
+
+  static define(tagName = "ed-micro") {
+    // the element may be defined by several bundles or calls
+    if (!customElements.get(tagName)) {
+      customElements.define(tagName, this);
+    }
+  }
+
+  static get observedAttributes() {
+    // HTML lowercases attribute names: isHTML is observed as ishtml
+    return ["label", "ishtml"];
+  }
+
+  get isHTML() {
+    return this.hasAttribute("isHTML");
+  }
+
+  get label(): string | null {
+    return this.getAttribute("label");
+  }
+
+  set label(value: string) {
+    this._updateLabel(value);
+    this.setAttribute("label", value);
+  }
+
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open" });
+    this.shadowRoot.adoptedStyleSheets = [commonSheet, sheet];
+    this.shadowRoot.innerHTML = `
     <dialog id="MegaDialog" modal-mode="mega">
       <form method="dialog">
       <header>

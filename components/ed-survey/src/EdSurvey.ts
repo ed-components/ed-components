@@ -1,5 +1,6 @@
 import { NudeRating } from "./nudeui/nd-rating.js";
 import { EdSmiley } from "./_EdSmiley.js";
+import { commonSheet, stylesheet } from "../../common/src/styles.js";
 
 NudeRating.define();
 EdSmiley.define();
@@ -9,6 +10,21 @@ type SurveyType = "smiley" | "rating";
 // This component implements a likert interaction activitie as defined in xapi spec
 // ie, An interaction which asks the learner to select from a discrete set of choices on a scale
 // see https://github.com/adlnet/xAPI-Spec/blob/master/xAPI-Data.md#interaction-activities
+
+// shared by all instances (adoptedStyleSheets)
+const sheet = stylesheet(`
+:host {
+  display: block;
+}
+div {
+  display: flex;
+  justify-content: space-evenly;
+}
+.question {
+  font-size: var(--font-size-fluid-2, max(1.5rem,min(6vw,2.5rem)));
+  font-weight: var(--font-weight-6, 600);
+}
+`);
 
 export class EdSurveyElement extends HTMLElement {
   // attached in the constructor, never null
@@ -75,20 +91,8 @@ export class EdSurveyElement extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+    this.shadowRoot.adoptedStyleSheets = [commonSheet, sheet];
     this.shadowRoot.innerHTML = `
-    <style>
-    :host {
-      display: block;
-    }
-    div {
-      display: flex;
-      justify-content: space-evenly;
-    }
-    .question {
-      font-size: var(--font-size-fluid-2, max(1.5rem,min(6vw,2.5rem)));
-      font-weight: var(--font-weight-6, 600);
-    }
-    </style>
     <p class="question" aria-description="question"></p>
     <div></div>
     `;

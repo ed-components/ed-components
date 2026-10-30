@@ -1,3 +1,4 @@
+import { commonSheet, stylesheet } from "../../common/src/styles.js";
 /** @module _EdInputCheckBox
  *
  * Based on https://codepen.io/Foxxite/pen/LYEdOoX for svg input
@@ -6,15 +7,12 @@
  *
  */
 
-const template = document.createElement("template");
-template.innerHTML = `
-  <style>
+// shared by all instances (adoptedStyleSheets)
+const sheet = stylesheet(`
 :host {
   display: inline-block;
   position: relative;
   top: 0.5em;
-  --ed-success: var(--green-7, #37b24d);
-  --ed-danger: var(--red-7, #f03e3e);
 }
 
 input[type="checkbox"] {
@@ -78,7 +76,10 @@ svg {
   stroke: var(--ed-danger); 
 }
 
-  </style>
+`);
+
+const template = document.createElement("template");
+template.innerHTML = `
   <input type="checkbox" name="cb" id="cb" disabled />
   <label for="cb" id="checkbox">
     <svg viewBox="0 0 100 100">
@@ -107,6 +108,7 @@ export class EdInputCheckBox extends HTMLElement {
     if (!this.shadowRoot) {
       this.attachShadow({ mode: "open" });
     }
+    this.shadowRoot.adoptedStyleSheets = [commonSheet, sheet];
     // rendered once: connectedCallback may run several times
     this.shadowRoot.appendChild(template.content.cloneNode(true));
   }

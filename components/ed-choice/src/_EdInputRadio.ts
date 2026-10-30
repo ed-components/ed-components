@@ -1,3 +1,4 @@
+import { commonSheet, stylesheet } from "../../common/src/styles.js";
 /** @module EdInputRadio
  *
  * Based on https://codepen.io/Foxxite/pen/LYEdOoX for svg input
@@ -6,16 +7,12 @@
  *
  */
 
-const template = document.createElement("template");
-template.innerHTML = `
-  <style>
+// shared by all instances (adoptedStyleSheets)
+const sheet = stylesheet(`
 :host {
   display: inline-block;
   position: relative;
   top: 0.5em;
-  --ed-primary: var(--blue-7, #1c7ed6);
-  --ed-success: var(--green-7, green);
-  --ed-danger: var(--red-7, red);
 }
 
 input[type="checkbox"] {
@@ -78,7 +75,10 @@ svg {
   stroke: var(--ed-danger); 
 }
 
-  </style>
+`);
+
+const template = document.createElement("template");
+template.innerHTML = `
   <input type="checkbox" name="cb" id="cb" disabled />
   <label for="cb" id="checkbox">
     <svg viewBox="0 0 100 100">
@@ -108,6 +108,7 @@ export class EdInputRadio extends HTMLElement {
     if (!this.shadowRoot) {
       this.attachShadow({ mode: "open" });
     }
+    this.shadowRoot.adoptedStyleSheets = [commonSheet, sheet];
     // rendered once: connectedCallback may run several times
     this.shadowRoot.appendChild(template.content.cloneNode(true));
   }

@@ -4,6 +4,7 @@ import similarity from "wink-nlp/utilities/similarity";
 import model from "wink-eng-lite-web-model";
 
 import { checkButtonHTML } from "../../common/src/checkButton.js";
+import { commonSheet, stylesheet } from "../../common/src/styles.js";
 
 const nlp = winkNLP(model);
 // Acquire "its" and "as" helpers from nlp.
@@ -18,6 +19,13 @@ type answerData = {
   score: number;
   answer: string;
 };
+
+// shared by all instances (adoptedStyleSheets)
+const sheet = stylesheet(`
+:host {
+  display: block;
+}
+`);
 
 /**
  * @tag ed-ans
@@ -65,20 +73,8 @@ export class EdAnsElement extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+    this.shadowRoot.adoptedStyleSheets = [commonSheet, sheet];
     this.shadowRoot.innerHTML = `
-    <style>
-    :host {
-      display: block;
-    }
-    div {
-      display: flex;
-      width: 100%;
-      & > * {font-size: 1.1em;}
-    }
-    input {
-      flex: 1;
-    }
-    </style>
     <div class="user-input">
     <input type="text" name="answer" placeholder="Enter your answer"/>
     ${checkButtonHTML}
@@ -168,11 +164,10 @@ export class EdAnsElement extends HTMLElement {
     input.setAttribute("disabled", "");
     button.setAttribute("disabled", "");
     // output results
-    this.shadowRoot.querySelector(
-      "output",
-    )!.innerHTML = `Score: ${score}% the correct answer was: ${
-      this._answers[0]?.answer ?? ""
-    }`;
+    this.shadowRoot.querySelector("output")!.innerHTML =
+      `Score: ${score}% the correct answer was: ${
+        this._answers[0]?.answer ?? ""
+      }`;
   }
 }
 

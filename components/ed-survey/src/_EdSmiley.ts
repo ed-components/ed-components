@@ -1,25 +1,29 @@
+import { commonSheet, stylesheet } from "../../common/src/styles.js";
+
 const template = document.createElement("template");
 template.innerHTML = `
-  <style>
-    :host {
-      display: block;
-    }
-    div {
-      display: flex;
-      gap: var(--font-size-fluid-2, clamp(1.5rem, 6vw, 2.5rem));
-    }
-    button {
-      font-size: var(--font-size-fluid-2, clamp(1.5rem, 6vw, 2.5rem));
-      border-radius: var(--font-size-fluid-2, clamp(1.5rem, 6vw, 2.5rem));
-      border: none;
-    }
-  </style>
   <div>
     <button type="button" aria-label="Confused face" data-value="1">&#128533;</button>
     <button type="button" aria-label="Neutral face" data-value="2">&#128528;</button>
     <button type="button" aria-label="Grinning face" data-value="3">&#128512;</button>
   </div>
   `;
+
+// shared by all instances (adoptedStyleSheets)
+const sheet = stylesheet(`
+:host {
+  display: block;
+}
+div {
+  display: flex;
+  gap: var(--font-size-fluid-2, clamp(1.5rem, 6vw, 2.5rem));
+}
+button {
+  font-size: var(--font-size-fluid-2, clamp(1.5rem, 6vw, 2.5rem));
+  border-radius: var(--font-size-fluid-2, clamp(1.5rem, 6vw, 2.5rem));
+  border: none;
+}
+`);
 
 export class EdSmiley extends HTMLElement {
   // attached in the constructor, never null
@@ -35,6 +39,7 @@ export class EdSmiley extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+    this.shadowRoot.adoptedStyleSheets = [commonSheet, sheet];
     // rendered once: connectedCallback may run several times
     this.shadowRoot.appendChild(template.content.cloneNode(true));
     this.shadowRoot

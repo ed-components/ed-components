@@ -1,10 +1,33 @@
 import { EdProgressBarElement } from "./_EdProgressBar.js";
+import { commonSheet, stylesheet } from "../../common/src/styles.js";
 
 EdProgressBarElement.define();
 
 // integers, decimals (dot or comma) and scientific notation: 42, -3.14, 6,02e23
 const edNumRegex =
   /^:num:\s+(?<answer>[-+]?\d+(?:[.,]\d+)?(?:e[-+]?\d+)?)\s*$/im;
+
+// shared by all instances (adoptedStyleSheets)
+const sheet = stylesheet(`
+:host {
+  display: block;
+}
+main {
+  font-family: var(--ed-font-sans);
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border-style: solid;
+  border-color: rgb(192, 192, 192);
+  border-radius: 2em;
+  padding: 0em 1em;
+}
+#progress {
+  position: sticky;
+  backdrop-filter: blur(23px);
+  top: 0;
+  z-index: 10;
+}
+`);
 
 /**
  * This component is a wrapper that allows to include multiple questions
@@ -82,27 +105,8 @@ export class EdPbElement extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+    this.shadowRoot.adoptedStyleSheets = [commonSheet, sheet];
     this.shadowRoot.innerHTML = `
-    <style>
-    :host {
-      display: block;
-    }
-    main {
-      font-family: var(--font-sans, system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif);
-      margin-top: 1rem;
-      margin-bottom: 1rem;
-      border-style: solid;
-      border-color: rgb(192, 192, 192);
-      border-radius: 2em;
-      padding: 0em 1em;
-    }
-    #progress {
-      position: sticky;
-      backdrop-filter: blur(23px);
-      top: 0;
-      z-index: 10;
-    }
-    </style>
     <main>
     <section id="progress">
       <h1 id="label"></h1>

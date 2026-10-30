@@ -1,6 +1,75 @@
 /// <reference types="dom-speech-recognition" />
 
+import { commonSheet, stylesheet } from "../../common/src/styles.js";
+
 // This component implements speech to text using web speech api
+
+// shared by all instances (adoptedStyleSheets)
+const sheet = stylesheet(`
+:host {
+  display: block;
+  --bs-alert-bg: transparent;
+  --bs-alert-padding-x: 1rem;
+  --bs-alert-padding-y: 1rem;
+  --bs-alert-margin-bottom: 1rem;
+  --bs-alert-color: inherit;
+  --bs-alert-border-color: transparent;
+  --bs-alert-border: var(--border-size-1, 1px) solid var(--gray-1, #f1f3f5);
+  --bs-alert-border-radius: var(--radius-3, 1rem);
+  --bs-alert-link-color: inherit;
+}
+main {
+  display: flex;
+}
+#mic-button {
+  background-color: var(--red-5, #ff6b6b);
+  color: white;
+  &.recording {
+    background-color: initial;
+    color: initial;
+  }
+  &.error {
+    &::before {
+      content: "!";
+    }
+    
+  }
+}
+
+.question {
+  font-size: var(--font-size-fluid-1, max(1.5rem,min(6vw,2.5rem)));
+  font-weight: var(--font-weight-5, 500);
+  flex-basis: 100%;
+}
+.alert {
+  position: relative;
+  padding: var(--bs-alert-padding-y) var(--bs-alert-padding-x);
+  margin-bottom: var(--bs-alert-margin-bottom);
+  color: var(--bs-alert-color);
+  background-color: var(--bs-alert-bg);
+  border: var(--bs-alert-border);
+  border-radius: var(--bs-alert-border-radius);
+  &.warning {
+     --bs-alert-color: var(--orange-5, #ff922b);
+     --bs-alert-bg: var(--orange-1, #ffe8cc);
+     --bs-alert-border-color: var(--orange-3, #ffc078);
+     --bs-alert-link-color: var(--orange-1, #ffe8cc);
+  }
+  &.success {
+    --bs-alert-color: var(--blue-5, #339af0);
+     --bs-alert-bg: var(--blue-1, #d0ebff);
+     --bs-alert-border-color: var(--blue-3, #74c0fc);
+     --bs-alert-link-color: var(--blue-1, #d0ebff);
+  }
+}
+.final {
+    font-weight: var(--font-weight-8, 800);
+  }
+  .interim {
+    color: var(--blue-5, #339af0);
+  }
+`);
+
 export class EdSpeechElement extends HTMLElement {
   // attached in the constructor, never null
   declare readonly shadowRoot: ShadowRoot;
@@ -50,72 +119,9 @@ export class EdSpeechElement extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+    this.shadowRoot.adoptedStyleSheets = [commonSheet, sheet];
 
     this.shadowRoot.innerHTML = `
-    <style>
-    :host {
-      display: block;
-      --bs-alert-bg: transparent;
-      --bs-alert-padding-x: 1rem;
-      --bs-alert-padding-y: 1rem;
-      --bs-alert-margin-bottom: 1rem;
-      --bs-alert-color: inherit;
-      --bs-alert-border-color: transparent;
-      --bs-alert-border: var(--border-size-1, 1px) solid var(--gray-1, #f1f3f5);
-      --bs-alert-border-radius: var(--radius-3, 1rem);
-      --bs-alert-link-color: inherit;
-    }
-    main {
-      display: flex;
-    }
-    #mic-button {
-      background-color: var(--red-5, #ff6b6b);
-      color: white;
-      &.recording {
-        background-color: initial;
-        color: initial;
-      }
-      &.error {
-        &::before {
-          content: "!";
-        }
-        
-      }
-    }
-    
-    .question {
-      font-size: var(--font-size-fluid-1, max(1.5rem,min(6vw,2.5rem)));
-      font-weight: var(--font-weight-5, 500);
-      flex-basis: 100%;
-    }
-    .alert {
-      position: relative;
-      padding: var(--bs-alert-padding-y) var(--bs-alert-padding-x);
-      margin-bottom: var(--bs-alert-margin-bottom);
-      color: var(--bs-alert-color);
-      background-color: var(--bs-alert-bg);
-      border: var(--bs-alert-border);
-      border-radius: var(--bs-alert-border-radius);
-      &.warning {
-         --bs-alert-color: var(--orange-5, #ff922b);
-         --bs-alert-bg: var(--orange-1, #ffe8cc);
-         --bs-alert-border-color: var(--orange-3, #ffc078);
-         --bs-alert-link-color: var(--orange-1, #ffe8cc);
-      }
-      &.success {
-        --bs-alert-color: var(--blue-5, #339af0);
-         --bs-alert-bg: var(--blue-1, #d0ebff);
-         --bs-alert-border-color: var(--blue-3, #74c0fc);
-         --bs-alert-link-color: var(--blue-1, #d0ebff);
-      }
-    }
-    .final {
-        font-weight: var(--font-weight-8, 800);
-      }
-      .interim {
-        color: var(--blue-5, #339af0);
-      }
-    </style>
     <div id="info"></div>
     <main>
       <p class="question" aria-description="question"></p>

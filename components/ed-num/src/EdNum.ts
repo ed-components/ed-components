@@ -1,7 +1,15 @@
 import { checkButtonHTML } from "../../common/src/checkButton.js";
+import { commonSheet, stylesheet } from "../../common/src/styles.js";
 
 // accept french decimal separator: "3,14" -> 3.14
 const parseNumber = (s: string) => Number(s.trim().replace(",", "."));
+
+// shared by all instances (adoptedStyleSheets)
+const sheet = stylesheet(`
+:host {
+  display: block;
+}
+`);
 
 /**
  * This component implements a numeric interaction activitie as defined in xapi spec
@@ -88,20 +96,8 @@ export class EdNumElement extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+    this.shadowRoot.adoptedStyleSheets = [commonSheet, sheet];
     this.shadowRoot.innerHTML = `
-    <style>
-    :host {
-      display: block;
-    }
-    div {
-      display: flex;
-      width: 100%;
-      & > * {font-size: 1.1em;}
-    }
-    input {
-      flex: 1;
-    }
-    </style>
     <div class="user-input">
     <input type="number" name="answer" placeholder="Enter number"/>
     ${checkButtonHTML}
@@ -182,9 +178,8 @@ export class EdNumElement extends HTMLElement {
     input.setAttribute("disabled", "");
     button.setAttribute("disabled", "");
     // output results
-    this.shadowRoot.querySelector(
-      "output",
-    )!.innerHTML = `Score: ${score}% the correct answer was: ${this._answer}`;
+    this.shadowRoot.querySelector("output")!.innerHTML =
+      `Score: ${score}% the correct answer was: ${this._answer}`;
   }
 }
 
