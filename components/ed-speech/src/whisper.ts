@@ -6,6 +6,8 @@
  * https://huggingface.co/docs/transformers.js
  */
 
+import { rms, SilenceDetector, trimSilence } from "./silence.js";
+
 /** Sample rate expected by Whisper */
 export const SAMPLE_RATE = 16000;
 
@@ -22,6 +24,12 @@ export const DEFAULT_MODEL = "onnx-community/whisper-base";
 export const DEFAULT_TRANSFORMERS_URL =
   "https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.2/+esm";
 
+export interface RecordOptions {
+  /** Called once when the learner stopped speaking for `silenceSeconds` */
+  onSilence?: () => void;
+  silenceSeconds?: number;
+}
+
 /** An ongoing recording */
 export interface Recording {
   /** Stop recording and return mono audio at SAMPLE_RATE */
@@ -29,7 +37,7 @@ export interface Recording {
 }
 
 /** Start recording the microphone */
-export type Recorder = () => Promise<Recording>;
+export type Recorder = (options?: RecordOptions) => Promise<Recording>;
 
 export interface TranscribeOptions {
   model: string;
@@ -72,18 +80,44 @@ interface Transformers {
   ): Promise<AsrPipeline>;
 }
 
-export const recordMicrophone: Recorder = async () => {
+/** Call `onSilence` when the learner stopped speaking, returns a cleanup */
+function watchSilence(
+  stream: MediaStream,
+  { onSilence, silenceSeconds = 2 }: RecordOptions,
+): () => void {
+  if (!onSilence) return () => {};
+  const context = new AudioContext();
+  const analyser = context.createAnalyser();
+  context.createMediaStreamSource(stream).connect(analyser);
+  const samples = new Float32Array(analyser.fftSize);
+  const detector = new SilenceDetector(silenceSeconds * 1000);
+  const interval = setInterval(() => {
+    analyser.getFloatTimeDomainData(samples);
+    if (detector.update(rms(samples), performance.now())) {
+      clearInterval(interval);
+      onSilence();
+    }
+  }, 100);
+  return () => {
+    clearInterval(interval);
+    context.close();
+  };
+}
+
+export const recordMicrophone: Recorder = async (options = {}) => {
   const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
   const recorder = new MediaRecorder(stream);
   const chunks: Blob[] = [];
   recorder.addEventListener("dataavailable", (evt) => chunks.push(evt.data));
   recorder.start();
+  const stopWatching = watchSilence(stream, options);
   return {
     stop: () =>
       new Promise((resolve, reject) => {
         recorder.addEventListener(
           "stop",
           async () => {
+            stopWatching();
             stream.getTracks().forEach((track) => {
               track.stop();
             });
@@ -184,8 +218,9 @@ export const transcribeWithWhisper: Transcriber = async (audio, options) => {
     options.transformersUrl,
     options.onProgress,
   );
-  const seconds = audio.length / SAMPLE_RATE;
-  const { text } = await asr(audio, {
+  const speech = trimSilence(audio, SAMPLE_RATE);
+  const seconds = speech.length / SAMPLE_RATE;
+  const { text } = await asr(speech, {
     language: options.language,
     task: "transcribe",
     // small models can repeat a word endlessly: bound the output to what can

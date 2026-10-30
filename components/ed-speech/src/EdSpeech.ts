@@ -80,6 +80,10 @@ const messages = {
     class: "alert success",
   },
   recording: {
+    msg: "Recording… It stops when you stop speaking, or click on the microphone.",
+    class: "alert success",
+  },
+  recording_manual: {
     msg: "Recording… Click on the microphone to stop.",
     class: "alert success",
   },
@@ -131,6 +135,8 @@ type Message = keyof typeof messages;
  * @attr {string} answer - Expected answer: the event gets a score from 0 to
  * 100 based on the similarity with the transcription (ignoring case, accents
  * and punctuation).
+ * @attr {number} silence - Seconds of silence after speech stopping the
+ * recording, 2 by default, 0 to stop only with the microphone button.
  * @attr {string} model - Whisper model on the Hugging Face hub, e.g.
  * "onnx-community/whisper-small" for a better accuracy (larger download).
  *
@@ -178,7 +184,7 @@ export class EdSpeechElement extends HTMLElement {
 
   static get observedAttributes() {
     // HTML lowercases attribute names: isHTML is observed as ishtml
-    return ["lang", "answer", "model", "ishtml"];
+    return ["lang", "answer", "silence", "model", "ishtml"];
   }
 
   set lang(lang: string) {
@@ -195,6 +201,15 @@ export class EdSpeechElement extends HTMLElement {
 
   set answer(answer: string) {
     this.setAttribute("answer", answer);
+  }
+
+  get silence(): number {
+    const silence = Number(this.getAttribute("silence") ?? 2);
+    return Number.isFinite(silence) && silence > 0 ? silence : 0;
+  }
+
+  set silence(seconds: number) {
+    this.setAttribute("silence", String(seconds));
   }
 
   get model(): string {
@@ -309,15 +324,20 @@ export class EdSpeechElement extends HTMLElement {
     this.busy = true;
     this.submitButton.disabled = true;
     this.transcript.textContent = "";
+    const { silence } = this;
     try {
-      this.recording = await recorder();
+      this.recording = await recorder(
+        silence > 0
+          ? { silenceSeconds: silence, onSilence: () => this._stopRecording() }
+          : {},
+      );
     } catch (error) {
       this.busy = false;
       this.showInfo(recordingError(error));
       return;
     }
     this.setRecording(true);
-    this.showInfo("recording");
+    this.showInfo(silence > 0 ? "recording" : "recording_manual");
     // download the model while the learner speaks
     if (transcriber === transcribeWithWhisper) {
       preloadModel(this.model, transformersUrl, (percent) =>

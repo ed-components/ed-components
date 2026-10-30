@@ -11,8 +11,9 @@ browser. Recordings are stopped after 30 seconds.
 
 ## Usage
 
-Click on the microphone, speak, then click on it again to stop: the
-transcription is shown, and the learner can submit it or try again.
+Click on the microphone and speak: the recording stops after a silence of
+2 seconds, or when clicking on the microphone again. The transcription is
+shown, and the learner can submit it or try again.
 
 ```html
 <ed-speech lang="en" answer="Hello">
@@ -41,6 +42,8 @@ As in every ed-component, you can use Markdown as content.
 - `answer`: expected answer. The `edEvent` then gets a `score` from 0 to 100,
   the similarity between the transcription and the answer, ignoring case,
   accents and punctuation.
+- `silence`: seconds of silence after speech stopping the recording, `2` by
+  default. With `0`, the recording is stopped with the microphone button only.
 - `model`: Whisper model from the [Hugging Face hub](https://huggingface.co/onnx-community?search_models=whisper),
   `onnx-community/whisper-base` by default. `onnx-community/whisper-small` is
   more accurate but larger (about 270 MB) and slower;
