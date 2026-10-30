@@ -1,7 +1,10 @@
 const postcssPresetEnv = require("postcss-preset-env");
 const postcssImport = require("postcss-import");
 const cssnano = require("cssnano");
-const combineSelectors = require("postcss-combine-duplicated-selectors");
+// ESM only package: require() returns its module namespace
+const {
+  default: combineSelectors,
+} = require("postcss-combine-duplicated-selectors");
 
 const lib = process.env.npm_lifecycle_event;
 

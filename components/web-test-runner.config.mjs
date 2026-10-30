@@ -57,6 +57,8 @@ export default /** @type {import("@web/test-runner").TestRunnerConfig} */ ({
     resolve(),
     commonjs({
       include: ["**/node_modules/**/*"],
+      // axe-core is loaded as a script that sets window.axe (a11y audits)
+      exclude: ["**/node_modules/axe-core/**/*"],
     }),
     json(),
     // replace({
@@ -71,7 +73,9 @@ export default /** @type {import("@web/test-runner").TestRunnerConfig} */ ({
   // concurrentBrowsers: 2,
 
   /** Amount of test files per browser to test concurrently */
-  // concurrency: 1,
+  // headless Chrome throttles background pages: fixtures waiting for an
+  // animation frame time out when test files run in parallel
+  concurrency: 1,
 
   /** Browsers to run tests on */
   // browsers: [

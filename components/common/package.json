@@ -11,7 +11,7 @@
   "type": "module",
   "dependencies": {
     "micromark": "catalog:",
-    "micromark-extension-directive": "^3.0.0",
+    "micromark-extension-directive": "^4.0.0",
     "micromark-extension-gfm": "catalog:",
     "micromark-extension-math": "catalog:"
   },

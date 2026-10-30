@@ -1,4 +1,4 @@
-import { html, fixture, expect, oneEvent, aTimeout } from "@open-wc/testing";
+import { html, fixture, expect, oneEvent, waitUntil } from "@open-wc/testing";
 import { EdChoiceElement } from "../src/EdChoice.js";
 import { moveInDom } from "../../common/test/helpers.js";
 
@@ -61,7 +61,7 @@ Question
 - [x] B
 - [ ] C
 </ed-choice>`);
-    await aTimeout(0);
+    await waitUntil(() => el.shadowRoot.querySelector("#feedback button"));
     await moveInDom(el);
     expect(el.shadowRoot.querySelectorAll("#feedback button").length).to.equal(
       1,
@@ -75,7 +75,7 @@ Question
 - [x] A
 - [x] B
 </ed-choice>`);
-    await aTimeout(0);
+    await waitUntil(() => el.shadowRoot.querySelector("#feedback button"));
     const button = el.shadowRoot.querySelector("#feedback button")!;
     // customized built-ins (is="...") don't work in Safari
     expect(Object.getPrototypeOf(button)).to.equal(HTMLButtonElement.prototype);

@@ -1,11 +1,4 @@
-import {
-  aTimeout,
-  fixture,
-  expect,
-  html,
-  oneEvent,
-  waitUntil,
-} from "@open-wc/testing";
+import { fixture, expect, html, oneEvent, waitUntil } from "@open-wc/testing";
 import { moveInDom } from "../../common/test/helpers.js";
 import { EdPbElement } from "../src/EdPb.js";
 import "../src/ed-pb.js";
@@ -81,11 +74,10 @@ describe("EdPb tests", () => {
 - [x] Yes
 - [ ] No
 "></ed-pb>`);
-    await waitUntil(
-      () =>
-        el.shadowRoot
-          .querySelector("ed-choice")
-          ?.shadowRoot.querySelector("ed-input-radio.good-answer"),
+    await waitUntil(() =>
+      el.shadowRoot
+        .querySelector("ed-choice")
+        ?.shadowRoot.querySelector("ed-input-radio.good-answer"),
     );
     const radio = el.shadowRoot
       .querySelector("ed-choice")!
@@ -142,7 +134,7 @@ Question
 
 - :100: answer
 </ed-pb>`);
-    await aTimeout(0);
+    await waitUntil(() => el.shadowRoot.querySelector("ed-ans"));
     expect(el.shadowRoot.querySelector("ed-ans")!.hasAttribute("html")).to.be
       .true;
   });

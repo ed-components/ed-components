@@ -24,22 +24,22 @@
     "@custom-elements-manifest/analyzer": "catalog:",
     "@open-wc/testing": "catalog:",
     "@rollup/plugin-commonjs": "catalog:",
-    "@rollup/plugin-json": "^6.0.1",
-    "@rollup/plugin-node-resolve": "^15.2.1",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-replace": "catalog:",
-    "@rollup/plugin-terser": "^0.4.3",
+    "@rollup/plugin-terser": "^1.0.2",
     "@types/mocha": "catalog:",
     "@web/dev-server-esbuild": "catalog:",
     "@web/dev-server-rollup": "catalog:",
     "@web/test-runner": "catalog:",
     "change": "^0.0.0",
-    "clean-css": "^5.3.2",
+    "clean-css": "^5.3.3",
     "esbuild": "catalog:",
-    "glob": "^10.3.10",
+    "glob": "^14.0.3",
     "html-minifier": "^4.0.0",
-    "lit": "^2.8.0",
+    "lit": "^3.3.3",
     "on": "^1.3.0",
-    "rollup": "^3.29.4",
+    "rollup": "^4.66.0",
     "rollup-plugin-filesize": "^10.0.0",
     "typescript": "catalog:",
     "util": "^0.12.5"
@@ -80,5 +80,6 @@
     "test:watch": "wtr --watch"
   },
   "sideEffects": false,
-  "types": "dist/index.d.ts"
+  "types": "dist/index.d.ts",
+  "customElements": "ed-survey/custom-elements.json"
 }
