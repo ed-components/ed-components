@@ -22,6 +22,9 @@ template.innerHTML = `
   `;
 
 export class EdSmiley extends HTMLElement {
+  // attached in the constructor, never null
+  declare readonly shadowRoot: ShadowRoot;
+
   static define(tagName = "ed-smiley") {
     customElements.define(tagName, this);
   }
@@ -34,7 +37,7 @@ export class EdSmiley extends HTMLElement {
   connectedCallback() {
     this.shadowRoot.appendChild(template.content.cloneNode(true));
     this.shadowRoot
-      .querySelector("div")
+      .querySelector("div")!
       .addEventListener("click", this._clickHandler.bind(this));
     // FIX called multiple times
     // this.shadowRoot.querySelector('div').addEventListener('keyup', this._clickHandler, {
@@ -42,22 +45,12 @@ export class EdSmiley extends HTMLElement {
     // })
   }
 
-  static get observedAttributes() {
-    // store rating value between 1 and 3
-    return ["value", "readonly"];
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (oldValue !== newValue) {
-      this[name] = newValue;
-    }
-  }
-
-  get value() {
+  // rating value between 1 and 3
+  get value(): string | null {
     return this.getAttribute("value");
   }
 
-  set value(value) {
+  set value(value: string) {
     this.setAttribute("value", value);
   }
 
@@ -79,5 +72,11 @@ export class EdSmiley extends HTMLElement {
       this.value = value;
       this.readonly = true;
     }
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ed-smiley": EdSmiley;
   }
 }

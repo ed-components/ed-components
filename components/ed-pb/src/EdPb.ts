@@ -1,7 +1,4 @@
 import { EdProgressBarElement } from "./_EdProgressBar.js";
-import type { EdAnsElement } from "../../ed-ans/src/EdAns.js";
-import type { EdNumElement } from "../../ed-num/src/EdNum.js";
-import type { EdChoiceElement } from "../../ed-choice/src/EdChoice.js";
 
 EdProgressBarElement.define();
 
@@ -22,6 +19,9 @@ const edNumRegex =
  * @extends {HTMLElement}
  */
 export class EdPbElement extends HTMLElement {
+  // attached in the constructor, never null
+  declare readonly shadowRoot: ShadowRoot;
+
   // number of answers handled in the problem
   private nAnsTot = 0;
 
@@ -39,19 +39,19 @@ export class EdPbElement extends HTMLElement {
     return ["label", "description", "emd", "isHTML"];
   }
 
-  get label() {
+  get label(): string | null {
     return this.getAttribute("label");
   }
 
-  set label(value) {
+  set label(value: string) {
     this.setAttribute("label", value);
   }
 
-  get emd() {
+  get emd(): string | null {
     return this.getAttribute("emd");
   }
 
-  set emd(value) {
+  set emd(value: string) {
     // content is processed by attributeChangedCallback
     this.setAttribute("emd", value);
   }
@@ -68,7 +68,7 @@ export class EdPbElement extends HTMLElement {
     }
   }
 
-  async attributeChangedCallback(name, oldValue, newValue) {
+  async attributeChangedCallback(name: string) {
     // before connection, connectedCallback takes care of processing
     if (name === "emd" && this.isConnected) {
       await this._processEmd();
@@ -112,13 +112,13 @@ export class EdPbElement extends HTMLElement {
     // as a wrapper ed-pb catches events from his ed-components childrens
     // (registered once here, connectedCallback may run several times)
     this.shadowRoot
-      .querySelector("article")
+      .querySelector("article")!
       .addEventListener("edEvent", this._handleResponse.bind(this));
   }
 
   private async _processEmd() {
     if (this.label) {
-      this.shadowRoot.querySelector("#label").innerHTML = this.label;
+      this.shadowRoot.querySelector("#label")!.innerHTML = this.label;
     }
     // TODO use a template before mounting?
     const emdContent =
@@ -141,7 +141,7 @@ export class EdPbElement extends HTMLElement {
       .querySelectorAll("ed-progress-bar")
       .forEach((bar) => bar.setAttribute("percent", "0"));
 
-    const article = this.shadowRoot.querySelector("article");
+    const article = this.shadowRoot.querySelector("article")!;
     article.innerHTML = md2HTML(emdContent);
     // turn lists into ed components
     this.shadowRoot
@@ -149,48 +149,42 @@ export class EdPbElement extends HTMLElement {
       .forEach((ul: HTMLUListElement, i: number) => {
         // type of answer depends on list item type
         const li = ul.querySelector("li");
+        if (li === null) {
+          return;
+        }
+        // TODO make it uniques checking for collisions
+        const label = `Q${i + 1}: ${(ul.parentElement?.innerText ?? "").slice(
+          0,
+          30,
+        )}`;
 
         // task-list is turned into ed-choice component
         if (li.querySelector("input[type='checkbox']:disabled") !== null) {
           this.nAnsTot += 1;
           // replace task-list with ed-choice
-          // @ts-ignore
-          const edChoice: EdChoiceElement = document.createElement("ed-choice");
-
-          // TODO make it uniques checking for collisions
-          edChoice.label = `Q${i + 1}: ${ul.parentElement.innerText.slice(
-            0,
-            30,
-          )}`;
+          const edChoice = document.createElement("ed-choice");
+          edChoice.label = label;
           // we don't require to transform md->html
           edChoice.isHTML = true;
           edChoice.innerHTML = ul.outerHTML;
-          ul.parentNode.replaceChild(edChoice, ul);
+          ul.replaceWith(edChoice);
         } else if (li.innerText.startsWith(":100: ")) {
           // verify if it is an ed-ans
           this.nAnsTot += 1;
           // replace unorder-list with ed-ans
-          // @ts-ignore
-          const edAns: EdAnsElement = document.createElement("ed-ans");
-
-          // TODO make it uniques checking for collisions
-          edAns.label = `Q${i + 1}: ${ul.parentElement.innerText.slice(0, 30)}`;
+          const edAns = document.createElement("ed-ans");
+          edAns.label = label;
           edAns.innerHTML = ul.outerHTML;
-          ul.parentNode.replaceChild(edAns, ul);
+          ul.replaceWith(edAns);
         } else if (li.innerText.startsWith(":num: ")) {
           const answer = edNumRegex.exec(li.innerText)?.groups?.answer;
           if (answer) {
             // replace unorder-list with ed-num
             this.nAnsTot += 1;
-            // @ts-ignore
-            const edNum: EdNumElement = document.createElement("ed-num");
-            // TODO make it uniques checking for collisions
-            edNum.label = `Q${i + 1}: ${ul.parentElement.innerText.slice(
-              0,
-              30,
-            )}`;
+            const edNum = document.createElement("ed-num");
+            edNum.label = label;
             edNum.innerHTML = answer;
-            ul.parentNode.replaceChild(edNum, ul);
+            ul.replaceWith(edNum);
           }
         }
       });
@@ -203,18 +197,17 @@ export class EdPbElement extends HTMLElement {
     evt.stopPropagation();
     this.nAns += 1;
     // TODO need to type custom edevents!
-    // @ts-ignore
-    this.score += evt.detail.score;
+    this.score += (evt as CustomEvent<{ score: number }>).detail.score;
 
-    const progressBar: EdProgressBarElement =
-      this.shadowRoot.querySelector("#bar-progress");
+    const progressBar =
+      this.shadowRoot.querySelector<EdProgressBarElement>("#bar-progress")!;
     progressBar.setAttribute(
       "percent",
       String(Math.round((100 * this.nAns) / this.nAnsTot)),
     );
 
-    const resultBar: EdProgressBarElement =
-      this.shadowRoot.querySelector("#bar-results");
+    const resultBar =
+      this.shadowRoot.querySelector<EdProgressBarElement>("#bar-results")!;
     const score = Math.round(this.score / this.nAnsTot);
     resultBar.setAttribute("percent", String(score));
 
@@ -236,5 +229,11 @@ export class EdPbElement extends HTMLElement {
         },
       }),
     );
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ed-pb": EdPbElement;
   }
 }

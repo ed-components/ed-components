@@ -15,9 +15,13 @@ const parseNumber = (s: string) => Number(s.trim().replace(",", "."));
  * @extends {HTMLElement}
  */
 export class EdNumElement extends HTMLElement {
-  label: string;
+  // attached in the constructor, never null
+  declare readonly shadowRoot: ShadowRoot;
 
-  _answer: number;
+  label?: string;
+
+  // parsed from innerHTML when connected
+  _answer = NaN;
 
   static define(tagName = "ed-num") {
     customElements.define(tagName, this);
@@ -44,11 +48,11 @@ export class EdNumElement extends HTMLElement {
    *
    * @memberof EdNumElement
    */
-  get eval() {
+  get eval(): string | null {
     return this.getAttribute("eval");
   }
 
-  set eval(val) {
+  set eval(val: string) {
     this.setAttribute("eval", val);
   }
 
@@ -109,9 +113,9 @@ export class EdNumElement extends HTMLElement {
     // this.innerHTML contains answer
     this._answer = parseNumber(this.innerHTML);
 
-    const button = this.shadowRoot.querySelector("button");
+    const button = this.shadowRoot.querySelector("button")!;
     // pass attributes to input
-    const input = this.shadowRoot.querySelector("input");
+    const input = this.shadowRoot.querySelector("input")!;
     if (this.hasAttribute("min")) {
       input.setAttribute("min", String(this.min));
     }
@@ -131,7 +135,7 @@ export class EdNumElement extends HTMLElement {
 
     // TODO get unique identifier of html element ie id or // dompath:
     // https://stackoverflow.com/a/69104350
-    const input = this.shadowRoot.querySelector("input");
+    const input = this.shadowRoot.querySelector("input")!;
     const button = evt.target as EdCheckButtonElement;
 
     // TODO find a way to inform user(submit disabled)
@@ -176,6 +180,12 @@ export class EdNumElement extends HTMLElement {
     // output results
     this.shadowRoot.querySelector(
       "output",
-    ).innerHTML = `Score: ${score}% the correct answer was: ${this._answer}`;
+    )!.innerHTML = `Score: ${score}% the correct answer was: ${this._answer}`;
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ed-num": EdNumElement;
   }
 }

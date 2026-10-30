@@ -19,7 +19,7 @@
     "@rollup/plugin-commonjs": "catalog:",
     "@rollup/plugin-replace": "catalog:",
     "@types/dom-speech-recognition": "^0.0.1",
-    "@types/jest": "catalog:",
+    "@types/mocha": "catalog:",
     "@web/dev-server-esbuild": "catalog:",
     "@web/dev-server-rollup": "catalog:",
     "@web/test-runner": "catalog:",

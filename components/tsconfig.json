@@ -11,7 +11,12 @@
     "declaration": true,
     "importHelpers": true,
     "declarationMap": true,
-    "experimentalDecorators": true,
+    // type checks replace linting
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    // global types are not loaded by default since TypeScript 6
+    "types": ["mocha"],
     // Skip typechecking libraries and .d.ts files
     "skipLibCheck": true
   }

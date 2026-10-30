@@ -1,11 +1,29 @@
-// @ts-nocheck
+/// <reference types="dom-speech-recognition" />
 
-let startTimestamp: number;
-let ignoreOnend = false;
-let recognizing = false;
-
-// This component implements text to speech using web speech api
+// This component implements speech to text using web speech api
 export class EdSpeechElement extends HTMLElement {
+  // attached in the constructor, never null
+  declare readonly shadowRoot: ShadowRoot;
+
+  question = "";
+
+  private startButton: HTMLButtonElement;
+
+  private submitButton: HTMLButtonElement;
+
+  private finalParagraph: HTMLParagraphElement;
+
+  private interimParagraph: HTMLParagraphElement;
+
+  private recognition?: SpeechRecognition;
+
+  // recognition state, per instance
+  private startTimestamp = 0;
+
+  private ignoreOnend = false;
+
+  private recognizing = false;
+
   static define(tagName = "ed-speech") {
     customElements.define(tagName, this);
   }
@@ -114,11 +132,27 @@ export class EdSpeechElement extends HTMLElement {
           <p id="interim-result" class="interim"></p>
     </div>
     `;
+
+    this.startButton =
+      this.shadowRoot.querySelector<HTMLButtonElement>("#mic-button")!;
+    this.submitButton =
+      this.shadowRoot.querySelector<HTMLButtonElement>("#submit")!;
+    this.finalParagraph =
+      this.shadowRoot.querySelector<HTMLParagraphElement>("#final-result")!;
+    this.interimParagraph =
+      this.shadowRoot.querySelector<HTMLParagraphElement>("#interim-result")!;
+
+    // event listeners, registered once (connectedCallback may run several times)
+    this.startButton.addEventListener("click", this._handleClick.bind(this));
+    this.submitButton.addEventListener(
+      "click",
+      this._handleResponse.bind(this),
+    );
   }
 
   async connectedCallback() {
     this.question = this.innerHTML ? this.innerHTML : "Say something!";
-    const questionEl = this.shadowRoot.querySelector(".question");
+    const questionEl = this.shadowRoot.querySelector(".question")!;
     if (!this.isHTML) {
       // parse markdown into html
       const { md2HTML } = await import("../../common/src/index.js");
@@ -127,38 +161,18 @@ export class EdSpeechElement extends HTMLElement {
       questionEl.innerHTML = this.innerHTML.trim();
     }
 
-    this.startButton = this.shadowRoot.querySelector(
-      "#mic-button",
-    ) as HTMLButtonElement;
-    this.submitButton = this.shadowRoot.querySelector(
-      "#submit",
-    ) as HTMLButtonElement;
-    this.finalParagraph = this.shadowRoot.querySelector(
-      "#final-result",
-    ) as HTMLParagraphElement;
-    this.interimParagraph = this.shadowRoot.querySelector(
-      "#interim-result",
-    ) as HTMLParagraphElement;
-
-    // event listeners
-    this.startButton.addEventListener("click", this._handleClick.bind(this));
-    this.submitButton.addEventListener(
-      "click",
-      this._handleResponse.bind(this),
-    );
-
     if (!("webkitSpeechRecognition" in window)) {
       this.showInfo("upgrade");
     } else {
       // webspeech available
       this.showInfo("start");
       this.startButton.style.display = "inline-block";
-      this.recognition = new webkitSpeechRecognition() as SpeechRecognition;
+      this.recognition = new webkitSpeechRecognition();
       this.recognition.continuous = true;
       this.recognition.interimResults = true;
 
       this.recognition.onstart = () => {
-        recognizing = true;
+        this.recognizing = true;
         this.showInfo("speak_now");
         this.startButton.className = "recording";
       };
@@ -167,32 +181,32 @@ export class EdSpeechElement extends HTMLElement {
         this.startButton.className = "error";
         if (evt.error === "no-speech") {
           this.showInfo("no_speech");
-          ignoreOnend = true;
+          this.ignoreOnend = true;
         }
         if (evt.error === "audio-capture") {
           this.showInfo("no_microphone");
-          ignoreOnend = true;
+          this.ignoreOnend = true;
         }
         if (evt.error === "not-allowed") {
-          if (evt.timeStamp - startTimestamp < 100) {
+          if (evt.timeStamp - this.startTimestamp < 100) {
             this.showInfo("blocked");
           } else {
             this.showInfo("denied");
           }
-          ignoreOnend = true;
+          this.ignoreOnend = true;
         }
       };
       this.recognition.onend = () => {
         this.startButton.className = "";
-        recognizing = false;
-        if (ignoreOnend) {
+        this.recognizing = false;
+        if (this.ignoreOnend) {
           return;
         }
         // start_img.src = "images/mic.gif";
         this.showInfo("stop");
       };
 
-      this.recognition.onresult = (evt: SpeechRecognitionResult) => {
+      this.recognition.onresult = (evt) => {
         let finalTranscript = "";
         let interimTranscript = "";
         for (let i = evt.resultIndex; i < evt.results.length; ++i) {
@@ -209,23 +223,22 @@ export class EdSpeechElement extends HTMLElement {
     }
   }
 
-  private showInfo(s: string) {
-    if (s) {
-      const message = messages[s];
-      this.shadowRoot.querySelector("#info").innerHTML = message.msg;
-      this.shadowRoot.querySelector("#info").className = message.class;
-    } else {
-      this.shadowRoot.querySelector("#info").style = "display: none;";
-      this.shadowRoot.querySelector("#info").className = "";
-    }
+  private showInfo(s: keyof typeof messages) {
+    const message = messages[s];
+    const info = this.shadowRoot.querySelector("#info")!;
+    info.innerHTML = message.msg;
+    info.className = message.class;
   }
 
   private _handleClick(evt: Event) {
-    if (recognizing) {
+    // the mic button is only displayed when speech recognition is available
+    if (this.recognition === undefined) {
+      return;
+    }
+    if (this.recognizing) {
       this.recognition.stop();
       return;
     }
-    this.final_transcript = "";
     this.recognition.lang = this.lang;
     this.recognition.start();
 
@@ -233,10 +246,10 @@ export class EdSpeechElement extends HTMLElement {
     this.interimParagraph.innerHTML = "";
     // start_img.src = "images/mic-slash.gif";
     this.showInfo("allow");
-    startTimestamp = evt.timeStamp;
+    this.startTimestamp = evt.timeStamp;
   }
 
-  private _handleResponse(evt: Event) {
+  private _handleResponse() {
     // TODO handle a default base interface(date, url)
 
     // TODO get unique identifier of html element ie id or // dompath:
@@ -255,7 +268,6 @@ export class EdSpeechElement extends HTMLElement {
           date: new Date().toISOString(),
           url: url.host + url.pathname,
           tag: this.tagName,
-          type: this.type,
           question: this.question,
           verb: "RESPONDED",
           response,
@@ -304,3 +316,9 @@ const messages = {
     class: "alert success",
   },
 };
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ed-speech": EdSpeechElement;
+  }
+}

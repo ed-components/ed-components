@@ -9,7 +9,7 @@ describe("EdChoiceElement", () => {
       html`<ed-choice>Hello **from** here.</ed-choice>`,
     );
     await el.connectedCallback();
-    await expect(el.shadowRoot.querySelector("#content").innerHTML).equals(
+    await expect(el.shadowRoot.querySelector("#content")!.innerHTML).equals(
       "<p>Hello <strong>from</strong> here.</p>",
     );
   });
@@ -18,7 +18,7 @@ describe("EdChoiceElement", () => {
       html`<ed-choice isHTML>Hello **from** here.</ed-choice>`,
     );
     await el.connectedCallback();
-    await expect(el.shadowRoot.querySelector("#content").innerHTML).equals(
+    await expect(el.shadowRoot.querySelector("#content")!.innerHTML).equals(
       "Hello **from** here.",
     );
   });
@@ -44,9 +44,9 @@ Question
     (el.shadowRoot.querySelector("#content p") as HTMLElement).click();
     expect(responded).to.be.false;
 
-    const radio: HTMLElement = el.shadowRoot.querySelector(
+    const radio = el.shadowRoot.querySelector<HTMLElement>(
       "ed-input-radio.good-answer",
-    );
+    )!;
     setTimeout(() => radio.click());
     const { detail } = await oneEvent(el, "edEvent");
     expect(detail.score).to.equal(100);

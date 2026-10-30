@@ -91,6 +91,9 @@ svg {
   `;
 
 export class EdInputCheckBox extends HTMLElement {
+  // attached in the constructor, never null
+  declare readonly shadowRoot: ShadowRoot;
+
   static define(tagName = "ed-input-checkbox") {
     customElements.define(tagName, this);
   }
@@ -123,10 +126,12 @@ export class EdInputCheckBox extends HTMLElement {
     this.removeEventListener("click", this._toggleChecked);
   }
 
-  _upgradeProperty(prop) {
-    if (this.hasAttribute(prop)) {
+  // a property set before the element upgrade shadows the class accessor:
+  // remove it and pass its value through the setter
+  _upgradeProperty(prop: "checked" | "disabled") {
+    if (Object.prototype.hasOwnProperty.call(this, prop)) {
       const value = this[prop];
-      delete this[prop];
+      delete (this as Partial<Record<typeof prop, boolean>>)[prop];
       this[prop] = value;
     }
   }
@@ -166,7 +171,11 @@ export class EdInputCheckBox extends HTMLElement {
    * `observedAttributes` array are changed. It's a good place to handle
    * side effects, like setting ARIA attributes.
    */
-  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+  attributeChangedCallback(
+    name: string,
+    _oldValue: string | null,
+    newValue: string | null,
+  ) {
     const hasValue = newValue !== null;
     switch (name) {
       case "checked":
@@ -176,9 +185,6 @@ export class EdInputCheckBox extends HTMLElement {
         this.setAttribute("aria-disabled", String(hasValue));
         break;
       default:
-        if (oldValue !== newValue) {
-          this[name] = newValue;
-        }
         break;
     }
   }
@@ -201,5 +207,11 @@ export class EdInputCheckBox extends HTMLElement {
         bubbles: true,
       }),
     );
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ed-input-checkbox": EdInputCheckBox;
   }
 }

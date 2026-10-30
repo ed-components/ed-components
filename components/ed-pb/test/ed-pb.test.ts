@@ -17,7 +17,7 @@ describe("EdPb tests", () => {
       html`<ed-pb label="test">Hello **from** here.</ed-pb>`,
     );
     await el.connectedCallback();
-    await expect(el.shadowRoot.querySelector("article").innerHTML).equals(
+    await expect(el.shadowRoot.querySelector("article")!.innerHTML).equals(
       "<p>Hello <strong>from</strong> here.</p>",
     );
   });
@@ -26,7 +26,7 @@ describe("EdPb tests", () => {
       html`<ed-pb label="test" isHTML><p>Hello from here.</p></ed-pb>`,
     );
     await el.connectedCallback();
-    await expect(el.shadowRoot.querySelector("article").innerHTML).equals(
+    await expect(el.shadowRoot.querySelector("article")!.innerHTML).equals(
       "<p>Hello from here.</p>",
     );
   });
@@ -78,15 +78,15 @@ describe("EdPb tests", () => {
           .querySelector("ed-choice")
           ?.shadowRoot.querySelector("ed-input-radio.good-answer"),
     );
-    const radio: HTMLElement = el.shadowRoot
-      .querySelector("ed-choice")
-      .shadowRoot.querySelector("ed-input-radio.good-answer");
+    const radio = el.shadowRoot
+      .querySelector("ed-choice")!
+      .shadowRoot.querySelector<HTMLElement>("ed-input-radio.good-answer")!;
     setTimeout(() => radio.click());
     const { detail } = await oneEvent(el, "edEvent");
     expect(detail.verb).to.equal("COMPLETED");
     expect(detail.score).to.equal(100);
     expect(
-      el.shadowRoot.querySelector("#bar-progress").getAttribute("percent"),
+      el.shadowRoot.querySelector("#bar-progress")!.getAttribute("percent"),
     ).to.equal("100");
   });
 
@@ -110,4 +110,5 @@ Q3
     );
     expect(answers).to.deep.equal(["3.14", "-2,5", "6.02e23"]);
   });
+
 });

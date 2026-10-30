@@ -10,7 +10,7 @@ describe("EdSurveyElement", () => {
     expect(el.type).to.equal("smiley");
     expect(
       el.shadowRoot
-        ?.querySelector("ed-smiley")
+        .querySelector("ed-smiley")!
         .shadowRoot.querySelectorAll("button").length,
     ).to.equal(3);
   });

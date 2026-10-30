@@ -57,6 +57,9 @@ template.innerHTML = `
   `;
 
 export class EdProgressBarElement extends HTMLElement {
+  // attached in the constructor, never null
+  declare readonly shadowRoot: ShadowRoot;
+
   static define(tagName = "ed-progress-bar") {
     customElements.define(tagName, this);
   }
@@ -70,10 +73,10 @@ export class EdProgressBarElement extends HTMLElement {
 
   connectedCallback() {
     this.shadowRoot.appendChild(template.content.cloneNode(true));
-    this.shadowRoot.querySelector("#label").innerHTML = this.label;
+    this.shadowRoot.querySelector("#label")!.innerHTML = this.label ?? "";
 
-    const progress: HTMLElement =
-      this.shadowRoot.querySelector("#progress-bar");
+    const progress =
+      this.shadowRoot.querySelector<HTMLElement>("#progress-bar")!;
     progress.ariaLabel = this.label;
     progress.style.backgroundColor = this.style.backgroundColor;
   }
@@ -82,10 +85,7 @@ export class EdProgressBarElement extends HTMLElement {
     return ["percent", "label"];
   }
 
-  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-    if (oldValue !== newValue) {
-      this[name] = newValue;
-    }
+  attributeChangedCallback(name: string) {
     switch (name) {
       case "percent":
         this.updateProgress();
@@ -96,30 +96,36 @@ export class EdProgressBarElement extends HTMLElement {
     }
   }
 
-  get percent() {
+  get percent(): string | null {
     return this.getAttribute("percent");
   }
 
-  set percent(value) {
+  set percent(value: string) {
     this.setAttribute("percent", value);
   }
 
-  get label() {
+  get label(): string | null {
     return this.getAttribute("label");
   }
 
-  set label(value) {
+  set label(value: string) {
     this.setAttribute("label", value);
   }
 
   async updateProgress() {
     const { percent } = this;
-    const progress: HTMLElement =
-      this.shadowRoot.querySelector("#progress-bar");
-    if (progress) {
+    const progress =
+      this.shadowRoot.querySelector<HTMLElement>("#progress-bar");
+    if (progress && percent !== null) {
       progress.innerHTML = `&nbsp;${percent}&nbsp;%`;
       progress.style.width = `${percent}%`;
       progress.setAttribute("aria-valuenow", percent);
     }
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ed-progress-bar": EdProgressBarElement;
   }
 }

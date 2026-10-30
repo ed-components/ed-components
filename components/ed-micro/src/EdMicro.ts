@@ -19,6 +19,9 @@ const microSvg = `<svg xmlns="http://www.w3.org/2000/svg"
  * @extends {HTMLElement}
  */
 export class EdMicroElement extends HTMLElement {
+  // attached in the constructor, never null
+  declare readonly shadowRoot: ShadowRoot;
+
   static define(tagName = "ed-micro") {
     customElements.define(tagName, this);
   }
@@ -31,11 +34,11 @@ export class EdMicroElement extends HTMLElement {
     return this.hasAttribute("isHTML");
   }
 
-  get label() {
+  get label(): string | null {
     return this.getAttribute("label");
   }
 
-  set label(value) {
+  set label(value: string) {
     this._updateLabel(value);
     this.setAttribute("label", value);
   }
@@ -317,7 +320,7 @@ dialog {
     if (this.innerHTML.length === 0) {
       return;
     }
-    const slidesWrapper = this.shadowRoot.querySelector("#slides");
+    const slidesWrapper = this.shadowRoot.querySelector("#slides")!;
 
     if (!this.isHTML) {
       // parse markdown into html
@@ -330,10 +333,12 @@ dialog {
     // if no label is provided use first element
     if (this.label === null) {
       const firstChild = slidesWrapper.firstElementChild;
-      this.label = firstChild.outerHTML;
-      firstChild.remove();
+      if (firstChild !== null) {
+        this.label = firstChild.outerHTML;
+        firstChild.remove();
+      }
     }
-    this._updateLabel(this.label);
+    this._updateLabel(this.label ?? "");
 
     // wrap headers inside slide units
     // first add hr before headings
@@ -371,27 +376,34 @@ dialog {
     }
   }
 
-  private _handleCarouselMove(evt) {
-    const carousel = this.shadowRoot.querySelector("#slides");
-    const slideWidth = this.shadowRoot.querySelector(".slide").clientWidth;
-    carousel.scrollLeft = evt.target.classList.contains("carousel-arrow--next")
+  private _handleCarouselMove(evt: Event) {
+    const carousel = this.shadowRoot.querySelector("#slides")!;
+    const slideWidth = this.shadowRoot.querySelector(".slide")!.clientWidth;
+    const arrow = evt.target as HTMLElement;
+    carousel.scrollLeft = arrow.classList.contains("carousel-arrow--next")
       ? carousel.scrollLeft + slideWidth
       : carousel.scrollLeft - slideWidth;
   }
 
-  private _updateLabel(label) {
-    this.shadowRoot.querySelector("#label").innerHTML = label;
-    const openLabel = this.shadowRoot.querySelector("#open-label");
+  private _updateLabel(label: string) {
+    this.shadowRoot.querySelector("#label")!.innerHTML = label;
+    const openLabel = this.shadowRoot.querySelector("#open-label")!;
     openLabel.innerHTML = label;
-    if (openLabel.childElementCount > 0) {
+    if (openLabel.firstElementChild !== null) {
       openLabel.firstElementChild.insertAdjacentHTML("beforeend", microSvg);
     } else {
       openLabel.innerHTML += microSvg;
     }
-    openLabel.querySelector("svg").addEventListener("click", () => {
-      this.shadowRoot.querySelector("dialog").showModal();
+    openLabel.querySelector("svg")!.addEventListener("click", () => {
+      this.shadowRoot.querySelector("dialog")!.showModal();
       // move slider to the left on each opening
-      this.shadowRoot.querySelector("#slides").scrollTo(0, 0);
+      this.shadowRoot.querySelector("#slides")!.scrollTo(0, 0);
     });
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ed-micro": EdMicroElement;
   }
 }

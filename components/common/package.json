@@ -19,7 +19,7 @@
     "@open-wc/testing": "catalog:",
     "@rollup/plugin-commonjs": "catalog:",
     "@rollup/plugin-replace": "catalog:",
-    "@types/jest": "catalog:",
+    "@types/mocha": "catalog:",
     "@web/dev-server-esbuild": "catalog:",
     "@web/dev-server-rollup": "catalog:",
     "@web/test-runner": "catalog:",

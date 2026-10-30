@@ -8,7 +8,7 @@ describe("EdMicro tests", () => {
       html`<ed-micro label="test">Hello **from** here.</ed-micro>`,
     );
     await el.connectedCallback();
-    await expect(el.shadowRoot.querySelector(".slide").innerHTML).equals(
+    await expect(el.shadowRoot.querySelector(".slide")!.innerHTML).equals(
       "<p>Hello <strong>from</strong> here.</p>",
     );
   });
@@ -17,7 +17,7 @@ describe("EdMicro tests", () => {
       html`<ed-micro label="test" isHTML><p>Hello from here.</p></ed-micro>`,
     );
     await el.connectedCallback();
-    await expect(el.shadowRoot.querySelector(".slide").innerHTML).equals(
+    await expect(el.shadowRoot.querySelector(".slide")!.innerHTML).equals(
       "<p>Hello from here.</p>",
     );
   });

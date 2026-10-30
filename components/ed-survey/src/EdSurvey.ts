@@ -11,6 +11,9 @@ type SurveyType = "smiley" | "rating";
 // see https://github.com/adlnet/xAPI-Spec/blob/master/xAPI-Data.md#interaction-activities
 
 export class EdSurveyElement extends HTMLElement {
+  // attached in the constructor, never null
+  declare readonly shadowRoot: ShadowRoot;
+
   static define(tagName = "ed-survey") {
     customElements.define(tagName, this);
   }
@@ -41,7 +44,7 @@ export class EdSurveyElement extends HTMLElement {
     this.setAttribute("choice", choice);
   }
 
-  get choice() {
+  get choice(): string | null {
     return this.getAttribute("choice");
   }
 
@@ -89,7 +92,7 @@ export class EdSurveyElement extends HTMLElement {
 
   async connectedCallback() {
     this.question = this.innerHTML ? this.innerHTML : "How are you today?";
-    const questionEl = this.shadowRoot.querySelector(".question");
+    const questionEl = this.shadowRoot.querySelector(".question")!;
     if (!this.isHTML) {
       // parse markdown into html
       const { md2HTML } = await import("../../common/src/index.js");
@@ -103,7 +106,7 @@ export class EdSurveyElement extends HTMLElement {
      */
     const type: SurveyType = this.type ?? "smiley";
     this.type = type;
-    const div = this.shadowRoot.querySelector("div");
+    const div = this.shadowRoot.querySelector("div")!;
     const { choice, readonly } = this;
     div.innerHTML =
       this.type === "rating"
@@ -144,5 +147,11 @@ export class EdSurveyElement extends HTMLElement {
       }),
     );
     this.setAttribute("readonly", "");
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ed-survey": EdSurveyElement;
   }
 }

@@ -28,7 +28,7 @@
     "@rollup/plugin-node-resolve": "^15.2.1",
     "@rollup/plugin-replace": "catalog:",
     "@rollup/plugin-terser": "^0.4.3",
-    "@types/jest": "catalog:",
+    "@types/mocha": "catalog:",
     "@web/dev-server-esbuild": "catalog:",
     "@web/dev-server-rollup": "catalog:",
     "@web/test-runner": "catalog:",

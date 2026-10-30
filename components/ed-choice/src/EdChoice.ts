@@ -64,7 +64,10 @@ const template = `
   `;
 
 export class EdChoiceElement extends HTMLElement {
-  label: string;
+  // attached in the constructor, never null
+  declare readonly shadowRoot: ShadowRoot;
+
+  label?: string;
 
   static define(tagName = "ed-choice") {
     customElements.define(tagName, this);
@@ -74,11 +77,11 @@ export class EdChoiceElement extends HTMLElement {
     return ["type", "isHTML"];
   }
 
-  get type() {
+  get type(): string | null {
     return this.getAttribute("type");
   }
 
-  set type(type) {
+  set type(type: string) {
     this.setAttribute("type", type);
   }
 
@@ -106,19 +109,22 @@ export class EdChoiceElement extends HTMLElement {
       const { md2HTML } = await import("../../common/src/index.js");
       const contents = md2HTML(this.innerHTML);
       // work on the DocumentFragment content before mounting it
-      this.shadowRoot.querySelector("#content").innerHTML = contents.trim();
+      this.shadowRoot.querySelector("#content")!.innerHTML = contents.trim();
     } else {
-      this.shadowRoot.querySelector("#content").innerHTML = this.innerHTML;
+      this.shadowRoot.querySelector("#content")!.innerHTML = this.innerHTML;
     }
 
     // prepare html
     this.shadowRoot.querySelectorAll("ul").forEach((ul: HTMLUListElement) => {
       // We inspect li elements to see if there is only one or multiple answers
-      let inputs = [];
+      const inputs: [HTMLInputElement, boolean][] = [];
       let nCorrect = 0;
-      ul.querySelectorAll("li").forEach((li: HTMLLIElement) => {
-        // handle answers
+      ul.querySelectorAll("li").forEach((li) => {
+        // handle answers, items without checkbox are not answers
         const input = li.querySelector("input");
+        if (input === null) {
+          return;
+        }
         const isCorrect = input.checked;
 
         inputs.push([input, isCorrect]);
@@ -151,7 +157,7 @@ export class EdChoiceElement extends HTMLElement {
         button.addEventListener("click", this._handleResponse.bind(this), {
           once: true,
         });
-        this.shadowRoot.querySelector("#feedback").appendChild(button);
+        this.shadowRoot.querySelector("#feedback")!.appendChild(button);
       } else {
         // check response once a radio is selected, clicks elsewhere are ignored
         ul.addEventListener("change", this._handleResponse.bind(this), {
@@ -178,12 +184,15 @@ export class EdChoiceElement extends HTMLElement {
     let nChoice = 0;
     // count selected good answers
     let score = 0;
-    let answers = [];
-    this.shadowRoot.querySelectorAll(`li`).forEach((li: HTMLLIElement) => {
-      const input: EdInputCheckBox | EdInputRadio =
+    const answers: string[] = [];
+    this.shadowRoot.querySelectorAll("li").forEach((li) => {
+      const input =
         this.type === "single"
           ? li.querySelector("ed-input-radio")
           : li.querySelector("ed-input-checkbox");
+      if (input === null) {
+        return;
+      }
 
       const good = input.className; // "good-answer / bad-answer"
 
@@ -192,7 +201,7 @@ export class EdChoiceElement extends HTMLElement {
       if (input.checked) {
         // add one point if correct and remove 0.5 if not
         score += good === "good-answer" ? 1 : -0.5;
-        answers.push(li.textContent);
+        answers.push(li.textContent ?? "");
       }
 
       // disables all inputs
@@ -220,5 +229,11 @@ export class EdChoiceElement extends HTMLElement {
       }),
     );
     el.setAttribute("readonly", "");
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ed-choice": EdChoiceElement;
   }
 }

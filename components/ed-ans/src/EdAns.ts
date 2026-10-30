@@ -1,5 +1,5 @@
 //  TODO move this as dynamic import based on attribute lang
-import winkNLP, { Bow } from "wink-nlp";
+import winkNLP from "wink-nlp";
 import similarity from "wink-nlp/utilities/similarity";
 import model from "wink-eng-lite-web-model";
 
@@ -39,7 +39,10 @@ type answerData = {
  *
  */
 export class EdAnsElement extends HTMLElement {
-  label: string;
+  // attached in the constructor, never null
+  declare readonly shadowRoot: ShadowRoot;
+
+  label?: string;
 
   private _answers: answerData[] = [];
 
@@ -87,17 +90,17 @@ export class EdAnsElement extends HTMLElement {
       this.innerHTML = md2HTML(this.innerHTML);
     }
 
-    this.querySelectorAll("ul > li").forEach((el: HTMLLIElement) => {
+    this.querySelectorAll<HTMLLIElement>("ul > li").forEach((el) => {
       const m = regexScoreAns.exec(el.innerText);
       if (m === null) {
         return;
       }
-      const { score, answer } = m.groups;
-      const bow = new Set(this._bagOfWords(m.groups.answer));
+      const { score, answer } = m.groups as { score: string; answer: string };
+      const bow = new Set(this._bagOfWords(answer));
       this._answers.push({ score: Number(score), answer, bow });
     });
 
-    const button: HTMLButtonElement = this.shadowRoot.querySelector("button");
+    const button = this.shadowRoot.querySelector("button")!;
     button.addEventListener("click", this._handleResponse.bind(this));
   }
 
@@ -114,7 +117,7 @@ export class EdAnsElement extends HTMLElement {
 
     // TODO get unique identifier of html element ie id or // dompath:
     // https://stackoverflow.com/a/69104350
-    const input = this.shadowRoot.querySelector("input");
+    const input = this.shadowRoot.querySelector("input")!;
     const button = evt.target as EdCheckButtonElement;
 
     const answer = input.value;
@@ -158,6 +161,12 @@ export class EdAnsElement extends HTMLElement {
     // output results
     this.shadowRoot.querySelector(
       "output",
-    ).innerHTML = `Score: ${score}% the correct answer was: ${this._answers[0].answer}`;
+    )!.innerHTML = `Score: ${score}% the correct answer was: ${this._answers[0].answer}`;
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ed-ans": EdAnsElement;
   }
 }
