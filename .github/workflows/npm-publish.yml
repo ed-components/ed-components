@@ -22,16 +22,16 @@ jobs:
   publish-npm:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      # pnpm must be installed before setup-node to enable its cache
+      - uses: actions/checkout@v7
       # version is read from packageManager in package.json
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v5
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 26
           registry-url: https://registry.npmjs.org/
-          cache: pnpm
-          cache-dependency-path: pnpm-lock.yaml
+          # no dependency cache when publishing: a poisoned cache would end up
+          # in the published package
+          package-manager-cache: false
       - run: pnpm i --frozen-lockfile
       - name: Check the tag matches the package version
         run: test "$GITHUB_REF_NAME" = "v$(node -p "require('./package.json').version")"
