@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "ed-speech",
   "description": "A webcomponent for speech to text using Speech recognition API.",
   "version": "0.0.0",

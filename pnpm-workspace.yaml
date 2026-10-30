@@ -1,5 +1,6 @@
 packages:
   - "components"
+  - "components/*"
 
 allowBuilds:
   esbuild: true
