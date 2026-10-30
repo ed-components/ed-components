@@ -10,7 +10,6 @@
     "@custom-elements-manifest/to-markdown": "^0.1.0",
     "concurrently": "^10.0.6",
     "cssnano": "^9.9.0",
-    "esbuild": "catalog:",
     "markdown-it": "^15.0.3",
     "open-props": "^1.7.23",
     "postcss": "^8.5.32",

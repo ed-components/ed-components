@@ -185,9 +185,6 @@ catalogs:
     '@web/test-runner':
       specifier: ^1.0.0
       version: 1.0.0
-    esbuild:
-      specifier: ^0.28.2
-      version: 0.28.2
     micromark:
       specifier: ^4.0.3
       version: 4.0.3
@@ -233,9 +230,6 @@ importers:
       cssnano:
         specifier: ^9.9.0
         version: 9.9.0(postcss@8.5.32)
-      esbuild:
-        specifier: 'catalog:'
-        version: 0.28.2
       markdown-it:
         specifier: ^15.0.3
         version: 15.0.3
