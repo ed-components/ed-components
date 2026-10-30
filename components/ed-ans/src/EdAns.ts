@@ -74,9 +74,9 @@ export class EdAnsElement extends HTMLElement {
     </style>
     <div class="user-input">
     <input type="text" name="answer" placeholder="Enter your answer"/>
-    <button is="ed-check-button"/>
+    <button is="ed-check-button"></button>
     </div>
-    <output name="answer"></out>
+    <output name="answer"></output>
     `;
   }
 

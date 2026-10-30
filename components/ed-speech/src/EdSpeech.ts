@@ -78,7 +78,7 @@ export class EdSpeechElement extends HTMLElement {
          --bs-alert-color: var(--orange-5);
          --bs-alert-bg: var(--orange-1);
          --bs-alert-border-color: var(--orange-3);
-         --bs-alert-link-color: var(--orange-1mic-butt)mic-buuton;
+         --bs-alert-link-color: var(--orange-1);
       }
       &.success {
         --bs-alert-color: var(--blue-5);

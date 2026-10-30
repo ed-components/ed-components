@@ -49,7 +49,7 @@ const template = `
     }
 
 
-    {* TODO share math style*}
+    /* TODO share math style */
     .math-inline {
       font-size: 1.3em;
     }

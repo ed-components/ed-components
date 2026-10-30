@@ -99,9 +99,9 @@ export class EdNumElement extends HTMLElement {
     </style>
     <div class="user-input">
     <input type="number" name="answer" placeholder="Enter number"/>
-    <button is="ed-check-button"/>
+    <button is="ed-check-button"></button>
     </div>
-    <output name="answer"></out>
+    <output name="answer"></output>
     `;
   }
 
