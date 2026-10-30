@@ -103,8 +103,13 @@ The changelog and versions are managed with [Changesets](https://changesets.dev)
 2. To release, run `pnpm release:version`: it bumps the version of
    `components/package.json` and writes `components/CHANGELOG.md` from the
    pending changesets. Review them and commit (`vX.Y.Z`).
-3. Run `pnpm release:tag` then `git push --follow-tags`: the `vX.Y.Z` tag
-   triggers the GitHub workflow that publishes the package to npm.
+3. Run `pnpm release:tag` then `pnpm release:push`. It pushes `main` with the
+   `vX.Y.Z` tag, which triggers the GitHub workflow that publishes the package
+   to npm, and moves the `release` branch to the tagged commit.
+
+The documentation site is deployed by Netlify from the `release` branch, so it
+always matches the version published on npm (`main` may contain unreleased
+changes).
 
 The workflow publishes with npm
 [trusted publishing](https://docs.npmjs.com/trusted-publishers) (no npm token):
