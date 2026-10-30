@@ -1,8 +1,16 @@
-/// <reference types="dom-speech-recognition" />
-
 import { commonSheet, stylesheet } from "../../common/src/styles.js";
-
-// This component implements speech to text using web speech api
+import { similarityScore } from "./similarity.js";
+import {
+  DEFAULT_MODEL,
+  DEFAULT_TRANSFORMERS_URL,
+  MAX_RECORDING_SECONDS,
+  preloadModel,
+  recordMicrophone,
+  transcribeWithWhisper,
+  type Recorder,
+  type Recording,
+  type Transcriber,
+} from "./whisper.js";
 
 // shared by all instances (adoptedStyleSheets)
 const sheet = stylesheet(`
@@ -20,22 +28,17 @@ const sheet = stylesheet(`
 }
 main {
   display: flex;
+  align-items: center;
+  gap: 0.5ch;
 }
 #mic-button {
   background-color: var(--red-5, #ff6b6b);
   color: white;
-  &.recording {
+  &[aria-pressed="true"] {
     background-color: initial;
-    color: initial;
-  }
-  &.error {
-    &::before {
-      content: "!";
-    }
-    
+    color: var(--red-5, #ff6b6b);
   }
 }
-
 .question {
   font-size: var(--font-size-fluid-1, max(1.5rem,min(6vw,2.5rem)));
   font-weight: var(--font-weight-5, 500);
@@ -50,48 +53,121 @@ main {
   border: var(--bs-alert-border);
   border-radius: var(--bs-alert-border-radius);
   &.warning {
-     --bs-alert-color: var(--orange-5, #ff922b);
-     --bs-alert-bg: var(--orange-1, #ffe8cc);
-     --bs-alert-border-color: var(--orange-3, #ffc078);
-     --bs-alert-link-color: var(--orange-1, #ffe8cc);
+    /* text contrast of at least 4.5:1 on the background */
+    --bs-alert-color: var(--orange-11, #99330b);
+    --bs-alert-bg: var(--orange-1, #ffe8cc);
+    --bs-alert-border-color: var(--orange-3, #ffc078);
+    --bs-alert-link-color: var(--orange-1, #ffe8cc);
   }
   &.success {
-    --bs-alert-color: var(--blue-5, #339af0);
-     --bs-alert-bg: var(--blue-1, #d0ebff);
-     --bs-alert-border-color: var(--blue-3, #74c0fc);
-     --bs-alert-link-color: var(--blue-1, #d0ebff);
+    --bs-alert-color: var(--blue-9, #1864ab);
+    --bs-alert-bg: var(--blue-1, #d0ebff);
+    --bs-alert-border-color: var(--blue-3, #74c0fc);
+    --bs-alert-link-color: var(--blue-1, #d0ebff);
   }
 }
+progress {
+  inline-size: 100%;
+}
 .final {
-    font-weight: var(--font-weight-8, 800);
-  }
-  .interim {
-    color: var(--blue-5, #339af0);
-  }
+  font-weight: var(--font-weight-8, 800);
+}
 `);
 
+const messages = {
+  start: {
+    msg: "Click on the microphone and speak, then click on it again to stop.",
+    class: "alert success",
+  },
+  recording: {
+    msg: "Recording… Click on the microphone to stop.",
+    class: "alert success",
+  },
+  loading: {
+    msg: "Loading speech recognition (first time only), your voice stays on your device…",
+    class: "alert success",
+  },
+  transcribing: {
+    msg: "Transcribing…",
+    class: "alert success",
+  },
+  transcribed: {
+    msg: "Submit your answer, or click on the microphone to try again.",
+    class: "alert success",
+  },
+  no_speech: {
+    msg: "No speech was detected, click on the microphone to try again.",
+    class: "alert warning",
+  },
+  no_microphone: {
+    msg: "No microphone was found. Ensure that a microphone is connected and allowed for this page.",
+    class: "alert warning",
+  },
+  denied: {
+    msg: "Permission to use the microphone was denied. Allow it in the browser settings of this page.",
+    class: "alert warning",
+  },
+  unsupported: {
+    msg: "Recording audio is not supported by this browser.",
+    class: "alert warning",
+  },
+  failed: {
+    msg: "Speech recognition failed, please try again.",
+    class: "alert warning",
+  },
+};
+
+type Message = keyof typeof messages;
+
+/**
+ * @tag ed-speech
+ *
+ * @summary Speech to text answer, transcribed in the browser by a Whisper
+ * model: the audio never leaves the device. The model is downloaded on first
+ * use (about 80 MB with the default model), then cached by the browser.
+ *
+ * @attr {string} lang - Language of the expected answer (ISO code such as
+ * "fr"), defaults to the page language.
+ * @attr {string} answer - Expected answer: the event gets a score from 0 to
+ * 100 based on the similarity with the transcription (ignoring case, accents
+ * and punctuation).
+ * @attr {string} model - Whisper model on the Hugging Face hub, e.g.
+ * "onnx-community/whisper-small" for a better accuracy (larger download).
+ *
+ * @fires {CustomEvent} edEvent - When the learner submits the transcription.
+ */
 export class EdSpeechElement extends HTMLElement {
   // attached in the constructor, never null
   declare readonly shadowRoot: ShadowRoot;
 
+  /**
+   * transformers.js module URL, to self-host it. Models and WebAssembly files
+   * locations can then be set on its `env` before the first transcription.
+   */
+  static transformersUrl = DEFAULT_TRANSFORMERS_URL;
+
+  /** Microphone recorder, replaceable (tests) */
+  static recorder: Recorder = recordMicrophone;
+
+  /** Speech to text engine, replaceable (tests) */
+  static transcriber: Transcriber = transcribeWithWhisper;
+
   question = "";
 
-  private startButton: HTMLButtonElement;
+  private micButton: HTMLButtonElement;
 
   private submitButton: HTMLButtonElement;
 
-  private finalParagraph: HTMLParagraphElement;
+  private transcript: HTMLParagraphElement;
 
-  private interimParagraph: HTMLParagraphElement;
+  private progress: HTMLProgressElement;
 
-  private recognition?: SpeechRecognition;
+  private recording?: Recording;
 
-  // recognition state, per instance
-  private startTimestamp = 0;
+  private recordingTimeout?: ReturnType<typeof setTimeout>;
 
-  private ignoreOnend = false;
-
-  private recognizing = false;
+  // recording or transcribing
+  private busy = false;
 
   static define(tagName = "ed-speech") {
     // the element may be defined by several bundles or calls
@@ -99,9 +175,10 @@ export class EdSpeechElement extends HTMLElement {
       customElements.define(tagName, this);
     }
   }
+
   static get observedAttributes() {
     // HTML lowercases attribute names: isHTML is observed as ishtml
-    return ["question", "lang", "ishtml"];
+    return ["lang", "answer", "model", "ishtml"];
   }
 
   set lang(lang: string) {
@@ -112,8 +189,28 @@ export class EdSpeechElement extends HTMLElement {
     return this.getAttribute("lang") ?? document.documentElement.lang;
   }
 
+  get answer(): string | null {
+    return this.getAttribute("answer");
+  }
+
+  set answer(answer: string) {
+    this.setAttribute("answer", answer);
+  }
+
+  get model(): string {
+    return this.getAttribute("model") ?? DEFAULT_MODEL;
+  }
+
+  set model(model: string) {
+    this.setAttribute("model", model);
+  }
+
   get isHTML() {
     return this.hasAttribute("isHTML");
+  }
+
+  get readonly() {
+    return this.hasAttribute("readonly");
   }
 
   constructor() {
@@ -122,38 +219,34 @@ export class EdSpeechElement extends HTMLElement {
     this.shadowRoot.adoptedStyleSheets = [commonSheet, sheet];
 
     this.shadowRoot.innerHTML = `
-    <div id="info"></div>
+    <div id="info" role="status" class="${messages.start.class}">${messages.start.msg}</div>
     <main>
-      <p class="question" aria-description="question"></p>
-      <button id="mic-button" style="display: none;">
+      <p class="question"></p>
+      <button id="mic-button" type="button" aria-pressed="false" aria-label="Start recording">
         <!-- from bootstrap icons -->
-        <svg class="mic" aria-label="Start microphone" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
           fill="currentColor" viewBox="0 0 16 16">
-          <title>Mic</title>
           <path
             d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z" />
           <path d="M10 8a2 2 0 1 1-4 0V3a2 2 0 1 1 4 0v5zM8 0a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V3a3 3 0 0 0-3-3z" />
         </svg>
-        </button>
-        <button id="submit">Submit</button>
+      </button>
+      <button id="submit" type="button" disabled>Submit</button>
     </main>
-    <div id="results">
-          <p id="final-result" class="final"></p>
-          <p id="interim-result" class="interim"></p>
-    </div>
+    <progress max="100" hidden></progress>
+    <p id="transcript" class="final"></p>
     `;
 
-    this.startButton =
+    this.micButton =
       this.shadowRoot.querySelector<HTMLButtonElement>("#mic-button")!;
     this.submitButton =
       this.shadowRoot.querySelector<HTMLButtonElement>("#submit")!;
-    this.finalParagraph =
-      this.shadowRoot.querySelector<HTMLParagraphElement>("#final-result")!;
-    this.interimParagraph =
-      this.shadowRoot.querySelector<HTMLParagraphElement>("#interim-result")!;
+    this.transcript =
+      this.shadowRoot.querySelector<HTMLParagraphElement>("#transcript")!;
+    this.progress = this.shadowRoot.querySelector("progress")!;
 
     // event listeners, registered once (connectedCallback may run several times)
-    this.startButton.addEventListener("click", this._handleClick.bind(this));
+    this.micButton.addEventListener("click", this._handleMic.bind(this));
     this.submitButton.addEventListener(
       "click",
       this._handleResponse.bind(this),
@@ -170,107 +263,115 @@ export class EdSpeechElement extends HTMLElement {
     } else {
       questionEl.innerHTML = this.innerHTML.trim();
     }
+  }
 
-    if (!("webkitSpeechRecognition" in window)) {
-      this.showInfo("upgrade");
-    } else {
-      // webspeech available
-      this.showInfo("start");
-      this.startButton.style.display = "inline-block";
-      this.recognition = new webkitSpeechRecognition();
-      this.recognition.continuous = true;
-      this.recognition.interimResults = true;
-
-      this.recognition.onstart = () => {
-        this.recognizing = true;
-        this.showInfo("speak_now");
-        this.startButton.className = "recording";
-      };
-
-      this.recognition.onerror = (evt) => {
-        this.startButton.className = "error";
-        if (evt.error === "no-speech") {
-          this.showInfo("no_speech");
-          this.ignoreOnend = true;
-        }
-        if (evt.error === "audio-capture") {
-          this.showInfo("no_microphone");
-          this.ignoreOnend = true;
-        }
-        if (evt.error === "not-allowed") {
-          if (evt.timeStamp - this.startTimestamp < 100) {
-            this.showInfo("blocked");
-          } else {
-            this.showInfo("denied");
-          }
-          this.ignoreOnend = true;
-        }
-      };
-      this.recognition.onend = () => {
-        this.startButton.className = "";
-        this.recognizing = false;
-        if (this.ignoreOnend) {
-          return;
-        }
-        // start_img.src = "images/mic.gif";
-        this.showInfo("stop");
-      };
-
-      this.recognition.onresult = (evt) => {
-        let finalTranscript = "";
-        let interimTranscript = "";
-        for (let i = evt.resultIndex; i < evt.results.length; ++i) {
-          if (evt.results[i].isFinal) {
-            finalTranscript += evt.results[i][0].transcript;
-          } else {
-            interimTranscript += evt.results[i][0].transcript;
-          }
-        }
-
-        this.finalParagraph.innerHTML = finalTranscript;
-        this.interimParagraph.innerHTML = interimTranscript;
-      };
+  disconnectedCallback() {
+    // release the microphone
+    if (this.recording) {
+      this._stopRecording();
     }
   }
 
-  private showInfo(s: keyof typeof messages) {
+  /** ISO 639-1 language code expected by Whisper, e.g. "fr" for "fr-FR" */
+  get language() {
+    return (this.lang || "en").split("-")[0].toLowerCase();
+  }
+
+  private showInfo(s: Message) {
     const message = messages[s];
     const info = this.shadowRoot.querySelector("#info")!;
-    info.innerHTML = message.msg;
+    info.textContent = message.msg;
     info.className = message.class;
   }
 
-  private _handleClick(evt: Event) {
-    // the mic button is only displayed when speech recognition is available
-    if (this.recognition === undefined) {
-      return;
-    }
-    if (this.recognizing) {
-      this.recognition.stop();
-      return;
-    }
-    this.recognition.lang = this.lang;
-    this.recognition.start();
+  private setRecording(recording: boolean) {
+    this.micButton.setAttribute("aria-pressed", String(recording));
+    this.micButton.ariaLabel = recording ? "Stop recording" : "Start recording";
+  }
 
-    this.finalParagraph.innerHTML = "";
-    this.interimParagraph.innerHTML = "";
-    // start_img.src = "images/mic-slash.gif";
-    this.showInfo("allow");
-    this.startTimestamp = evt.timeStamp;
+  private _handleMic() {
+    if (this.readonly) return;
+    if (this.recording) {
+      this._stopRecording();
+    } else if (!this.busy) {
+      this._startRecording();
+    }
+  }
+
+  private showProgress(percent: number) {
+    this.progress.hidden = false;
+    this.progress.value = percent;
+  }
+
+  private async _startRecording() {
+    const { recorder, transcriber, transformersUrl } = this
+      .constructor as typeof EdSpeechElement;
+    this.busy = true;
+    this.submitButton.disabled = true;
+    this.transcript.textContent = "";
+    try {
+      this.recording = await recorder();
+    } catch (error) {
+      this.busy = false;
+      this.showInfo(recordingError(error));
+      return;
+    }
+    this.setRecording(true);
+    this.showInfo("recording");
+    // download the model while the learner speaks
+    if (transcriber === transcribeWithWhisper) {
+      preloadModel(this.model, transformersUrl, (percent) =>
+        this.showProgress(percent),
+      );
+    }
+    this.recordingTimeout = setTimeout(
+      () => this._stopRecording(),
+      MAX_RECORDING_SECONDS * 1000,
+    );
+  }
+
+  private async _stopRecording() {
+    const { recording } = this;
+    if (recording === undefined) return;
+    this.recording = undefined;
+    clearTimeout(this.recordingTimeout);
+    this.setRecording(false);
+    const { transcriber, transformersUrl } = this
+      .constructor as typeof EdSpeechElement;
+    try {
+      const audio = await recording.stop();
+      this.showInfo("transcribing");
+      const text = await transcriber(audio, {
+        model: this.model,
+        language: this.language,
+        transformersUrl,
+        onProgress: (percent) => {
+          this.showInfo("loading");
+          this.showProgress(percent);
+        },
+      });
+      this.progress.hidden = true;
+      this.transcript.textContent = text;
+      this.submitButton.disabled = text === "";
+      this.showInfo(text === "" ? "no_speech" : "transcribed");
+    } catch (error) {
+      console.error(error);
+      this.progress.hidden = true;
+      this.showInfo("failed");
+    } finally {
+      this.busy = false;
+    }
   }
 
   private _handleResponse() {
-    // TODO handle a default base interface(date, url)
-
     // TODO get unique identifier of html element ie id or // dompath:
     // https://stackoverflow.com/a/69104350
 
-    const response = this.finalParagraph.innerHTML;
+    const response = this.transcript.textContent ?? "";
+    if (response.length === 0 || this.readonly) return;
 
-    if (response.length === 0) return;
-
+    const { answer } = this;
     const url = this.ownerDocument.location as Location;
-    // CustomEvent
     this.dispatchEvent(
       new CustomEvent("edEvent", {
         bubbles: true,
@@ -281,51 +382,29 @@ export class EdSpeechElement extends HTMLElement {
           question: this.question,
           verb: "RESPONDED",
           response,
+          ...(answer === null
+            ? {}
+            : { answer, score: similarityScore(response, answer) }),
         },
       }),
     );
     this.setAttribute("readonly", "");
+    this.micButton.disabled = true;
+    this.submitButton.disabled = true;
   }
 }
 
-const messages = {
-  start: {
-    msg: "Click on the microphone icon and begin speaking.",
-    class: "alert success",
-  },
-  speak_now: {
-    msg: "Speak now.",
-    class: "alert success",
-  },
-  no_speech: {
-    msg: 'No speech was detected. You may need to adjust your <a href="//support.google.com/chrome/answer/2693767" target="_blank">microphone settings</a>.',
-    class: "alert warning",
-  },
-  no_microphone: {
-    msg: 'No microphone was found. Ensure that a microphone is installed and that <a href="//support.google.com/chrome/answer/2693767" target="_blank">microphone settings</a> are configured correctly.',
-    class: "alert warning",
-  },
-  allow: {
-    msg: 'Click the "Allow" button above to enable your microphone.',
-    class: "alert warning",
-  },
-  denied: {
-    msg: "Permission to use microphone was denied.",
-    class: "alert warning",
-  },
-  blocked: {
-    msg: "Permission to use microphone is blocked. To change, go to chrome://settings/content/microphone",
-    class: "alert warning",
-  },
-  upgrade: {
-    msg: 'Web Speech API is not supported by this browser. It is only supported by <a href="//www.google.com/chrome">Chrome</a> version 25 or later on desktop and Android mobile.',
-    class: "alert warning",
-  },
-  stop: {
-    msg: "Stopped listening, click on the microphone icon to restart",
-    class: "alert success",
-  },
-};
+/** Message for an error when starting to record */
+function recordingError(error: unknown): Message {
+  if (!navigator.mediaDevices || typeof MediaRecorder === "undefined") {
+    return "unsupported";
+  }
+  if (error instanceof DOMException) {
+    if (error.name === "NotAllowedError") return "denied";
+    if (error.name === "NotFoundError") return "no_microphone";
+  }
+  return "failed";
+}
 
 declare global {
   interface HTMLElementTagNameMap {

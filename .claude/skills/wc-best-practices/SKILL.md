@@ -85,7 +85,8 @@ Every rule below comes from a bug found in this repo.
     can be missing: check for `null` and skip or fall back.
 15. No `@ts-ignore` / `@ts-nocheck` outside vendored code (`ed-survey/src/nudeui`).
     Browser APIs without DOM typings get a local
-    `/// <reference types="..." />` (see `ed-speech/src/EdSpeech.ts`).
+    `/// <reference types="..." />`, and libraries loaded at runtime a local
+    type of the part of their API used (see `ed-speech/src/whisper.ts`).
 
 ## Compatibility and accessibility
 

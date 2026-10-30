@@ -406,9 +406,6 @@ importers:
       '@custom-elements-manifest/analyzer':
         specifier: 'catalog:'
         version: 0.11.0
-      '@types/dom-speech-recognition':
-        specifier: ^0.0.12
-        version: 0.0.12
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
@@ -1545,9 +1542,6 @@ packages:
 
   '@types/deep-eql@4.0.2':
     resolution: {integrity: sha512-c9h9dVVMigMPc4bwTvC5dxqtqJZwQPePsWjPlpSOnojbor6pGqdk541lfA7AqFQr5pB1BRdq0juY9db81BwyFw==}
-
-  '@types/dom-speech-recognition@0.0.12':
-    resolution: {integrity: sha512-SmLovKV3e/J71U5CBmKYe03Q75biuw7jiEWGoO1arc47CjtmxCr+W7cPJcAAwySSJFwr+jWkr/fPVuVuL+D6Dw==}
 
   '@types/estree@1.0.10':
     resolution: {integrity: sha512-lTyOMnOcmRBzdCv6/4zUZCrEhV0xrqQiUZBZtVcbmLHBXKLnN8q89v/wKRF/Q0HbwVsqbIG3o5HDoFl9sduM+g==}
@@ -5083,8 +5077,6 @@ snapshots:
       '@types/ms': 2.1.0
 
   '@types/deep-eql@4.0.2': {}
-
-  '@types/dom-speech-recognition@0.0.12': {}
 
   '@types/estree@1.0.10': {}
 
