@@ -12,6 +12,12 @@ defaults:
   run:
     working-directory: ./components
 
+# npm trusted publishing: authenticate with GitHub OIDC instead of a token,
+# and attest the provenance of the package
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   publish-npm:
     runs-on: ubuntu-latest
@@ -27,7 +33,10 @@ jobs:
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
       - run: pnpm i --frozen-lockfile
+      - name: Check the tag matches the package version
+        run: test "$GITHUB_REF_NAME" = "v$(node -p "require('./package.json').version")"
       - run: pnpm build
-      - run: pnpm publish --access=public --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+      # pnpm pack replaces catalog: and workspace: versions, then npm publish
+      # authenticates with trusted publishing
+      - run: pnpm pack --pack-destination "$RUNNER_TEMP"
+      - run: npm publish "$RUNNER_TEMP"/ed-components-ed-components-*.tgz --access public

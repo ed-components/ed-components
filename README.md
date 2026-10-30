@@ -93,6 +93,24 @@ Also, as `ed-components` can be used in the client-side,
 [script](https://edx.readthedocs.io/projects/open-edx-building-and-running-a-course/en/latest/exercises_tools/custom_python.html#)
 programmatic graders should use javascript instead of python.
 
+## Release
+
+The changelog and versions are managed with [Changesets](https://changesets.dev):
+
+1. With each user facing change, run `pnpm changeset`: pick the bump type
+   (`patch`, `minor`, `major`) and describe the change for the package users.
+   This adds a file in `.changeset/` to commit with the change.
+2. To release, run `pnpm release:version`: it bumps the version of
+   `components/package.json` and writes `components/CHANGELOG.md` from the
+   pending changesets. Review them and commit (`vX.Y.Z`).
+3. Run `pnpm release:tag` then `git push --follow-tags`: the `vX.Y.Z` tag
+   triggers the GitHub workflow that publishes the package to npm.
+
+The workflow publishes with npm
+[trusted publishing](https://docs.npmjs.com/trusted-publishers) (no npm token):
+the package settings on npmjs.com must trust the GitHub repository
+`ed-components/ed-components` and the workflow `npm-publish.yml`.
+
 ## References
 
 - [Web components Guide](https://webcomponents.guide)

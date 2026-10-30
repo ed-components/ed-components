@@ -51,14 +51,15 @@
     "dist/*.js",
     "dist/**/*.js",
     "dist/dts/*.d.ts",
-    "dist/dts/**/*.d.ts"
+    "dist/dts/**/*.d.ts",
+    "CHANGELOG.md"
   ],
   "homepage": "https://components.lyceum.fr",
   "license": "MIT",
   "main": "dist/index.js",
   "repository": {
     "type": "git",
-    "url": "git@github.com:ed-components/ed-components.git",
+    "url": "git+https://github.com/ed-components/ed-components.git",
     "directory": "components"
   },
   "scripts": {

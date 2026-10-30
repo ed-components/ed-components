@@ -3,6 +3,8 @@ import syntaxHighlight from "@11ty/eleventy-plugin-syntaxhighlight";
 export default async function (eleventyConfig) {
   // ignore design files
   eleventyConfig.ignores.add("design/*");
+  // changesets pending release, see .changeset/README.md
+  eleventyConfig.ignores.add(".changeset/*");
   eleventyConfig.watchIgnores.add("design/*");
   // eleventyConfig.addWatchTarget("./components/dist/index.js");
   eleventyConfig.addWatchTarget("./**/README.md");
