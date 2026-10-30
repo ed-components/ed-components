@@ -66,12 +66,15 @@ export class EdProgressBarElement extends HTMLElement {
 
   constructor() {
     super();
-    // between 0 and 100
-    this.percent = String(0);
     this.attachShadow({ mode: "open" });
   }
 
   connectedCallback() {
+    // between 0 and 100. Set here: a constructor must not add attributes, or
+    // document.createElement() returns an HTMLUnknownElement
+    if (!this.hasAttribute("percent")) {
+      this.percent = "0";
+    }
     this.shadowRoot.appendChild(template.content.cloneNode(true));
     this.shadowRoot.querySelector("#label")!.innerHTML = this.label ?? "";
 

@@ -1,6 +1,7 @@
 import { fixture, expect, html, oneEvent, waitUntil } from "@open-wc/testing";
 import { EdPbElement } from "../src/EdPb.js";
 import "../src/ed-pb.js";
+import { EdProgressBarElement } from "../src/_EdProgressBar.js";
 // ed-pb wraps questions in ed-choice components
 import "../../ed-choice/src/ed-choice.js";
 
@@ -111,4 +112,11 @@ Q3
     expect(answers).to.deep.equal(["3.14", "-2,5", "6.02e23"]);
   });
 
+  it("Progress bar can be created from javascript", async () => {
+    const bar = document.createElement("ed-progress-bar");
+    expect(bar).to.be.instanceOf(EdProgressBarElement);
+    document.body.appendChild(bar);
+    expect(bar.getAttribute("percent")).to.equal("0");
+    bar.remove();
+  });
 });
