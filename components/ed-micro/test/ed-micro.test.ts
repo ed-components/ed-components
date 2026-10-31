@@ -88,4 +88,18 @@ World
       expect(arrow.tagName).to.equal("BUTTON");
     });
   });
+  it("Opens and closes the dialog", async () => {
+    const el = await fixture<EdMicroElement>(`<ed-micro>
+# Title
+
+Hello
+</ed-micro>`);
+    const dialog = el.shadowRoot.querySelector("dialog")!;
+    el.shadowRoot
+      .querySelector<HTMLElement>("#open-label .open-button")!
+      .click();
+    expect(dialog.open).to.be.true;
+    el.shadowRoot.querySelector<HTMLElement>("header button")!.click();
+    expect(dialog.open).to.be.false;
+  });
 });

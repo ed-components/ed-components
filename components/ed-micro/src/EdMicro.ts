@@ -1,4 +1,6 @@
-import { commonSheet, stylesheet } from "../../common/src/styles.js";
+import { css, LitElement, type PropertyValues } from "lit";
+import { html, unsafeStatic } from "lit/static-html.js";
+import { commonSheet } from "../../common/src/styles.js";
 
 // adapted from bootstrap icons https://icons.getbootstrap.com/icons/chat-left-quote/
 const microSvg = `<svg xmlns="http://www.w3.org/2000/svg"
@@ -10,8 +12,31 @@ const microSvg = `<svg xmlns="http://www.w3.org/2000/svg"
 
 const openButton = `<button type="button" class="open-button" aria-label="Open micro-learning content">${microSvg}</button>`;
 
-// shared by all instances (adoptedStyleSheets)
-const sheet = stylesheet(`
+/**
+ * This component allows to present chunks of educational content
+ * in a modal carousel to allow easy navigation and remove unecesary distraction.
+ *
+ * Heavily inspired from https://github.com/argyleink/gui-challenges/tree/main/dialog
+ * and https://css-tricks.com/css-only-carousel/
+ * and https://webdesign.tutsplus.com/easy-slider-carousel-with-pure-css--cms-107626t
+ *
+ * @export
+ * @class EdMicroElement
+ * @extends {LitElement}
+ */
+export class EdMicroElement extends LitElement {
+  // attached by LitElement, never null
+  declare readonly shadowRoot: ShadowRoot;
+
+  static properties = {
+    label: { type: String },
+    // HTML lowercases attribute names
+    isHTML: { type: Boolean, attribute: "ishtml" },
+  };
+
+  static styles = [
+    commonSheet,
+    css`
     :host {
       display: block;
     }
@@ -267,23 +292,15 @@ dialog {
 .carousel-arrow--next {
   right: 0;
 }
-`);
+`,
+  ];
 
-/**
- * This component allows to present chunks of educational content
- * in a modal carousel to allow easy navigation and remove unecesary distraction.
- *
- * Heavily inspired from https://github.com/argyleink/gui-challenges/tree/main/dialog
- * and https://css-tricks.com/css-only-carousel/
- * and https://webdesign.tutsplus.com/easy-slider-carousel-with-pure-css--cms-107626t
- *
- * @export
- * @class EdMicroElement
- * @extends {HTMLElement}
- */
-export class EdMicroElement extends HTMLElement {
-  // attached in the constructor, never null
-  declare readonly shadowRoot: ShadowRoot;
+  declare label?: string;
+
+  declare isHTML: boolean;
+
+  // markdown content being turned into slides
+  private processing?: Promise<void>;
 
   static define(tagName = "ed-micro") {
     // the element may be defined by several bundles or calls
@@ -292,53 +309,61 @@ export class EdMicroElement extends HTMLElement {
     }
   }
 
-  static get observedAttributes() {
-    // HTML lowercases attribute names: isHTML is observed as ishtml
-    return ["label", "ishtml"];
-  }
-
-  get isHTML() {
-    return this.hasAttribute("isHTML");
-  }
-
-  get label(): string | null {
-    return this.getAttribute("label");
-  }
-
-  set label(value: string) {
-    this._updateLabel(value);
-    this.setAttribute("label", value);
-  }
-
   constructor() {
     super();
-    this.attachShadow({ mode: "open" });
-    this.shadowRoot.adoptedStyleSheets = [commonSheet, sheet];
-    this.shadowRoot.innerHTML = `
-    <dialog id="MegaDialog" modal-mode="mega">
-      <form method="dialog">
-      <header>
-        <h3 id="label">µLearning</h3>
-               
-        <button onclick="this.closest('dialog').close('close')" type="button" title="Close dialog"> 
-            <title>Close dialog icon</title>
-            <svg width="24" height="24" viewBox="0 0 24 24">
-              <line x1="18" y1="6" x2="6" y2="18"/>
-              <line x1="6" y1="6" x2="18" y2="18"/>
-            </svg>
-          </button>
-      </header>
-      <article id="slides"></article>
-      </form>
-    </dialog>
-    <section id="open-label">
-      Open micro-learning content
-      ${openButton}
-    </section>
+    this.isHTML = false;
+  }
+
+  render() {
+    // the label and the slides are filled from the content, not by the
+    // template: static values only inside them
+    return html`
+      <dialog id="MegaDialog" modal-mode="mega">
+        <form method="dialog">
+          <header>
+            <h3 id="label">µLearning</h3>
+            <button
+              type="button"
+              title="Close dialog"
+              @click=${() => this.shadowRoot.querySelector("dialog")!.close()}
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+          </header>
+          <article id="slides"></article>
+        </form>
+      </dialog>
+      <section id="open-label" @click=${this._handleOpen}>
+        Open micro-learning content ${unsafeStatic(openButton)}
+      </section>
     `;
   }
 
-  async connectedCallback() {
+  protected updated(changed: PropertyValues<this>) {
+    // processed once rendered, then when the content format changes
+    if (this.processing === undefined || changed.has("isHTML")) {
+      this.processing = this._processContent();
+    } else if (changed.has("label") && this.label !== undefined) {
+      this._updateLabel(this.label);
+    }
+  }
+
+  /** Also wait for the slides built from the markdown content */
+  protected async getUpdateComplete(): Promise<boolean> {
+    const result = await super.getUpdateComplete();
+    await this.processing;
+    return result;
+  }
+
+  private async _processContent() {
     if (this.innerHTML.length === 0) {
       return;
     }
@@ -353,9 +378,9 @@ export class EdMicroElement extends HTMLElement {
     }
 
     // if no label is provided use first element (not stored in the label
-    // attribute: connectedCallback may run several times)
+    // attribute: the content may be processed several times)
     let label = this.label;
-    if (label === null) {
+    if (label === undefined) {
       const firstChild = slidesWrapper.firstElementChild;
       label = firstChild?.outerHTML ?? "";
       firstChild?.remove();
@@ -402,6 +427,13 @@ export class EdMicroElement extends HTMLElement {
     }
   }
 
+  private _handleOpen(evt: Event) {
+    if ((evt.target as Element).closest(".open-button") === null) return;
+    this.shadowRoot.querySelector("dialog")!.showModal();
+    // move slider to the left on each opening
+    this.shadowRoot.querySelector("#slides")!.scrollTo(0, 0);
+  }
+
   private _handleCarouselMove(evt: Event) {
     const carousel = this.shadowRoot.querySelector("#slides")!;
     const slideWidth = this.shadowRoot.querySelector(".slide")!.clientWidth;
@@ -420,11 +452,6 @@ export class EdMicroElement extends HTMLElement {
     } else {
       openLabel.innerHTML += openButton;
     }
-    openLabel.querySelector(".open-button")!.addEventListener("click", () => {
-      this.shadowRoot.querySelector("dialog")!.showModal();
-      // move slider to the left on each opening
-      this.shadowRoot.querySelector("#slides")!.scrollTo(0, 0);
-    });
   }
 }
 
