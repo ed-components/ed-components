@@ -25,5 +25,3 @@ allowBuilds:
   # postinstall only installs a wasm fallback when the native binding (an
   # optional dependency) is missing
   rs-module-lexer: false
-  # postinstall installs the git hooks: done by the prepare script instead
-  simple-git-hooks: false

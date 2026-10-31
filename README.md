@@ -106,6 +106,15 @@ Each `html` source code starting with `<ed-` is turned into an interactive demo.
 Run `pnpm start` to work on the site at <http://localhost:8080>: it rebuilds
 the components, styles and pages on each change.
 
+### Formatting
+
+JavaScript and TypeScript are formatted, with sorted imports, by
+[Biome](https://biomejs.dev): run `pnpm format`, or `pnpm format:check` to
+only check. To format the staged files on each commit, install the git hooks
+of `.pre-commit-config.yaml` with [prek](https://prek.j178.dev) or
+[pre-commit](https://pre-commit.com): `prek install` or `pre-commit install`.
+A commit whose files the hook changed fails: stage them again and commit.
+
 ### Testing on a phone
 
 Browsers only give access to the microphone (`ed-speech`) on secure pages:

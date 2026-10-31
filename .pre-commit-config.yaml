@@ -1,0 +1,12 @@
+# Git hooks, for prek (https://prek.j178.dev) or pre-commit
+# (https://pre-commit.com): install them with `prek install` or
+# `pre-commit install`.
+repos:
+  - repo: local
+    hooks:
+      # format and sort imports with the Biome of the project (pnpm format)
+      - id: biome
+        name: biome check
+        entry: pnpm exec biome check --write --no-errors-on-unmatched --files-ignore-unknown=true
+        language: system
+        types_or: [javascript, ts]
