@@ -1,5 +1,14 @@
 # @ed-components/ed-components
 
+## 0.1.1
+
+### Patch Changes
+
+- 4e54d0f: The `ed-speech` microphone button has the same look as the submit button, in red, inverted while recording. Its start message no longer says to click again to stop, as the recording stops after a silence.
+- 6440d69: The submit button is disabled until an answer is given: a checked answer in `ed-choice` multiple choice questions, an entered number in `ed-num` and an entered text in `ed-ans`.
+- de3490a: `ed-speech` explains that the microphone needs a secure page (https) instead of reporting an unsupported browser when used on an http page.
+- 1a2ac12: `ed-speech` uses the same submit button as `ed-choice`, `ed-ans` and `ed-num` ("Correction") instead of its own "Submit" button. The shared button looks disabled when it is.
+
 ## 0.1.0
 
 ### Minor Changes
