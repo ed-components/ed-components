@@ -76,11 +76,25 @@ The website is build using eleventy. Each `README.md` file is turned into a `htm
 
 Each `html` source code starting with `<ed-` is turned into an interactive demo.
 
-Run `pnpm start` to work on the site at <http://localhost:8080>. To test on a
-phone, run `pnpm start:mobile`: it also opens a public https tunnel with
-[localtunnel](https://theboroer.github.io/localtunnel-www/) (the microphone of
-`ed-speech` needs https). The tunnel page asks for a password: the public IP of
-the computer, given by <https://loca.lt/mytunnelpassword>.
+Run `pnpm start` to work on the site at <http://localhost:8080>: it rebuilds
+the components, styles and pages on each change.
+
+### Testing on a phone
+
+Browsers only give access to the microphone (`ed-speech`) on secure pages:
+https, or `localhost`. Opening the dev server with the computer's IP address
+(`http://192.168.x.x:8080`) does not work, so the site is exposed through an
+https tunnel with [localtunnel](https://theboroer.github.io/localtunnel-www/):
+
+1. Run `pnpm start:mobile`, which runs `pnpm start` and the tunnel together
+   (or `pnpm tunnel` when `pnpm start` is already running).
+2. Open the `https://….loca.lt` URL printed in the terminal on the phone.
+3. On the first visit, the tunnel page asks for a password: the public IP of
+   the computer, shown by <https://loca.lt/mytunnelpassword> opened on the
+   computer.
+
+While the tunnel is open, anyone with its URL can reach the dev server: stop
+it after testing.
 
 ## Syntax overview
 
