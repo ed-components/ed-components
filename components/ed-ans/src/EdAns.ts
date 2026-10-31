@@ -1,3 +1,6 @@
+// WIP: answers will be evaluated by a language model (LLM) instead of the
+// wink-nlp English model. Until then, ed-ans is not rewritten with Lit like
+// the other components, and its test module can't be imported (wink-nlp).
 //  TODO move this as dynamic import based on attribute lang
 import winkNLP from "wink-nlp";
 import similarity from "wink-nlp/utilities/similarity";
