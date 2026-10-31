@@ -63,6 +63,28 @@ If more than one answer is checked a submit button is added to allow the choice 
 </ed-choice>
 ```
 
+### Feedbacks
+
+A blockquote under an answer is the feedback of this answer, and a blockquote
+right after the list is the feedback of the question, such as the solution.
+They are shown once the learner answered: the feedback of each chosen answer,
+as correct or incorrect, and the feedback of the question.
+
+```html
+<ed-choice>
+  What is $E$ in $E=mc^2$?
+
+  - [ ] mass
+    > No, $m$ is the mass.
+  - [x] energy
+    > Yes, $E$ is the energy.
+  - [ ] entropy
+    > No, entropy is usually written $S$.
+
+  > $E$ is the energy, $m$ the mass and $c$ the speed of light.
+</ed-choice>
+```
+
 ## OLX compatibility
 
 [Edx single select problem OLX](https://edx.readthedocs.io/projects/open-edx-building-and-running-a-course/en/latest/exercises_tools/single_select.html#elements)
@@ -84,9 +106,11 @@ can include this hierarchy of child elements.
                               </ed-choice>
 ```
 
+Choice hints and the solution are [feedbacks](#feedbacks).
+
 **TODO**
 
-- attributes for label, description, solution and hints
+- attributes for label, description and hints
 - allow to define attributes in yaml header
 - script tag to generate all question as a json object.
 

@@ -1,4 +1,5 @@
 import { css, html, LitElement, type PropertyValues } from "lit";
+import { EdFeedbackElement } from "../../common/src/EdFeedback.js";
 import { t } from "../../common/src/i18n.js";
 import { commonSheet } from "../../common/src/styles.js";
 import { submitButtonHTML } from "../../common/src/submitButton.js";
@@ -7,6 +8,24 @@ import { EdInputRadio } from "./_EdInputRadio.js";
 
 EdInputCheckBox.define();
 EdInputRadio.define();
+EdFeedbackElement.define();
+
+/** A blockquote turned into a feedback, revealed once answered */
+function toFeedback(blockquote: Element) {
+  const feedback = document.createElement("ed-feedback");
+  feedback.innerHTML = blockquote.innerHTML;
+  blockquote.replaceWith(feedback);
+  return feedback;
+}
+
+/** Text of an answer, without its feedback */
+function answerText(li: HTMLLIElement) {
+  const answer = li.cloneNode(true) as HTMLLIElement;
+  answer.querySelectorAll("ed-feedback").forEach((feedback) => {
+    feedback.remove();
+  });
+  return answer.textContent?.trim() ?? "";
+}
 
 export class EdChoiceElement extends LitElement {
   // attached by LitElement, never null
@@ -49,6 +68,11 @@ export class EdChoiceElement extends LitElement {
         text-decoration: underline solid var(--ed-success);
         font-size: 1.5em;
         transition: font-size 0.3s linear;
+      }
+
+      /* answer feedback, not enlarged with a good answer */
+      li > ed-feedback {
+        font-size: 1rem;
       }
 
       #feedback {
@@ -147,6 +171,13 @@ export class EdChoiceElement extends LitElement {
       // now we go for single or multiple choice
       this.type = nCorrect === 1 ? "single" : "multiple";
 
+      // feedbacks, revealed once answered: a blockquote in an answer, and
+      // one right after the list for the question
+      ul.querySelectorAll(":scope > li > blockquote").forEach(toFeedback);
+      if (ul.nextElementSibling?.tagName === "BLOCKQUOTE") {
+        toFeedback(ul.nextElementSibling);
+      }
+
       inputs.forEach(([input, isCorrect]) => {
         const edInput =
           this.type === "single"
@@ -155,10 +186,8 @@ export class EdChoiceElement extends LitElement {
         // is it a good answer?
         edInput.className = isCorrect ? "good-answer" : "bad-answer";
         // accessible name from the answer text
-        edInput.setAttribute(
-          "aria-label",
-          input.parentElement?.textContent?.trim() ?? "",
-        );
+        const li = input.closest("li");
+        edInput.setAttribute("aria-label", li ? answerText(li) : "");
 
         input.replaceWith(edInput);
       });
@@ -224,7 +253,15 @@ export class EdChoiceElement extends LitElement {
       if (input.checked) {
         // add one point if correct and remove 0.5 if not
         score += good === "good-answer" ? 1 : -0.5;
-        answers.push(li.textContent ?? "");
+        answers.push(answerText(li));
+        // feedback of the chosen answer
+        const feedback = li.querySelector<EdFeedbackElement>(
+          ":scope > ed-feedback",
+        );
+        if (feedback !== null) {
+          feedback.type = good === "good-answer" ? "correct" : "incorrect";
+          feedback.revealed = true;
+        }
       }
 
       // disables all inputs
@@ -235,6 +272,13 @@ export class EdChoiceElement extends LitElement {
     });
     // convert score to percentage and zeroes negative scores
     score = Math.max(0, Math.round((100 * score) / nChoice));
+
+    // feedback of the question
+    this.shadowRoot
+      .querySelectorAll<EdFeedbackElement>("#content > ed-feedback")
+      .forEach((feedback) => {
+        feedback.revealed = true;
+      });
 
     // CustomEvent
     this.dispatchEvent(

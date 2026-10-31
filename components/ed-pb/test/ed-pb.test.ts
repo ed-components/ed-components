@@ -1,4 +1,5 @@
 import { expect, fixture, html, oneEvent, waitUntil } from "@open-wc/testing";
+import type { EdFeedbackElement } from "../../common/src/EdFeedback.js";
 import { registerMessages } from "../../common/src/i18n.js";
 import { moveInDom } from "../../common/test/helpers.js";
 import { EdPbElement } from "../src/EdPb.js";
@@ -222,5 +223,22 @@ Question
     expect(getComputedStyle(percent).fontVariantNumeric).to.equal(
       "tabular-nums",
     );
+  });
+
+  it("Keeps the question feedback hidden in its ed-choice", async () => {
+    const el = await fixture<EdPbElement>(`<ed-pb label="title">
+Question
+
+- [x] Yes
+- [ ] No
+
+> Because.
+</ed-pb>`);
+    expect(el.shadowRoot.querySelector("article > blockquote")).to.be.null;
+    const feedback = el.shadowRoot
+      .querySelector("ed-choice")!
+      .shadowRoot.querySelector<EdFeedbackElement>("#content > ed-feedback")!;
+    expect(feedback.textContent).to.contain("Because.");
+    expect(feedback.revealed).to.be.false;
   });
 });

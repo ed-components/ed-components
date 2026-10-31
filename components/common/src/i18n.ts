@@ -13,6 +13,10 @@ const en = {
   enterNumber: "Enter a number",
   score: (score: number, answer: string) =>
     `Score: ${score}% the correct answer was: ${answer}`,
+  // ed-feedback
+  feedbackCorrect: "Correct",
+  feedbackIncorrect: "Incorrect",
+  feedbackInfo: "Explanation",
   // ed-micro
   openMicro: "Open micro-learning content",
   closeDialog: "Close dialog",
@@ -59,6 +63,9 @@ const fr: Messages = {
   enterNumber: "Saisissez un nombre",
   score: (score, answer) =>
     `Score : ${score} % la bonne réponse était : ${answer}`,
+  feedbackCorrect: "Correct",
+  feedbackIncorrect: "Incorrect",
+  feedbackInfo: "Explication",
   openMicro: "Ouvrir le contenu de micro-apprentissage",
   closeDialog: "Fermer",
   previousSlide: "Diapositive précédente",

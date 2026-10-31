@@ -201,7 +201,12 @@ export class EdPbElement extends LitElement {
           edChoice.label = label;
           // we don't require to transform md->html
           edChoice.isHTML = true;
-          edChoice.innerHTML = ul.outerHTML;
+          // with the question feedback, a blockquote right after the list,
+          // revealed by ed-choice once answered
+          const next = ul.nextElementSibling;
+          const feedback = next?.tagName === "BLOCKQUOTE" ? next : null;
+          edChoice.innerHTML = ul.outerHTML + (feedback?.outerHTML ?? "");
+          feedback?.remove();
           ul.replaceWith(edChoice);
         } else if (li.innerText.startsWith(":100: ")) {
           // verify if it is an ed-ans

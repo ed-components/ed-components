@@ -120,4 +120,72 @@ Question
     box.click();
     expect(button.disabled).to.be.true;
   });
+
+  describe("feedbacks", () => {
+    const question = `<ed-choice>
+What is E?
+
+- [ ] mass
+  > No, m is the mass.
+- [x] energy
+  > Yes, energy.
+- [ ] entropy
+
+> E is the energy.
+
+> A citation, not a feedback.
+</ed-choice>`;
+    const revealed = (el: EdChoiceElement) =>
+      [...el.shadowRoot.querySelectorAll("ed-feedback")]
+        .filter((feedback) => feedback.revealed)
+        .map((feedback) => `${feedback.type}: ${feedback.textContent?.trim()}`);
+
+    it("are hidden until the question is answered", async () => {
+      const el = await fixture<EdChoiceElement>(question);
+      expect(el.shadowRoot.querySelectorAll("ed-feedback").length).to.equal(3);
+      expect(revealed(el)).to.deep.equal([]);
+      // a blockquote which doesn't follow the list stays a citation
+      expect(
+        el.shadowRoot.querySelector("#content > blockquote")!.textContent,
+      ).to.contain("A citation");
+    });
+
+    it("show the chosen answer and question feedbacks", async () => {
+      const el = await fixture<EdChoiceElement>(question);
+      const wrong = el.shadowRoot.querySelector<HTMLElement>(
+        "ed-input-radio.bad-answer",
+      )!;
+      expect(wrong.getAttribute("aria-label")).to.equal("mass");
+      setTimeout(() => wrong.click());
+      const { detail } = await oneEvent(el, "edEvent");
+      expect(JSON.parse(detail.answer)).to.deep.equal(["mass"]);
+      expect(revealed(el)).to.deep.equal([
+        "incorrect: No, m is the mass.",
+        "info: E is the energy.",
+      ]);
+    });
+
+    it("show the feedbacks of all checked answers", async () => {
+      const el = await fixture<EdChoiceElement>(`<ed-choice>
+Which are true?
+
+- [x] A
+  > A is true.
+- [x] B
+  > B is true.
+- [ ] C
+  > C is false.
+</ed-choice>`);
+      const boxes =
+        el.shadowRoot.querySelectorAll<HTMLElement>("ed-input-checkbox");
+      boxes[0].click();
+      boxes[2].click();
+      await el.updateComplete;
+      el.shadowRoot.querySelector<HTMLElement>("#feedback button")!.click();
+      expect(revealed(el)).to.deep.equal([
+        "correct: A is true.",
+        "incorrect: C is false.",
+      ]);
+    });
+  });
 });
