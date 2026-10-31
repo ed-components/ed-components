@@ -82,9 +82,14 @@ export class EdAnsElement extends HTMLElement {
     <output name="answer"></output>
     `;
     // registered once: connectedCallback may run several times
-    this.shadowRoot
-      .querySelector("button")!
-      .addEventListener("click", this._handleResponse.bind(this));
+    const button = this.shadowRoot.querySelector("button")!;
+    button.addEventListener("click", this._handleResponse.bind(this));
+    // enabled once an answer is entered
+    button.disabled = true;
+    const input = this.shadowRoot.querySelector("input")!;
+    input.addEventListener("input", () => {
+      button.disabled = input.value.trim() === "";
+    });
   }
 
   async connectedCallback() {
@@ -126,7 +131,6 @@ export class EdAnsElement extends HTMLElement {
     const button = this.shadowRoot.querySelector("button")!;
 
     const answer = input.value;
-    // TODO find a way to inform user(submit disabled)
     if (answer.length === 0) {
       return;
     }

@@ -153,12 +153,17 @@ export class EdChoiceElement extends HTMLElement {
       // add check answer if multiple-choice
       if (this.type === "multiple") {
         feedback.insertAdjacentHTML("beforeend", submitButtonHTML());
+        const button = feedback.lastElementChild as HTMLButtonElement;
         // add event listener to button check response
-        feedback.lastElementChild!.addEventListener(
-          "click",
-          this._handleResponse.bind(this),
-          { once: true },
-        );
+        button.addEventListener("click", this._handleResponse.bind(this), {
+          once: true,
+        });
+        // enabled once an answer is checked
+        button.disabled = true;
+        ul.addEventListener("change", () => {
+          button.disabled =
+            ul.querySelector("ed-input-checkbox[checked]") === null;
+        });
       } else {
         // check response once a radio is selected, clicks elsewhere are ignored
         ul.addEventListener("change", this._handleResponse.bind(this), {

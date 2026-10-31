@@ -29,8 +29,22 @@ describe("EdNum tests", () => {
     el.addEventListener("edEvent", () => {
       responses += 1;
     });
-    el.shadowRoot.querySelector("input")!.value = "3";
+    const input = el.shadowRoot.querySelector("input")!;
+    input.value = "3";
+    input.dispatchEvent(new Event("input"));
     el.shadowRoot.querySelector("button")!.click();
     expect(responses).to.equal(1);
+  });
+  it("Disables the submit button until a number is entered", async () => {
+    const el = await fixture<EdNumElement>(`<ed-num>3</ed-num>`);
+    const input = el.shadowRoot.querySelector("input")!;
+    const button = el.shadowRoot.querySelector("button")!;
+    expect(button.disabled).to.be.true;
+    input.value = "3";
+    input.dispatchEvent(new Event("input"));
+    expect(button.disabled).to.be.false;
+    input.value = "";
+    input.dispatchEvent(new Event("input"));
+    expect(button.disabled).to.be.true;
   });
 });

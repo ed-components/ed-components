@@ -98,4 +98,23 @@ Question
     box.dispatchEvent(new KeyboardEvent("keydown", { key: " " }));
     expect(box.hasAttribute("checked")).to.be.true;
   });
+
+  it("Disables the submit button until an answer is checked", async () => {
+    const el = await fixture<EdChoiceElement>(`<ed-choice>
+Question
+
+- [x] A
+- [x] B
+- [ ] C
+</ed-choice>`);
+    await waitUntil(() => el.shadowRoot.querySelector("#feedback button"));
+    const button =
+      el.shadowRoot.querySelector<HTMLButtonElement>("#feedback button")!;
+    const box = el.shadowRoot.querySelector<HTMLElement>("ed-input-checkbox")!;
+    expect(button.disabled).to.be.true;
+    box.click();
+    expect(button.disabled).to.be.false;
+    box.click();
+    expect(button.disabled).to.be.true;
+  });
 });

@@ -105,9 +105,14 @@ export class EdNumElement extends HTMLElement {
     <output name="answer"></output>
     `;
     // registered once: connectedCallback may run several times
-    this.shadowRoot
-      .querySelector("button")!
-      .addEventListener("click", this._handleResponse.bind(this));
+    const button = this.shadowRoot.querySelector("button")!;
+    button.addEventListener("click", this._handleResponse.bind(this));
+    // enabled once an answer is entered
+    button.disabled = true;
+    const input = this.shadowRoot.querySelector("input")!;
+    input.addEventListener("input", () => {
+      button.disabled = input.value === "";
+    });
   }
 
   connectedCallback() {
@@ -138,7 +143,6 @@ export class EdNumElement extends HTMLElement {
     // not evt.target, which may be the button icon
     const button = this.shadowRoot.querySelector("button")!;
 
-    // TODO find a way to inform user(submit disabled)
     if (input.value.length === 0) {
       return;
     }
