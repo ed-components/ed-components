@@ -11,6 +11,7 @@ catalog:
   "@web/dev-server-esbuild": ^2.0.0
   "@web/dev-server-rollup": ^1.0.0
   "@web/test-runner": ^1.0.0
+  "lit": ^3.3.3
   "micromark": ^4.0.3
   "micromark-extension-gfm": ^3.0.0
   "micromark-extension-math": ^3.1.0

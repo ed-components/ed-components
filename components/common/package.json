@@ -10,6 +10,7 @@
   ],
   "type": "module",
   "dependencies": {
+    "lit": "catalog:",
     "micromark": "catalog:",
     "micromark-extension-gfm": "catalog:",
     "micromark-extension-math": "catalog:"

@@ -1,4 +1,4 @@
-import { fixture, expect } from "@open-wc/testing";
+import { fixture, expect, oneEvent } from "@open-wc/testing";
 import { EdNumElement } from "../src/EdNum.js";
 import { moveInDom } from "../../common/test/helpers.js";
 import "../src/ed-num.js";
@@ -32,6 +32,8 @@ describe("EdNum tests", () => {
     const input = el.shadowRoot.querySelector("input")!;
     input.value = "3";
     input.dispatchEvent(new Event("input"));
+    // Lit renders asynchronously
+    await el.updateComplete;
     el.shadowRoot.querySelector("button")!.click();
     expect(responses).to.equal(1);
   });
@@ -42,9 +44,26 @@ describe("EdNum tests", () => {
     expect(button.disabled).to.be.true;
     input.value = "3";
     input.dispatchEvent(new Event("input"));
+    await el.updateComplete;
     expect(button.disabled).to.be.false;
     input.value = "";
     input.dispatchEvent(new Event("input"));
+    await el.updateComplete;
     expect(button.disabled).to.be.true;
+  });
+  it("Scores the answer and disables the input", async () => {
+    const el = await fixture<EdNumElement>(`<ed-num>4</ed-num>`);
+    const input = el.shadowRoot.querySelector("input")!;
+    input.value = "3";
+    input.dispatchEvent(new Event("input"));
+    await el.updateComplete;
+    setTimeout(() => el.shadowRoot.querySelector("button")!.click());
+    const { detail } = await oneEvent(el, "edEvent");
+    expect(detail.score).to.equal(75);
+    await el.updateComplete;
+    expect(input.disabled).to.be.true;
+    expect(el.shadowRoot.querySelector("output")!.textContent).to.contain(
+      "Score: 75%",
+    );
   });
 });

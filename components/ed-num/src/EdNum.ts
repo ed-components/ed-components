@@ -1,15 +1,10 @@
-import { submitButtonHTML } from "../../common/src/submitButton.js";
-import { commonSheet, stylesheet } from "../../common/src/styles.js";
+import { css, html, LitElement } from "lit";
+import { ifDefined } from "lit/directives/if-defined.js";
+import { commonSheet } from "../../common/src/styles.js";
+import { submitButton } from "../../common/src/submitButton.js";
 
 // accept french decimal separator: "3,14" -> 3.14
 const parseNumber = (s: string) => Number(s.trim().replace(",", "."));
-
-// shared by all instances (adoptedStyleSheets)
-const sheet = stylesheet(`
-:host {
-  display: block;
-}
-`);
 
 /**
  * This component implements a numeric interaction activitie as defined in xapi spec
@@ -18,16 +13,63 @@ const sheet = stylesheet(`
  *
  * @export
  * @class EdNumElement
- * @extends {HTMLElement}
+ * @extends {LitElement}
  */
-export class EdNumElement extends HTMLElement {
-  // attached in the constructor, never null
+export class EdNumElement extends LitElement {
+  // attached by LitElement, never null
   declare readonly shadowRoot: ShadowRoot;
+
+  static properties = {
+    min: { type: Number },
+    max: { type: Number },
+    step: { type: Number },
+    eval: { type: String },
+    // learner input and score, once answered (attribute: false for the
+    // custom elements manifest, which ignores state)
+    value: { state: true, attribute: false },
+    score: { state: true, attribute: false },
+  };
+
+  static styles = [
+    commonSheet,
+    css`
+      :host {
+        display: block;
+      }
+    `,
+  ];
+
+  declare min?: number;
+
+  declare max?: number;
+
+  /** Step of the input, any decimal by default */
+  declare step?: number;
+
+  /**
+   * Evaluation method
+   *
+   * By default calculate percentage of error
+   *
+   * If "exact": 100% if equal 0% if not
+   */
+  declare eval?: string;
+
+  // reactive properties are declared, not class fields: a class field would
+  // shadow the accessor of LitElement and disable updates
+  declare private value: string;
+
+  declare private score?: number;
 
   label?: string;
 
-  // parsed from innerHTML when connected
+  // parsed from the content when connected
   _answer = NaN;
+
+  constructor() {
+    super();
+    this.value = "";
+  }
 
   static define(tagName = "ed-num") {
     // the element may be defined by several bundles or calls
@@ -36,117 +78,50 @@ export class EdNumElement extends HTMLElement {
     }
   }
 
-  get readonly() {
-    return this.hasAttribute("readonly");
-  }
-
-  set readonly(readonly) {
-    if (readonly) {
-      this.setAttribute("readonly", "");
-    } else {
-      this.removeAttribute("readonly");
-    }
-  }
-
-  /**
-   * Evaluation method
-   *
-   * By default calculate percentage of error
-   *
-   * If "exact": 100% if equal 0% if not
-   *
-   * @memberof EdNumElement
-   */
-  get eval(): string | null {
-    return this.getAttribute("eval");
-  }
-
-  set eval(val: string) {
-    this.setAttribute("eval", val);
-  }
-
-  get min() {
-    return Number(this.getAttribute("min"));
-  }
-
-  set min(min: number) {
-    this.setAttribute("min", String(min));
-  }
-
-  get max() {
-    return Number(this.getAttribute("max"));
-  }
-
-  set max(max: number) {
-    this.setAttribute("max", String(max));
-  }
-
-  get step() {
-    return Number(this.getAttribute("step"));
-  }
-
-  set step(step: number) {
-    this.setAttribute("step", String(step));
-  }
-
-  static get observedAttributes() {
-    return ["max", "min", "step", "eval", "readonly"];
-  }
-
-  constructor() {
-    super();
-    this.attachShadow({ mode: "open" });
-    this.shadowRoot.adoptedStyleSheets = [commonSheet, sheet];
-    this.shadowRoot.innerHTML = `
-    <div class="user-input">
-    <input type="number" name="answer" placeholder="Enter number"/>
-    ${submitButtonHTML()}
-    </div>
-    <output name="answer"></output>
-    `;
-    // registered once: connectedCallback may run several times
-    const button = this.shadowRoot.querySelector("button")!;
-    button.addEventListener("click", this._handleResponse.bind(this));
-    // enabled once an answer is entered
-    button.disabled = true;
-    const input = this.shadowRoot.querySelector("input")!;
-    input.addEventListener("input", () => {
-      button.disabled = input.value === "";
-    });
-  }
-
   connectedCallback() {
-    // this.innerHTML contains answer
-    this._answer = parseNumber(this.innerHTML);
+    super.connectedCallback();
+    // the content is the answer
+    this._answer = parseNumber(this.textContent ?? "");
+  }
 
-    // pass attributes to input
-    const input = this.shadowRoot.querySelector("input")!;
-    if (this.hasAttribute("min")) {
-      input.setAttribute("min", String(this.min));
-    }
-    if (this.hasAttribute("max")) {
-      input.setAttribute("max", String(this.max));
-    }
-    // default step is 1, which would flag decimal answers as invalid
-    input.setAttribute(
-      "step",
-      this.hasAttribute("step") ? String(this.step) : "any",
-    );
+  render() {
+    const answered = this.score !== undefined;
+    return html`
+      <div class="user-input">
+        <input
+          type="number"
+          name="answer"
+          placeholder="Enter number"
+          min=${ifDefined(this.min)}
+          max=${ifDefined(this.max)}
+          step=${this.step ?? "any"}
+          ?disabled=${answered}
+          @input=${(evt: Event) => {
+            this.value = (evt.target as HTMLInputElement).value;
+          }}
+        />
+        ${submitButton({
+          disabled: answered || this.value === "",
+          onClick: this._handleResponse,
+        })}
+      </div>
+      <output name="answer"
+        >${
+          answered
+            ? `Score: ${this.score}% the correct answer was: ${this._answer}`
+            : ""
+        }</output
+      >
+    `;
   }
 
   private _handleResponse() {
-    // TODO handle a default base interface(date, url)
-
     // TODO get unique identifier of html element ie id or // dompath:
     // https://stackoverflow.com/a/69104350
-    const input = this.shadowRoot.querySelector("input")!;
-    // not evt.target, which may be the button icon
-    const button = this.shadowRoot.querySelector("button")!;
-
-    if (input.value.length === 0) {
+    if (this.value === "") {
       return;
     }
-    const answer = parseNumber(input.value);
+    const answer = parseNumber(this.value);
 
     // if answer is 0 can't calculate error!
     const exact = this.eval === "exact" || this._answer === 0;
@@ -162,9 +137,9 @@ export class EdNumElement extends HTMLElement {
     } else {
       score = answer === this._answer ? 100 : 0;
     }
+    this.score = score;
 
     const url = this.ownerDocument.location as Location;
-    // CustomEvent
     this.dispatchEvent(
       new CustomEvent("edEvent", {
         bubbles: true,
@@ -178,12 +153,6 @@ export class EdNumElement extends HTMLElement {
         },
       }),
     );
-    // Disable input and button
-    input.setAttribute("disabled", "");
-    button.setAttribute("disabled", "");
-    // output results
-    this.shadowRoot.querySelector("output")!.innerHTML =
-      `Score: ${score}% the correct answer was: ${this._answer}`;
   }
 }
 

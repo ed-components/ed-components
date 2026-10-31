@@ -13,6 +13,7 @@
   "type": "module",
   "bugs": "https://github.com/ed-components/ed-components/issues",
   "dependencies": {
+    "lit": "catalog:",
     "micromark": "catalog:",
     "micromark-extension-gfm": "catalog:",
     "micromark-extension-math": "catalog:",
@@ -63,7 +64,7 @@
     "directory": "components"
   },
   "scripts": {
-    "analyze": "for comp in ed-*/;do comp=$(basename $comp) && echo \"Analyze $comp\"  && cem analyze --outdir $comp/ --globs $comp/src/Ed*.ts;done",
+    "analyze": "for comp in ed-*/;do comp=$(basename $comp) && echo \"Analyze $comp\"  && cem analyze --litelement --outdir $comp/ --globs $comp/src/Ed*.ts;done",
     "build": "tsc && rollup -c",
     "lint": "tsc --noEmit",
     "test": "wtr --coverage",
