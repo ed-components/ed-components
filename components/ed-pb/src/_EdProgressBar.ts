@@ -32,7 +32,9 @@ export class EdProgressBarElement extends LitElement {
       #label {
         padding-left: 0.3em;
         padding-right: 0.5em;
-        min-width: 7ch;
+        /* same width for the bars of an ed-pb, set from its longest label */
+        inline-size: var(--ed-progress-label-width, auto);
+        flex-shrink: 0;
       }
       #progress {
         background-color: var(--gray-6, #868e96);

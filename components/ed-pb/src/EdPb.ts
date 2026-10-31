@@ -1,4 +1,5 @@
 import { css, html, LitElement, type PropertyValues } from "lit";
+import { styleMap } from "lit/directives/style-map.js";
 import { EdProgressBarElement } from "./_EdProgressBar.js";
 import { t } from "../../common/src/i18n.js";
 import { commonSheet } from "../../common/src/styles.js";
@@ -97,19 +98,26 @@ export class EdPbElement extends LitElement {
   }
 
   render() {
+    const progress = t(this, "progress");
+    const success = t(this, "success");
+    // the bars are aligned on the longest label, in characters
+    const labelWidth = `${Math.max(progress.length, success.length)}ch`;
     return html`
       <main>
-        <section id="progress">
+        <section
+          id="progress"
+          style=${styleMap({ "--ed-progress-label-width": labelWidth })}
+        >
           <h1 id="label">${this.label ?? ""}</h1>
           <ed-progress-bar
             id="bar-progress"
-            label=${t(this, "progress")}
+            label=${progress}
             percent=${this.progress}
             style="background-color: var(--blue-7, #1c7ed6);"
           ></ed-progress-bar>
           <ed-progress-bar
             id="bar-results"
-            label=${t(this, "success")}
+            label=${success}
             percent=${this.result}
             style="background-color: var(--green-7, #37b24d);"
           ></ed-progress-bar>

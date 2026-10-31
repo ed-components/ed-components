@@ -182,4 +182,28 @@ Question
       choice.shadowRoot.querySelector("#feedback button")!.textContent,
     ).to.contain("Correction");
   });
+
+  it("Aligns the progress bars on the longest label", async () => {
+    for (const [lang, width] of [
+      ["fr", "11ch"], // "Progression", "Réussite"
+      ["en", "8ch"], // "Progress", "Success"
+    ]) {
+      const el = await fixture<EdPbElement>(
+        `<ed-pb ui-lang="${lang}" label="title"></ed-pb>`,
+      );
+      const progress = el.shadowRoot.querySelector<HTMLElement>("#progress")!;
+      expect(
+        progress.style.getPropertyValue("--ed-progress-label-width"),
+      ).to.equal(width);
+      const labels = [
+        ...el.shadowRoot.querySelectorAll<EdProgressBarElement>(
+          "ed-progress-bar",
+        ),
+      ].map(
+        (bar) =>
+          bar.shadowRoot.querySelector<HTMLElement>("#label")!.offsetWidth,
+      );
+      expect(labels[0]).to.equal(labels[1]);
+    }
+  });
 });
