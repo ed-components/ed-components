@@ -54,6 +54,7 @@ describe("EdSpeechElement", () => {
     );
     mic(el).click();
     await waitUntil(speech.isRecording);
+    await el.updateComplete;
     expect(mic(el).getAttribute("aria-pressed")).to.equal("true");
 
     mic(el).click();
@@ -67,6 +68,8 @@ describe("EdSpeechElement", () => {
     expect(detail.response).to.equal("Hello!");
     expect(detail.answer).to.equal("hello");
     expect(detail.score).to.equal(100);
+    // Lit renders asynchronously
+    await el.updateComplete;
     expect(el.hasAttribute("readonly")).to.be.true;
     expect(mic(el).disabled).to.be.true;
   });
