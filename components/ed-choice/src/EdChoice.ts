@@ -1,64 +1,73 @@
+import { css, html, LitElement, type PropertyValues } from "lit";
 import { submitButtonHTML } from "../../common/src/submitButton.js";
 import { EdInputCheckBox } from "./_EdInputCheckBox.js";
 import { EdInputRadio } from "./_EdInputRadio.js";
-import { commonSheet, stylesheet } from "../../common/src/styles.js";
+import { commonSheet } from "../../common/src/styles.js";
 
 EdInputCheckBox.define();
 EdInputRadio.define();
 
-// shared by all instances (adoptedStyleSheets)
-const sheet = stylesheet(`
-:host {
-    display: block;
-  }
-
-  article {
-    font-family: var(--ed-font-sans);
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    border-style: solid;
-    border-color: rgb(192, 192, 192);
-    border-radius: 2em;
-    padding: 0em 1em;
-  }
-
-  li {
-    font-size: 1.1em;
-    list-style-type: none;
-  }
-  
-  li.bad-answer {
-    text-decoration: line-through;
-  }
-
-  li.good-answer {
-    text-decoration: underline solid var(--ed-success);
-    font-size: 1.5em;
-    transition: font-size 0.3s linear;
-  }
-
-  #feedback {
-    display: flex;
-    justify-content: flex-end;
-    button {
-      font-size: 1.1em;
-    }
-  }
-
-`);
-
-const template = `
-  <article>
-  <section id="content"></section>
-  <section id="feedback"></section>
-  </article>
-  `;
-
-export class EdChoiceElement extends HTMLElement {
-  // attached in the constructor, never null
+export class EdChoiceElement extends LitElement {
+  // attached by LitElement, never null
   declare readonly shadowRoot: ShadowRoot;
 
+  static properties = {
+    // "single" or "multiple", from the number of good answers
+    type: { type: String, reflect: true },
+    // HTML lowercases attribute names
+    isHTML: { type: Boolean, attribute: "ishtml" },
+  };
+
+  static styles = [
+    commonSheet,
+    css`
+      :host {
+        display: block;
+      }
+
+      article {
+        font-family: var(--ed-font-sans);
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        border-style: solid;
+        border-color: rgb(192, 192, 192);
+        border-radius: 2em;
+        padding: 0em 1em;
+      }
+
+      li {
+        font-size: 1.1em;
+        list-style-type: none;
+      }
+
+      li.bad-answer {
+        text-decoration: line-through;
+      }
+
+      li.good-answer {
+        text-decoration: underline solid var(--ed-success);
+        font-size: 1.5em;
+        transition: font-size 0.3s linear;
+      }
+
+      #feedback {
+        display: flex;
+        justify-content: flex-end;
+        button {
+          font-size: 1.1em;
+        }
+      }
+    `,
+  ];
+
+  declare type?: string;
+
+  declare isHTML: boolean;
+
   label?: string;
+
+  // markdown content being turned into choices
+  private processing?: Promise<void>;
 
   static define(tagName = "ed-choice") {
     // the element may be defined by several bundles or calls
@@ -67,39 +76,37 @@ export class EdChoiceElement extends HTMLElement {
     }
   }
 
-  static get observedAttributes() {
-    // HTML lowercases attribute names: isHTML is observed as ishtml
-    return ["type", "ishtml"];
+  constructor() {
+    super();
+    this.isHTML = false;
   }
 
-  get type(): string | null {
-    return this.getAttribute("type");
+  render() {
+    // filled from the markdown content, not by the template
+    return html`
+      <article>
+        <section id="content"></section>
+        <section id="feedback"></section>
+      </article>
+    `;
   }
 
-  set type(type: string) {
-    this.setAttribute("type", type);
-  }
-
-  get isHTML() {
-    return this.hasAttribute("isHTML");
-  }
-
-  set isHTML(isHTML) {
-    if (isHTML) {
-      this.setAttribute("isHTML", "");
-    } else {
-      this.removeAttribute("isHTML");
+  protected updated(changed: PropertyValues<this>) {
+    // processed once rendered, then when the content format changes (moving
+    // the element in the page keeps the answers)
+    if (this.processing === undefined || changed.has("isHTML")) {
+      this.processing = this._processContent();
     }
   }
 
-  constructor() {
-    super();
-    this.attachShadow({ mode: "open" });
-    this.shadowRoot.adoptedStyleSheets = [commonSheet, sheet];
-    this.shadowRoot.innerHTML = template;
+  /** Also wait for the choices built from the markdown content */
+  protected async getUpdateComplete(): Promise<boolean> {
+    const result = await super.getUpdateComplete();
+    await this.processing;
+    return result;
   }
 
-  async connectedCallback() {
+  private async _processContent() {
     // parse markdown into html
     const contents = this.isHTML
       ? this.innerHTML
@@ -107,7 +114,11 @@ export class EdChoiceElement extends HTMLElement {
           .md2HTML(this.innerHTML)
           .trim();
 
-    // render after the await: connectedCallback may run several times
+    // state changes below must not happen during the update that started
+    // processing (with html content, nothing was awaited)
+    await null;
+
+    // rebuild after the await: the content may be processed several times
     this.shadowRoot.querySelector("#content")!.innerHTML = contents;
     const feedback = this.shadowRoot.querySelector("#feedback")!;
     feedback.innerHTML = "";
@@ -161,8 +172,10 @@ export class EdChoiceElement extends HTMLElement {
         // enabled once an answer is checked
         button.disabled = true;
         ul.addEventListener("change", () => {
-          button.disabled =
-            ul.querySelector("ed-input-checkbox[checked]") === null;
+          // checked property: Lit reflects the attribute after rendering
+          button.disabled = ![...ul.querySelectorAll("ed-input-checkbox")].some(
+            (box) => box.checked,
+          );
         });
       } else {
         // check response once a radio is selected, clicks elsewhere are ignored

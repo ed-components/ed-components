@@ -1,5 +1,6 @@
 import { html, fixture, expect, oneEvent, waitUntil } from "@open-wc/testing";
 import { EdChoiceElement } from "../src/EdChoice.js";
+import type { EdInputCheckBox } from "../src/_EdInputCheckBox.js";
 import { moveInDom } from "../../common/test/helpers.js";
 
 import "../src/ed-choice.js";
@@ -96,6 +97,8 @@ Question
     );
     expect(box.getAttribute("tabindex")).to.equal("0");
     box.dispatchEvent(new KeyboardEvent("keydown", { key: " " }));
+    // Lit reflects the attribute when rendering
+    await (box as EdInputCheckBox).updateComplete;
     expect(box.hasAttribute("checked")).to.be.true;
   });
 
