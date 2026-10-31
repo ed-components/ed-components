@@ -1,5 +1,12 @@
 # @ed-components/ed-components
 
+## 0.2.1
+
+### Patch Changes
+
+- 130098e: The interface of the components is translated in English and French. Its language is the `ui-lang` attribute of the component or of an ancestor, else the page language (`<html lang>`), else English; the `lang` attribute of `ed-speech` stays the language of the answer. `registerMessages(locale, messages)`, exported by the package, changes messages or adds a language. In English, the submit button now reads "Check" instead of "Correction", and numbers shown by `ed-num` follow the interface language (`3,14` in French).
+- f2ef433: The progress bars of `ed-pb` are aligned on their longest label, whatever the interface language ("Progression" in French): labels use a monospace font, so that their width in characters is exact, and percentages use tabular digits, so that the text doesn't move when the value changes.
+
 ## 0.2.0
 
 ### Minor Changes
