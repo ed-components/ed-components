@@ -2,9 +2,12 @@
   for = "/*"
   [headers.values]
     X-Robots-Tag = "all"
+
+# The a11y plugin audits files with pa11y in parallel, without serving them,
+# and times out (30 s, not configurable) on the whole site: only check one
+# light page. Components are audited by the axe tests of pnpm test.
 [[plugins]]
   package = "netlify-plugin-a11y"
 
   [plugins.inputs]
-    checkPaths = ["/"]
-    timeout = 60000
+    checkPaths = ["/components/index.html"]
