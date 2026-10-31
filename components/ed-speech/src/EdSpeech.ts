@@ -1,4 +1,5 @@
 import { commonSheet, stylesheet } from "../../common/src/styles.js";
+import { submitButtonHTML } from "../../common/src/submitButton.js";
 import { similarityScore } from "./similarity.js";
 import {
   DEFAULT_MODEL,
@@ -250,7 +251,7 @@ export class EdSpeechElement extends HTMLElement {
           <path d="M10 8a2 2 0 1 1-4 0V3a2 2 0 1 1 4 0v5zM8 0a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V3a3 3 0 0 0-3-3z" />
         </svg>
       </button>
-      <button id="submit" type="button" disabled>Submit</button>
+      ${submitButtonHTML()}
     </main>
     <progress max="100" hidden></progress>
     <p id="transcript" class="final"></p>
@@ -259,7 +260,9 @@ export class EdSpeechElement extends HTMLElement {
     this.micButton =
       this.shadowRoot.querySelector<HTMLButtonElement>("#mic-button")!;
     this.submitButton =
-      this.shadowRoot.querySelector<HTMLButtonElement>("#submit")!;
+      this.shadowRoot.querySelector<HTMLButtonElement>(".ed-submit-button")!;
+    // enabled once there is a transcription
+    this.submitButton.disabled = true;
     this.transcript =
       this.shadowRoot.querySelector<HTMLParagraphElement>("#transcript")!;
     this.progress = this.shadowRoot.querySelector("progress")!;

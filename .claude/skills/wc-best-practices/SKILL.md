@@ -105,7 +105,7 @@ Every rule below comes from a bug found in this repo.
     the common one in the constructor:
     `this.shadowRoot.adoptedStyleSheets = [commonSheet, sheet];`
     (`common/src/styles.ts`). Values used by several components (colors, font,
-    math, check button, `.user-input`) go in `commonSheet`.
+    math, submit button, `.user-input`) go in `commonSheet`.
 
 ## Markdown content
 

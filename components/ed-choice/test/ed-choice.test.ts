@@ -53,7 +53,7 @@ Question
     expect(detail.score).to.equal(100);
   });
 
-  it("Keeps a single check button when moved in the DOM", async () => {
+  it("Keeps a single submit button when moved in the DOM", async () => {
     const el = await fixture<EdChoiceElement>(`<ed-choice>
 Question
 

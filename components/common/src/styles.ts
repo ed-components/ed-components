@@ -26,7 +26,7 @@ export const commonSheet = stylesheet(`
   font-size: 1.5em;
 }
 
-/* answer input followed by the check button (ed-ans, ed-num) */
+/* answer input followed by the submit button (ed-ans, ed-num) */
 .user-input {
   display: flex;
   width: 100%;
@@ -38,8 +38,8 @@ export const commonSheet = stylesheet(`
   }
 }
 
-/* check answer button, see checkButton.ts */
-.ed-check-button {
+/* submit answer button, see submitButton.ts */
+.ed-submit-button {
   --_accent: color-mix(in srgb, var(--ed-primary) 75%, white);
   display: inline-flex;
   justify-content: center;
@@ -53,5 +53,9 @@ export const commonSheet = stylesheet(`
     0 1px 3px,
     0 0 0 3px var(--_accent);
   color: currentColor;
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }
 `);

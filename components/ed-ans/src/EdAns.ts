@@ -3,7 +3,7 @@ import winkNLP from "wink-nlp";
 import similarity from "wink-nlp/utilities/similarity";
 import model from "wink-eng-lite-web-model";
 
-import { checkButtonHTML } from "../../common/src/checkButton.js";
+import { submitButtonHTML } from "../../common/src/submitButton.js";
 import { commonSheet, stylesheet } from "../../common/src/styles.js";
 
 const nlp = winkNLP(model);
@@ -77,7 +77,7 @@ export class EdAnsElement extends HTMLElement {
     this.shadowRoot.innerHTML = `
     <div class="user-input">
     <input type="text" name="answer" placeholder="Enter your answer"/>
-    ${checkButtonHTML}
+    ${submitButtonHTML()}
     </div>
     <output name="answer"></output>
     `;

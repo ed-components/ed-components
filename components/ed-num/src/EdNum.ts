@@ -1,4 +1,4 @@
-import { checkButtonHTML } from "../../common/src/checkButton.js";
+import { submitButtonHTML } from "../../common/src/submitButton.js";
 import { commonSheet, stylesheet } from "../../common/src/styles.js";
 
 // accept french decimal separator: "3,14" -> 3.14
@@ -100,7 +100,7 @@ export class EdNumElement extends HTMLElement {
     this.shadowRoot.innerHTML = `
     <div class="user-input">
     <input type="number" name="answer" placeholder="Enter number"/>
-    ${checkButtonHTML}
+    ${submitButtonHTML()}
     </div>
     <output name="answer"></output>
     `;

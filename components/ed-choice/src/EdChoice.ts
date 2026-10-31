@@ -1,4 +1,4 @@
-import { checkButtonHTML } from "../../common/src/checkButton.js";
+import { submitButtonHTML } from "../../common/src/submitButton.js";
 import { EdInputCheckBox } from "./_EdInputCheckBox.js";
 import { EdInputRadio } from "./_EdInputRadio.js";
 import { commonSheet, stylesheet } from "../../common/src/styles.js";
@@ -152,7 +152,7 @@ export class EdChoiceElement extends HTMLElement {
       });
       // add check answer if multiple-choice
       if (this.type === "multiple") {
-        feedback.insertAdjacentHTML("beforeend", checkButtonHTML);
+        feedback.insertAdjacentHTML("beforeend", submitButtonHTML());
         // add event listener to button check response
         feedback.lastElementChild!.addEventListener(
           "click",

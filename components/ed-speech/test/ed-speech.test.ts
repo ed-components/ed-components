@@ -30,7 +30,7 @@ function fakeSpeech(text: string, calls: TranscribeOptions[] = []) {
 const mic = (el: EdSpeechElement) =>
   el.shadowRoot.querySelector<HTMLButtonElement>("#mic-button")!;
 const submit = (el: EdSpeechElement) =>
-  el.shadowRoot.querySelector<HTMLButtonElement>("#submit")!;
+  el.shadowRoot.querySelector<HTMLButtonElement>(".ed-submit-button")!;
 const transcript = (el: EdSpeechElement) =>
   el.shadowRoot.querySelector("#transcript")!.textContent;
 const info = (el: EdSpeechElement) =>
