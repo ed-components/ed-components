@@ -1,5 +1,6 @@
 {
   "recommendations": [
+    "biomejs.biome",
     "csstools.postcss",
     "vunguyentuan.vscode-postcss",
     "eseom.nunjucks-template",

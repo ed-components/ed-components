@@ -7,6 +7,7 @@
   "devDependencies": {
     "@11ty/eleventy": "3.1.7",
     "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.2",
+    "@biomejs/biome": "^2.6.4",
     "@changesets/cli": "^3.0.3",
     "@custom-elements-manifest/to-markdown": "^0.1.0",
     "concurrently": "^10.0.6",
@@ -19,7 +20,7 @@
     "postcss-combine-duplicated-selectors": "^11.0.0",
     "postcss-import": "^17.0.1",
     "postcss-preset-env": "^11.6.1",
-    "prettier": "^3.9.10"
+    "simple-git-hooks": "^2.14.0"
   },
   "packageManager": "pnpm@12.16.1",
   "scripts": {
@@ -31,7 +32,9 @@
     "changeset": "changeset",
     "clean:dist": "find ./components -type d -name dist -exec rm -r \"{}\" \\; && echo 'Success: Dist cleaned'",
     "clean:node_modules": "find . -name \"node_modules\" -type d -exec rm -r \"{}\" \\;",
-    "format": "prettier --write \"**/*.{js,mjs,cjs,ts}\"",
+    "format": "biome check --write",
+    "format:check": "biome check",
+    "prepare": "simple-git-hooks",
     "release:push": "V=v$(node -p \"require('./components/package.json').version\") && git push --follow-tags origin main && git push origin \"$V^{commit}:refs/heads/release\"",
     "release:tag": "V=v$(node -p \"require('./components/package.json').version\") && git tag -a $V -m $V",
     "release:version": "changeset version",
@@ -43,5 +46,8 @@
     "watch:html": "npx @11ty/eleventy --serve",
     "watch:js": "onchange -i components/*/src/*.ts -- npm run build:js",
     "watchtodo:manifest": "pnpm -r analyze -- --watch"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm exec biome check --write --staged --no-errors-on-unmatched && git update-index --again"
   }
 }
