@@ -1,4 +1,5 @@
 import { css, html, LitElement, type PropertyValues } from "lit";
+import { t } from "../../common/src/i18n.js";
 import { submitButtonHTML } from "../../common/src/submitButton.js";
 import { EdInputCheckBox } from "./_EdInputCheckBox.js";
 import { EdInputRadio } from "./_EdInputRadio.js";
@@ -163,7 +164,10 @@ export class EdChoiceElement extends LitElement {
       });
       // add check answer if multiple-choice
       if (this.type === "multiple") {
-        feedback.insertAdjacentHTML("beforeend", submitButtonHTML());
+        feedback.insertAdjacentHTML(
+          "beforeend",
+          submitButtonHTML(t(this, "submit")),
+        );
         const button = feedback.lastElementChild as HTMLButtonElement;
         // add event listener to button check response
         button.addEventListener("click", this._handleResponse.bind(this), {

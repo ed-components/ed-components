@@ -1,5 +1,6 @@
 import { css, html, LitElement } from "lit";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
+import { t } from "../../common/src/i18n.js";
 import { commonSheet } from "../../common/src/styles.js";
 import { submitButton } from "../../common/src/submitButton.js";
 import { similarityScore } from "./similarity.js";
@@ -21,56 +22,21 @@ const micIcon = `<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" widt
   <path d="M10 8a2 2 0 1 1-4 0V3a2 2 0 1 1 4 0v5zM8 0a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V3a3 3 0 0 0-3-3z" />
 </svg>`;
 
+// status messages: translation key and alert style
 const messages = {
-  start: {
-    msg: "Click on the microphone and speak.",
-    class: "alert success",
-  },
-  recording: {
-    msg: "Recording… It stops when you stop speaking, or click on the microphone.",
-    class: "alert success",
-  },
-  recording_manual: {
-    msg: "Recording… Click on the microphone to stop.",
-    class: "alert success",
-  },
-  loading: {
-    msg: "Loading speech recognition (first time only), your voice stays on your device…",
-    class: "alert success",
-  },
-  transcribing: {
-    msg: "Transcribing…",
-    class: "alert success",
-  },
-  transcribed: {
-    msg: "Submit your answer, or click on the microphone to try again.",
-    class: "alert success",
-  },
-  no_speech: {
-    msg: "No speech was detected, click on the microphone to try again.",
-    class: "alert warning",
-  },
-  no_microphone: {
-    msg: "No microphone was found. Ensure that a microphone is connected and allowed for this page.",
-    class: "alert warning",
-  },
-  denied: {
-    msg: "Permission to use the microphone was denied. Allow it in the browser settings of this page.",
-    class: "alert warning",
-  },
-  insecure: {
-    msg: "The microphone is only available on secure pages (https).",
-    class: "alert warning",
-  },
-  unsupported: {
-    msg: "Recording audio is not supported by this browser.",
-    class: "alert warning",
-  },
-  failed: {
-    msg: "Speech recognition failed, please try again.",
-    class: "alert warning",
-  },
-};
+  start: { text: "speechStart", class: "alert success" },
+  recording: { text: "speechRecording", class: "alert success" },
+  recording_manual: { text: "speechRecordingManual", class: "alert success" },
+  loading: { text: "speechLoading", class: "alert success" },
+  transcribing: { text: "speechTranscribing", class: "alert success" },
+  transcribed: { text: "speechTranscribed", class: "alert success" },
+  no_speech: { text: "speechNoSpeech", class: "alert warning" },
+  no_microphone: { text: "speechNoMicrophone", class: "alert warning" },
+  denied: { text: "speechDenied", class: "alert warning" },
+  insecure: { text: "speechInsecure", class: "alert warning" },
+  unsupported: { text: "speechUnsupported", class: "alert warning" },
+  failed: { text: "speechFailed", class: "alert warning" },
+} as const;
 
 type Message = keyof typeof messages;
 
@@ -261,7 +227,7 @@ export class EdSpeechElement extends LitElement {
   async connectedCallback() {
     super.connectedCallback();
     const content = this.innerHTML.trim();
-    this.question = content || "Say something!";
+    this.question = content || t(this, "speechQuestion");
     if (this.isHTML) {
       this.questionHTML = content;
     } else {
@@ -282,7 +248,9 @@ export class EdSpeechElement extends LitElement {
   render() {
     const message = messages[this.message];
     return html`
-      <div id="info" role="status" class=${message.class}>${message.msg}</div>
+      <div id="info" role="status" class=${message.class}>
+        ${t(this, message.text)}
+      </div>
       <main>
         <p class="question">${unsafeHTML(this.questionHTML)}</p>
         <button
@@ -290,13 +258,17 @@ export class EdSpeechElement extends LitElement {
           class="ed-button"
           id="mic-button"
           aria-pressed=${String(this.isRecording)}
-          aria-label=${this.isRecording ? "Stop recording" : "Start recording"}
+          aria-label=${t(
+            this,
+            this.isRecording ? "stopRecording" : "startRecording",
+          )}
           ?disabled=${this.readonly}
           @click=${this._handleMic}
         >
           ${unsafeHTML(micIcon)}
         </button>
         ${submitButton({
+          label: t(this, "submit"),
           // enabled once there is a transcription
           disabled: this.readonly || this.transcript === "",
           onClick: this._handleResponse,

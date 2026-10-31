@@ -14,19 +14,20 @@ const icon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fil
  * built-in elements (is="...") don't work in Safari. It inherits the
  * base button (button.ts).
  */
-export const submitButtonHTML = (label = "Correction") =>
+export const submitButtonHTML = (label: string) =>
   buttonHTML({
     className: "ed-submit-button",
-    content: `${icon}&nbsp;${label}`,
+    content: `${icon}&nbsp;<span class="label">${label}</span>`,
   });
 
 /** The submit button as a Lit template, for components written with Lit */
 export const submitButton = ({
-  label = "Correction",
+  label,
   disabled = false,
   onClick,
 }: {
-  label?: string;
+  /** translated label, t(element, "submit") */
+  label: string;
   disabled?: boolean;
   onClick: (evt: Event) => void;
 }) =>
@@ -36,5 +37,5 @@ export const submitButton = ({
     ?disabled=${disabled}
     @click=${onClick}
   >
-    ${unsafeHTML(icon)}&nbsp;${label}
+    ${unsafeHTML(icon)}&nbsp;<span class="label">${label}</span>
   </button>`;

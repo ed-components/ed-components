@@ -3,6 +3,7 @@ import { ifDefined } from "lit/directives/if-defined.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { NudeRating } from "./nudeui/nd-rating.js";
 import { EdSmiley } from "./_EdSmiley.js";
+import { t } from "../../common/src/i18n.js";
 import { commonSheet } from "../../common/src/styles.js";
 
 NudeRating.define();
@@ -75,7 +76,7 @@ export class EdSurveyElement extends LitElement {
   constructor() {
     super();
     this.type = "smiley";
-    this.question = "How are you today?";
+    this.question = "";
     this.readonly = false;
     this.isHTML = false;
     this.questionHTML = "";
@@ -84,7 +85,7 @@ export class EdSurveyElement extends LitElement {
   async connectedCallback() {
     super.connectedCallback();
     const content = this.innerHTML.trim();
-    this.question = content || "How are you today?";
+    this.question = content || t(this, "surveyQuestion");
     if (this.isHTML) {
       this.questionHTML = content;
     } else {

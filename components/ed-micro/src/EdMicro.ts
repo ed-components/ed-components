@@ -1,5 +1,5 @@
-import { css, LitElement, type PropertyValues } from "lit";
-import { html, unsafeStatic } from "lit/static-html.js";
+import { css, html, LitElement, type PropertyValues } from "lit";
+import { t } from "../../common/src/i18n.js";
 import { commonSheet } from "../../common/src/styles.js";
 
 // adapted from bootstrap icons https://icons.getbootstrap.com/icons/chat-left-quote/
@@ -10,7 +10,8 @@ const microSvg = `<svg xmlns="http://www.w3.org/2000/svg"
   <text x="4.1194029" y="7.8606968" id="text2">µ</text>
   </svg>`;
 
-const openButton = `<button type="button" class="open-button" aria-label="Open micro-learning content">${microSvg}</button>`;
+const openButton = (label: string) =>
+  `<button type="button" class="open-button" aria-label="${label}">${microSvg}</button>`;
 
 /**
  * This component allows to present chunks of educational content
@@ -316,7 +317,7 @@ dialog {
 
   render() {
     // the label and the slides are filled from the content, not by the
-    // template: static values only inside them
+    // template
     return html`
       <dialog id="MegaDialog" modal-mode="mega">
         <form method="dialog">
@@ -324,7 +325,7 @@ dialog {
             <h3 id="label">µLearning</h3>
             <button
               type="button"
-              title="Close dialog"
+              title=${t(this, "closeDialog")}
               @click=${() => this.shadowRoot.querySelector("dialog")!.close()}
             >
               <svg
@@ -341,10 +342,14 @@ dialog {
           <article id="slides"></article>
         </form>
       </dialog>
-      <section id="open-label" @click=${this._handleOpen}>
-        Open micro-learning content ${unsafeStatic(openButton)}
-      </section>
+      <section id="open-label" @click=${this._handleOpen}></section>
     `;
+  }
+
+  protected firstUpdated() {
+    // default label until the content gives one
+    const openLabel = this.shadowRoot.querySelector("#open-label")!;
+    openLabel.innerHTML = `${t(this, "openMicro")} ${openButton(t(this, "openMicro"))}`;
   }
 
   protected updated(changed: PropertyValues<this>) {
@@ -413,14 +418,14 @@ dialog {
       const prevButton = document.createElement("button");
       prevButton.type = "button";
       prevButton.className = "carousel-arrow carousel-arrow--prev";
-      prevButton.ariaLabel = "Previous slide";
+      prevButton.ariaLabel = t(this, "previousSlide");
       prevButton.innerHTML = "&#8249;";
       prevButton.addEventListener("click", this._handleCarouselMove.bind(this));
       slidesWrapper.insertAdjacentElement("beforeend", prevButton);
       const nextButton = document.createElement("button");
       nextButton.type = "button";
       nextButton.className = "carousel-arrow carousel-arrow--next";
-      nextButton.ariaLabel = "Next slide";
+      nextButton.ariaLabel = t(this, "nextSlide");
       nextButton.innerHTML = "&#8250;";
       nextButton.addEventListener("click", this._handleCarouselMove.bind(this));
       slidesWrapper.insertAdjacentElement("beforeend", nextButton);
@@ -448,9 +453,12 @@ dialog {
     const openLabel = this.shadowRoot.querySelector("#open-label")!;
     openLabel.innerHTML = label;
     if (openLabel.firstElementChild !== null) {
-      openLabel.firstElementChild.insertAdjacentHTML("beforeend", openButton);
+      openLabel.firstElementChild.insertAdjacentHTML(
+        "beforeend",
+        openButton(t(this, "openMicro")),
+      );
     } else {
-      openLabel.innerHTML += openButton;
+      openLabel.innerHTML += openButton(t(this, "openMicro"));
     }
   }
 }

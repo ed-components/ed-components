@@ -1,4 +1,5 @@
 import { css, html, LitElement } from "lit";
+import { t } from "../../common/src/i18n.js";
 import { commonSheet } from "../../common/src/styles.js";
 
 export class EdSmiley extends LitElement {
@@ -48,13 +49,25 @@ export class EdSmiley extends LitElement {
   render() {
     return html`
       <div @click=${this._clickHandler}>
-        <button type="button" aria-label="Confused face" data-value="1">
+        <button
+          type="button"
+          aria-label=${t(this, "confusedFace")}
+          data-value="1"
+        >
           &#128533;
         </button>
-        <button type="button" aria-label="Neutral face" data-value="2">
+        <button
+          type="button"
+          aria-label=${t(this, "neutralFace")}
+          data-value="2"
+        >
           &#128528;
         </button>
-        <button type="button" aria-label="Grinning face" data-value="3">
+        <button
+          type="button"
+          aria-label=${t(this, "grinningFace")}
+          data-value="3"
+        >
           &#128512;
         </button>
       </div>

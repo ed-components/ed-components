@@ -234,3 +234,16 @@ describe("similarityScore", () => {
     expect(similarityScore("bonjour", "au revoir")).to.be.lessThan(50);
   });
 });
+
+describe("EdSpeechElement i18n", () => {
+  it("speaks the interface language, not the answer language", async () => {
+    const el = await fixture<EdSpeechElement>(
+      `<ed-speech ui-lang="fr" lang="es">Pronuncia «jamón»</ed-speech>`,
+    );
+    expect(info(el)).to.contain("Cliquez sur le micro");
+    expect(mic(el).getAttribute("aria-label")).to.equal(
+      "Démarrer l'enregistrement",
+    );
+    expect(el.language).to.equal("es");
+  });
+});

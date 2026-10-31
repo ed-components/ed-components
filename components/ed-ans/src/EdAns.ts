@@ -6,6 +6,7 @@ import winkNLP from "wink-nlp";
 import similarity from "wink-nlp/utilities/similarity";
 import model from "wink-eng-lite-web-model";
 
+import { t } from "../../common/src/i18n.js";
 import { submitButtonHTML } from "../../common/src/submitButton.js";
 import { commonSheet, stylesheet } from "../../common/src/styles.js";
 
@@ -79,8 +80,8 @@ export class EdAnsElement extends HTMLElement {
     this.shadowRoot.adoptedStyleSheets = [commonSheet, sheet];
     this.shadowRoot.innerHTML = `
     <div class="user-input">
-    <input type="text" name="answer" placeholder="Enter your answer"/>
-    ${submitButtonHTML()}
+    <input type="text" name="answer"/>
+    ${submitButtonHTML("")}
     </div>
     <output name="answer"></output>
     `;
@@ -96,6 +97,15 @@ export class EdAnsElement extends HTMLElement {
   }
 
   async connectedCallback() {
+    // texts in the interface language, known once connected
+    this.shadowRoot.querySelector("input")!.placeholder = t(
+      this,
+      "enterAnswer",
+    );
+    this.shadowRoot.querySelector(".ed-submit-button .label")!.textContent = t(
+      this,
+      "submit",
+    );
     this._source ??= this.innerHTML;
     // parse markdown into html
     const { md2HTML } = this.html
@@ -171,10 +181,12 @@ export class EdAnsElement extends HTMLElement {
     input.setAttribute("disabled", "");
     button.setAttribute("disabled", "");
     // output results
-    this.shadowRoot.querySelector("output")!.innerHTML =
-      `Score: ${score}% the correct answer was: ${
-        this._answers[0]?.answer ?? ""
-      }`;
+    this.shadowRoot.querySelector("output")!.textContent = t(
+      this,
+      "score",
+      score,
+      this._answers[0]?.answer ?? "",
+    );
   }
 }
 

@@ -134,12 +134,19 @@ comes from a bug found in this repo.
 23. **Interactive things are buttons**: keyboard reachable, with an accessible
     name. No click handler on `span`/`svg` alone.
 
+24. **No hard-coded interface text**: buttons, messages, `aria-label`,
+    `placeholder`, default questions use `t(this, "key")` from
+    `common/src/i18n.ts`, with the key added in English and French (`fr` is
+    typed as `Messages`, so a missing translation fails `tsc`). Numbers shown
+    to learners use `formatNumber(this, n)` (`3,14` in French). The interface
+    language is never the element's `lang`, which is the exercise language.
+
 ## Markdown content
 
-24. Content is markdown unless `isHTML` is set: parse it with the dynamically
+25. Content is markdown unless `isHTML` is set: parse it with the dynamically
     imported `md2HTML` from `common/src/index.js`, and render it with
     `unsafeHTML` (it is written by the author). A wrapper that passes already
     parsed HTML to a child component must set `isHTML` on it.
-25. The manifest analyzer runs with `--litelement` (`analyze` scripts) to read
+26. The manifest analyzer runs with `--litelement` (`analyze` scripts) to read
     `static properties`: check that new attributes appear in the element's
     `custom-elements.json`, used by the documentation API tab and playground.

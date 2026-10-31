@@ -1,5 +1,6 @@
 import { css, html, LitElement, type PropertyValues } from "lit";
 import { EdProgressBarElement } from "./_EdProgressBar.js";
+import { t } from "../../common/src/i18n.js";
 import { commonSheet } from "../../common/src/styles.js";
 
 EdProgressBarElement.define();
@@ -102,13 +103,13 @@ export class EdPbElement extends LitElement {
           <h1 id="label">${this.label ?? ""}</h1>
           <ed-progress-bar
             id="bar-progress"
-            label="Progress"
+            label=${t(this, "progress")}
             percent=${this.progress}
             style="background-color: var(--blue-7, #1c7ed6);"
           ></ed-progress-bar>
           <ed-progress-bar
             id="bar-results"
-            label="Success"
+            label=${t(this, "success")}
             percent=${this.result}
             style="background-color: var(--green-7, #37b24d);"
           ></ed-progress-bar>

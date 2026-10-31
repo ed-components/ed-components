@@ -51,6 +51,33 @@ What means $E$ in this formula?
 
 See [`ed-choice`](./components/ed-choice/) for more information.
 
+## Internationalization
+
+The interface of the components (buttons, messages, accessible labels) is in
+English or French. Its language is the `ui-lang` attribute of the component or
+of an ancestor, else the page language (`<html lang="fr">`), else English. The
+`lang` attribute of a component is the language of the exercise, not of the
+interface: a Spanish `<ed-speech lang="es">` in a French page talks French.
+
+```html
+<html lang="fr">
+  ...
+  <ed-pb ui-lang="en">…</ed-pb>
+</html>
+```
+
+Messages can be changed, or another language added, with `registerMessages`
+(missing messages fall back to English):
+
+```js
+import { registerMessages } from "@ed-components/ed-components";
+
+registerMessages("fr", { submit: "Valider" });
+registerMessages("de", { submit: "Prüfen", progress: "Fortschritt" });
+```
+
+The message keys are listed in `components/common/src/i18n.ts`.
+
 ## events
 
 Use https://www.xapijs.dev/ verbs, see <https://doc.xapi.fr/profiles/xapi/taxonomy/verbs>

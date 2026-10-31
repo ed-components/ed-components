@@ -66,4 +66,23 @@ describe("EdNum tests", () => {
       "Score: 75%",
     );
   });
+
+  it("Speaks the interface language", async () => {
+    const el = await fixture<EdNumElement>(
+      `<ed-num ui-lang="fr">3,14</ed-num>`,
+    );
+    const input = el.shadowRoot.querySelector("input")!;
+    expect(input.placeholder).to.equal("Saisissez un nombre");
+    expect(el.shadowRoot.querySelector("button")!.textContent).to.contain(
+      "Correction",
+    );
+    input.value = "3";
+    input.dispatchEvent(new Event("input"));
+    await el.updateComplete;
+    el.shadowRoot.querySelector("button")!.click();
+    await el.updateComplete;
+    expect(el.shadowRoot.querySelector("output")!.textContent).to.contain(
+      "la bonne réponse était\u00a0: 3,14",
+    );
+  });
 });

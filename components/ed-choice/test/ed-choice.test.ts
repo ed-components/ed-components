@@ -80,7 +80,7 @@ Question
     const button = el.shadowRoot.querySelector("#feedback button")!;
     // customized built-ins (is="...") don't work in Safari
     expect(Object.getPrototypeOf(button)).to.equal(HTMLButtonElement.prototype);
-    expect(button.textContent).to.contain("Correction");
+    expect(button.textContent).to.contain("Check");
   });
 
   it("Inputs render their template once when moved in the DOM", async () => {

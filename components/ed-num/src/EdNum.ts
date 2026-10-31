@@ -1,5 +1,6 @@
 import { css, html, LitElement } from "lit";
 import { ifDefined } from "lit/directives/if-defined.js";
+import { formatNumber, t } from "../../common/src/i18n.js";
 import { commonSheet } from "../../common/src/styles.js";
 import { submitButton } from "../../common/src/submitButton.js";
 
@@ -91,7 +92,7 @@ export class EdNumElement extends LitElement {
         <input
           type="number"
           name="answer"
-          placeholder="Enter number"
+          placeholder=${t(this, "enterNumber")}
           min=${ifDefined(this.min)}
           max=${ifDefined(this.max)}
           step=${this.step ?? "any"}
@@ -101,6 +102,7 @@ export class EdNumElement extends LitElement {
           }}
         />
         ${submitButton({
+          label: t(this, "submit"),
           disabled: answered || this.value === "",
           onClick: this._handleResponse,
         })}
@@ -108,7 +110,7 @@ export class EdNumElement extends LitElement {
       <output name="answer"
         >${
           answered
-            ? `Score: ${this.score}% the correct answer was: ${this._answer}`
+            ? t(this, "score", this.score!, formatNumber(this, this._answer))
             : ""
         }</output
       >

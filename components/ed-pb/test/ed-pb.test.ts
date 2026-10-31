@@ -165,4 +165,21 @@ Question
     await el.updateComplete;
     expect(progress()).to.equal("100");
   });
+
+  it("Passes its interface language to its questions", async () => {
+    const el = await fixture<EdPbElement>(`<ed-pb ui-lang="fr">
+Question
+
+- [x] A
+- [x] B
+</ed-pb>`);
+    expect(
+      el.shadowRoot.querySelector("#bar-progress")!.getAttribute("label"),
+    ).to.equal("Progression");
+    const choice = el.shadowRoot.querySelector("ed-choice")!;
+    await choice.updateComplete;
+    expect(
+      choice.shadowRoot.querySelector("#feedback button")!.textContent,
+    ).to.contain("Correction");
+  });
 });
