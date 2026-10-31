@@ -109,11 +109,43 @@ the components, styles and pages on each change.
 ### Formatting
 
 JavaScript and TypeScript are formatted, with sorted imports, by
-[Biome](https://biomejs.dev): run `pnpm format`, or `pnpm format:check` to
-only check. To format the staged files on each commit, install the git hooks
-of `.pre-commit-config.yaml` with [prek](https://prek.j178.dev) or
-[pre-commit](https://pre-commit.com): `prek install` or `pre-commit install`.
-A commit whose files the hook changed fails: stage them again and commit.
+[Biome](https://biomejs.dev), configured in `biome.json`:
+
+- `pnpm format` formats the files and sorts their imports;
+- `pnpm format:check` only checks them.
+
+### Git hooks
+
+The hooks of `.pre-commit-config.yaml` run on each commit. They work with
+[prek](https://prek.j178.dev) or [pre-commit](https://pre-commit.com), which
+read the same configuration (commands below with `prek`, the same with
+`pre-commit`).
+
+Install them once after cloning:
+
+```sh
+prek install
+```
+
+On each commit, the `biome` hook formats the staged JavaScript and TypeScript
+files with the Biome of the project (as `pnpm format`). When it changes a
+file, the commit fails: review the changes, stage them and commit again.
+
+```sh
+git commit -m "My change"   # fails: "files were modified by this hook"
+git add -p                  # review and stage the formatting changes
+git commit -m "My change"   # passes
+```
+
+Other commands:
+
+- `prek run` checks the staged files without committing;
+- `prek run --all-files` checks the whole repository, e.g. after changing
+  `biome.json`;
+- `prek list` lists the hooks;
+- `SKIP=biome git commit …` skips the hook for one commit, `git commit
+  --no-verify` skips all hooks;
+- `prek uninstall` removes the hooks.
 
 ### Testing on a phone
 
