@@ -110,8 +110,3 @@ to wtr:
 ```bash
 npm run test -- --group ed-survey
 ```
-
-## TODO
-
-- [ ] Share submit button with localization.
-- [ ] Localize.
