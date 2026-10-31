@@ -9,6 +9,18 @@
         <title>{{ title or defaultTitle }}</title>
         <link rel="icon" href="/logo.svg">
         <link rel="stylesheet" href="/style.css"/> {{ includes | safe }}
+        <script>
+            // interface language of the components, from ?ui-lang=fr or the
+            // choice stored by the navigation (ui-lang.js): set before the
+            // components render
+            {
+                let uiLang = new URLSearchParams(location.search).get("ui-lang");
+                try {
+                    uiLang ??= localStorage.getItem("ui-lang");
+                } catch {}
+                if (uiLang) document.documentElement.setAttribute("ui-lang", uiLang);
+            }
+        </script>
     </head>
     <body>
         {% include "_nav.njk" %}
@@ -33,6 +45,7 @@
         
         <script src="/global.js" type="module"></script>
         <script src="/theme-toggle.js"></script>
+        <script src="/ui-lang.js"></script>
         {% if isComponent %}
             <script type="module">
                 // Demo of edEvents as toasts
