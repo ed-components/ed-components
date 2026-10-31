@@ -1,4 +1,5 @@
 import { commonSheet, stylesheet } from "../../common/src/styles.js";
+import { buttonHTML } from "../../common/src/button.js";
 import { submitButtonHTML } from "../../common/src/submitButton.js";
 import { similarityScore } from "./similarity.js";
 import {
@@ -32,12 +33,13 @@ main {
   align-items: center;
   gap: 0.5ch;
 }
+/* base button in red, inverted while recording */
 #mic-button {
-  background-color: var(--red-5, #ff6b6b);
+  --ed-button-color: var(--ed-danger);
   color: white;
   &[aria-pressed="true"] {
-    background-color: initial;
-    color: var(--red-5, #ff6b6b);
+    background-color: transparent;
+    color: var(--ed-button-color);
   }
 }
 .question {
@@ -77,7 +79,7 @@ progress {
 
 const messages = {
   start: {
-    msg: "Click on the microphone and speak, then click on it again to stop.",
+    msg: "Click on the microphone and speak.",
     class: "alert success",
   },
   recording: {
@@ -242,15 +244,18 @@ export class EdSpeechElement extends HTMLElement {
     <div id="info" role="status" class="${messages.start.class}">${messages.start.msg}</div>
     <main>
       <p class="question"></p>
-      <button id="mic-button" type="button" aria-pressed="false" aria-label="Start recording">
+      ${buttonHTML({
+        attributes:
+          'id="mic-button" aria-pressed="false" aria-label="Start recording"',
+        content: `
         <!-- from bootstrap icons -->
         <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
           fill="currentColor" viewBox="0 0 16 16">
           <path
             d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z" />
           <path d="M10 8a2 2 0 1 1-4 0V3a2 2 0 1 1 4 0v5zM8 0a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V3a3 3 0 0 0-3-3z" />
-        </svg>
-      </button>
+        </svg>`,
+      })}
       ${submitButtonHTML()}
     </main>
     <progress max="100" hidden></progress>

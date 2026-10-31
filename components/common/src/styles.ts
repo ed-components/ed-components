@@ -38,15 +38,16 @@ export const commonSheet = stylesheet(`
   }
 }
 
-/* submit answer button, see submitButton.ts */
-.ed-submit-button {
-  --_accent: color-mix(in srgb, var(--ed-primary) 75%, white);
+/* base of the buttons, see button.ts */
+.ed-button {
+  --ed-button-color: var(--ed-primary);
+  --_accent: color-mix(in srgb, var(--ed-button-color) 75%, white);
   display: inline-flex;
   justify-content: center;
   align-items: center;
   text-align: center;
   gap: 0.2ch;
-  background-color: var(--ed-primary);
+  background-color: var(--ed-button-color);
   border-radius: 0.3em;
   border: 2px solid var(--_accent);
   box-shadow:
@@ -58,4 +59,5 @@ export const commonSheet = stylesheet(`
     cursor: not-allowed;
   }
 }
+
 `);
