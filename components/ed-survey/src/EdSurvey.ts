@@ -1,6 +1,9 @@
+import { css, html, LitElement } from "lit";
+import { ifDefined } from "lit/directives/if-defined.js";
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { NudeRating } from "./nudeui/nd-rating.js";
 import { EdSmiley } from "./_EdSmiley.js";
-import { commonSheet, stylesheet } from "../../common/src/styles.js";
+import { commonSheet } from "../../common/src/styles.js";
 
 NudeRating.define();
 EdSmiley.define();
@@ -11,24 +14,56 @@ type SurveyType = "smiley" | "rating";
 // ie, An interaction which asks the learner to select from a discrete set of choices on a scale
 // see https://github.com/adlnet/xAPI-Spec/blob/master/xAPI-Data.md#interaction-activities
 
-// shared by all instances (adoptedStyleSheets)
-const sheet = stylesheet(`
-:host {
-  display: block;
-}
-div {
-  display: flex;
-  justify-content: space-evenly;
-}
-.question {
-  font-size: var(--font-size-fluid-2, max(1.5rem,min(6vw,2.5rem)));
-  font-weight: var(--font-weight-6, 600);
-}
-`);
-
-export class EdSurveyElement extends HTMLElement {
-  // attached in the constructor, never null
+export class EdSurveyElement extends LitElement {
+  // attached by LitElement, never null
   declare readonly shadowRoot: ShadowRoot;
+
+  static properties = {
+    type: {
+      reflect: true,
+      // "smiley" unless "rating"
+      converter: {
+        fromAttribute: (value: string | null): SurveyType =>
+          value === "rating" ? "rating" : "smiley",
+      },
+    },
+    question: { type: String, reflect: true },
+    choice: { type: String, reflect: true },
+    readonly: { type: Boolean, reflect: true },
+    // HTML lowercases attribute names
+    isHTML: { type: Boolean, attribute: "ishtml" },
+    // question rendered from the markdown content
+    questionHTML: { state: true, attribute: false },
+  };
+
+  static styles = [
+    commonSheet,
+    css`
+      :host {
+        display: block;
+      }
+      div {
+        display: flex;
+        justify-content: space-evenly;
+      }
+      .question {
+        font-size: var(--font-size-fluid-2, max(1.5rem, min(6vw, 2.5rem)));
+        font-weight: var(--font-weight-6, 600);
+      }
+    `,
+  ];
+
+  declare type: SurveyType;
+
+  declare question: string;
+
+  declare choice?: string;
+
+  declare readonly: boolean;
+
+  declare isHTML: boolean;
+
+  declare private questionHTML: string;
 
   static define(tagName = "ed-survey") {
     // the element may be defined by several bundles or calls
@@ -37,112 +72,56 @@ export class EdSurveyElement extends HTMLElement {
     }
   }
 
-  get type() {
-    const type = this.getAttribute("type");
-    switch (type) {
-      case "rating":
-        return type;
-      default:
-        return "smiley";
-    }
-  }
-
-  set type(type: SurveyType) {
-    this.setAttribute("type", type);
-  }
-
-  set question(question: string) {
-    this.setAttribute("question", question);
-  }
-
-  get question() {
-    return this.getAttribute("question") ?? "How are you today";
-  }
-
-  set choice(choice: string) {
-    this.setAttribute("choice", choice);
-  }
-
-  get choice(): string | null {
-    return this.getAttribute("choice");
-  }
-
-  get readonly() {
-    return this.hasAttribute("readonly");
-  }
-
-  set readonly(readonly) {
-    if (readonly) {
-      this.setAttribute("readonly", "");
-    } else {
-      this.removeAttribute("readonly");
-    }
-  }
-
-  get isHTML() {
-    return this.hasAttribute("isHTML");
-  }
-
-  static get observedAttributes() {
-    // HTML lowercases attribute names: isHTML is observed as ishtml
-    return ["type", "question", "choice", "readonly", "ishtml"];
-  }
-
   constructor() {
     super();
-    this.attachShadow({ mode: "open" });
-    this.shadowRoot.adoptedStyleSheets = [commonSheet, sheet];
-    this.shadowRoot.innerHTML = `
-    <p class="question" aria-description="question"></p>
-    <div></div>
-    `;
-    // registered once: connectedCallback may run several times
-    this.shadowRoot
-      .querySelector("div")!
-      .addEventListener("click", this._handleResponse.bind(this));
+    this.type = "smiley";
+    this.question = "How are you today?";
+    this.readonly = false;
+    this.isHTML = false;
+    this.questionHTML = "";
   }
 
   async connectedCallback() {
-    this.question = this.innerHTML ? this.innerHTML : "How are you today?";
-    const questionEl = this.shadowRoot.querySelector(".question")!;
-    if (!this.isHTML) {
+    super.connectedCallback();
+    const content = this.innerHTML.trim();
+    this.question = content || "How are you today?";
+    if (this.isHTML) {
+      this.questionHTML = content;
+    } else {
       // parse markdown into html
       const { md2HTML } = await import("../../common/src/index.js");
-      questionEl.innerHTML = md2HTML(this.innerHTML.trim());
-    } else {
-      questionEl.innerHTML = this.innerHTML.trim();
-    }
-
-    /**
-     * type could be "smiley"(default) or "survey"
-     */
-    const type: SurveyType = this.type ?? "smiley";
-    this.type = type;
-    const div = this.shadowRoot.querySelector("div")!;
-    const { choice, readonly } = this;
-    div.innerHTML =
-      this.type === "rating"
-        ? `<nd-rating max="5" value="${choice}"></nd-rating>`
-        : `<ed-smiley value="${choice}"></ed-smiley>`;
-    if (readonly) {
-      // div.firstChild.setAttribue("readonly", "");
+      this.questionHTML = md2HTML(content);
     }
   }
 
-  private _handleResponse(evt: Event) {
-    // TODO handle a default base interface(date, url)
+  render() {
+    const choice = ifDefined(this.choice);
+    return html`
+      <p class="question" aria-description="question">
+        ${unsafeHTML(this.questionHTML)}
+      </p>
+      <div @click=${this._handleResponse}>
+        ${
+          this.type === "rating"
+            ? html`<nd-rating max="5" value=${choice}></nd-rating>`
+            : html`<ed-smiley value=${choice}></ed-smiley>`
+        }
+      </div>
+    `;
+  }
 
+  private _handleResponse(evt: Event) {
     // TODO get unique identifier of html element ie id or // dompath:
     // https://stackoverflow.com/a/69104350
 
-    const el = evt.target as HTMLInputElement;
-    const choice = el.getAttribute("value");
+    // the clicked ed-smiley or nd-rating, whose value is set on click
+    const value = (evt.target as EdSmiley | NudeRating).value;
 
     // if clicked outside a real choice return
-    if (!choice) return;
+    if (value === undefined || value === null || value === "") return;
+    const choice = String(value);
 
     const url = this.ownerDocument.location as Location;
-    // CustomEvent
     this.dispatchEvent(
       new CustomEvent("edEvent", {
         bubbles: true,
@@ -157,7 +136,7 @@ export class EdSurveyElement extends HTMLElement {
         },
       }),
     );
-    this.setAttribute("readonly", "");
+    this.readonly = true;
   }
 }
 
