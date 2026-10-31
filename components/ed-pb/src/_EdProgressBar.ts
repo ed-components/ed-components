@@ -1,67 +1,80 @@
-import { commonSheet, stylesheet } from "../../common/src/styles.js";
+import { css, html, LitElement } from "lit";
+import { ifDefined } from "lit/directives/if-defined.js";
+import { styleMap } from "lit/directives/style-map.js";
+import { commonSheet } from "../../common/src/styles.js";
 /** @module EdProgressBar
  *  Source: bootstrap 5
  *
  */
 
-// shared by all instances (adoptedStyleSheets)
-const sheet = stylesheet(`
-:host {
-  display: block;
-  border-radius: 0.3em;
-}
-#wrapper {
-  display: flex;
-  font: bold 1.1em var(--font-sans-serif, sans-serif);
-  margin: 0.3em 0;      
-}
-#label {
-  padding-left: 0.3em;
-  padding-right:0.5em ;
-  min-width: 7ch;
-}
-#progress {
+export class EdProgressBarElement extends LitElement {
+  // attached by LitElement, never null
+  declare readonly shadowRoot: ShadowRoot;
+
+  static properties = {
+    // between 0 and 100
+    percent: { type: Number, reflect: true },
+    label: { type: String },
+  };
+
+  static styles = [
+    commonSheet,
+    css`
+      :host {
+        display: block;
+        border-radius: 0.3em;
+      }
+      #wrapper {
+        display: flex;
+        font: bold 1.1em var(--font-sans-serif, sans-serif);
+        margin: 0.3em 0;
+      }
+      #label {
+        padding-left: 0.3em;
+        padding-right: 0.5em;
+        min-width: 7ch;
+      }
+      #progress {
         background-color: var(--gray-6, #868e96);
         border-radius: 0.25em;
         display: flex;
-        font-size: .75rem;
+        font-size: 0.75rem;
         width: 100%;
-    }
+      }
 
-#progress-bar {
+      #progress-bar {
         animation: 1s linear infinite progress-bar-stripes;
-        background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+        background-image: linear-gradient(
+          45deg,
+          rgba(255, 255, 255, 0.15) 25%,
+          transparent 25%,
+          transparent 50%,
+          rgba(255, 255, 255, 0.15) 50%,
+          rgba(255, 255, 255, 0.15) 75%,
+          transparent 75%,
+          transparent
+        );
         background-size: 1em 1em;
         border-radius: 0.3em;
         display: flex;
         flex-direction: column;
-        font-size: .75rem;
+        font-size: 0.75rem;
         justify-content: center;
         text-align: center;
         white-space: nowrap;
-        transition: width .6s ease;
-}
-@keyframes progress-bar-stripes {
+        transition: width 0.6s ease;
+      }
+      @keyframes progress-bar-stripes {
         0% {
-            background-position-x:1rem
-            }
-}
+          background-position-x: 1rem;
+        }
+      }
+    `,
+  ];
 
-`);
+  declare percent: number;
 
-const template = document.createElement("template");
-template.innerHTML = `
-  <div id="wrapper">
-      <div id="label"></div>
-      <div id="progress">
-          <div id="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
-      </div>
-  </div>
-  `;
-
-export class EdProgressBarElement extends HTMLElement {
-  // attached in the constructor, never null
-  declare readonly shadowRoot: ShadowRoot;
+  declare label?: string;
 
   static define(tagName = "ed-progress-bar") {
     // the element may be defined by several bundles or calls
@@ -72,66 +85,43 @@ export class EdProgressBarElement extends HTMLElement {
 
   constructor() {
     super();
-    this.attachShadow({ mode: "open" });
-    this.shadowRoot.adoptedStyleSheets = [commonSheet, sheet];
-    // rendered once: connectedCallback may run several times
-    this.shadowRoot.appendChild(template.content.cloneNode(true));
+    this.percent = 0;
   }
 
   connectedCallback() {
-    // between 0 and 100. Set here: a constructor must not add attributes, or
-    // document.createElement() returns an HTMLUnknownElement
+    super.connectedCallback();
+    // reflected now rather than at the next render. Not in the constructor:
+    // it must not add attributes, or document.createElement() returns an
+    // HTMLUnknownElement
     if (!this.hasAttribute("percent")) {
-      this.percent = "0";
-    }
-    this.shadowRoot.querySelector("#label")!.innerHTML = this.label ?? "";
-
-    const progress =
-      this.shadowRoot.querySelector<HTMLElement>("#progress-bar")!;
-    progress.ariaLabel = this.label;
-    progress.style.backgroundColor = this.style.backgroundColor;
-  }
-
-  static get observedAttributes() {
-    return ["percent", "label"];
-  }
-
-  attributeChangedCallback(name: string) {
-    switch (name) {
-      case "percent":
-        this.updateProgress();
-        break;
-
-      default:
-        break;
+      this.setAttribute("percent", "0");
     }
   }
 
-  get percent(): string | null {
-    return this.getAttribute("percent");
-  }
-
-  set percent(value: string) {
-    this.setAttribute("percent", value);
-  }
-
-  get label(): string | null {
-    return this.getAttribute("label");
-  }
-
-  set label(value: string) {
-    this.setAttribute("label", value);
-  }
-
-  async updateProgress() {
+  render() {
     const { percent } = this;
-    const progress =
-      this.shadowRoot.querySelector<HTMLElement>("#progress-bar");
-    if (progress && percent !== null) {
-      progress.innerHTML = `&nbsp;${percent}&nbsp;%`;
-      progress.style.width = `${percent}%`;
-      progress.setAttribute("aria-valuenow", percent);
-    }
+    return html`
+      <div id="wrapper">
+        <div id="label">${this.label ?? ""}</div>
+        <div id="progress">
+          <div
+            id="progress-bar"
+            role="progressbar"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow=${percent}
+            aria-label=${ifDefined(this.label)}
+            style=${styleMap({
+              width: `${percent}%`,
+              // color given on the host, e.g. by ed-pb
+              backgroundColor: this.style.backgroundColor,
+            })}
+          >
+            &nbsp;${percent}&nbsp;%
+          </div>
+        </div>
+      </div>
+    `;
   }
 }
 

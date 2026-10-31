@@ -1,33 +1,12 @@
+import { css, html, LitElement, type PropertyValues } from "lit";
 import { EdProgressBarElement } from "./_EdProgressBar.js";
-import { commonSheet, stylesheet } from "../../common/src/styles.js";
+import { commonSheet } from "../../common/src/styles.js";
 
 EdProgressBarElement.define();
 
 // integers, decimals (dot or comma) and scientific notation: 42, -3.14, 6,02e23
 const edNumRegex =
   /^:num:\s+(?<answer>[-+]?\d+(?:[.,]\d+)?(?:e[-+]?\d+)?)\s*$/im;
-
-// shared by all instances (adoptedStyleSheets)
-const sheet = stylesheet(`
-:host {
-  display: block;
-}
-main {
-  font-family: var(--ed-font-sans);
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  border-style: solid;
-  border-color: rgb(192, 192, 192);
-  border-radius: 2em;
-  padding: 0em 1em;
-}
-#progress {
-  position: sticky;
-  backdrop-filter: blur(23px);
-  top: 0;
-  z-index: 10;
-}
-`);
 
 /**
  * This component is a wrapper that allows to include multiple questions
@@ -39,11 +18,56 @@ main {
  * - numeric answers via vanilla ed-ans component.
  * @export
  * @class EdPbElement
- * @extends {HTMLElement}
+ * @extends {LitElement}
  */
-export class EdPbElement extends HTMLElement {
-  // attached in the constructor, never null
+export class EdPbElement extends LitElement {
+  // attached by LitElement, never null
   declare readonly shadowRoot: ShadowRoot;
+
+  static properties = {
+    label: { type: String },
+    // markdown content, instead of the element content
+    emd: { type: String },
+    // HTML lowercases attribute names
+    isHTML: { type: Boolean, attribute: "ishtml" },
+    // progress bars, as percentages
+    progress: { state: true, attribute: false },
+    result: { state: true, attribute: false },
+  };
+
+  static styles = [
+    commonSheet,
+    css`
+      :host {
+        display: block;
+      }
+      main {
+        font-family: var(--ed-font-sans);
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        border-style: solid;
+        border-color: rgb(192, 192, 192);
+        border-radius: 2em;
+        padding: 0em 1em;
+      }
+      #progress {
+        position: sticky;
+        backdrop-filter: blur(23px);
+        top: 0;
+        z-index: 10;
+      }
+    `,
+  ];
+
+  declare label?: string;
+
+  declare emd?: string;
+
+  declare isHTML: boolean;
+
+  declare private progress: number;
+
+  declare private result: number;
 
   // number of answers handled in the problem
   private nAnsTot = 0;
@@ -54,6 +78,9 @@ export class EdPbElement extends HTMLElement {
   // score on pb as percentage
   private score = 0;
 
+  // markdown content being turned into questions
+  private processing?: Promise<void>;
+
   static define(tagName = "ed-pb") {
     // the element may be defined by several bundles or calls
     if (!customElements.get(tagName)) {
@@ -61,83 +88,75 @@ export class EdPbElement extends HTMLElement {
     }
   }
 
-  static get observedAttributes() {
-    // HTML lowercases attribute names: isHTML is observed as ishtml
-    return ["label", "description", "emd", "ishtml"];
-  }
-
-  get label(): string | null {
-    return this.getAttribute("label");
-  }
-
-  set label(value: string) {
-    this.setAttribute("label", value);
-  }
-
-  get emd(): string | null {
-    return this.getAttribute("emd");
-  }
-
-  set emd(value: string) {
-    // content is processed by attributeChangedCallback
-    this.setAttribute("emd", value);
-  }
-
-  get isHTML() {
-    return this.hasAttribute("isHTML");
-  }
-
-  set isHTML(isHTML) {
-    if (isHTML) {
-      this.setAttribute("isHTML", "");
-    } else {
-      this.removeAttribute("isHTML");
-    }
-  }
-
-  async attributeChangedCallback(name: string) {
-    // before connection, connectedCallback takes care of processing
-    if (name === "emd" && this.isConnected) {
-      await this._processEmd();
-    }
-  }
-
   constructor() {
     super();
-    this.attachShadow({ mode: "open" });
-    this.shadowRoot.adoptedStyleSheets = [commonSheet, sheet];
-    this.shadowRoot.innerHTML = `
-    <main>
-    <section id="progress">
-      <h1 id="label"></h1>
-      <ed-progress-bar id="bar-progress" label="Progress" percent="0" style="background-color: var(--blue-7, #1c7ed6);"></ed-progress-bar>
-      <ed-progress-bar id="bar-results" label="Success" percent="0" style="background-color: var(--green-7, #37b24d);"></ed-progress-bar>
-      <hr>
-    </section>
-    <article></article>
-    </main>
+    this.isHTML = false;
+    this.progress = 0;
+    this.result = 0;
+  }
+
+  render() {
+    return html`
+      <main>
+        <section id="progress">
+          <h1 id="label">${this.label ?? ""}</h1>
+          <ed-progress-bar
+            id="bar-progress"
+            label="Progress"
+            percent=${this.progress}
+            style="background-color: var(--blue-7, #1c7ed6);"
+          ></ed-progress-bar>
+          <ed-progress-bar
+            id="bar-results"
+            label="Success"
+            percent=${this.result}
+            style="background-color: var(--green-7, #37b24d);"
+          ></ed-progress-bar>
+          <hr />
+        </section>
+        <!-- filled from the markdown content, not by the template -->
+        <article></article>
+      </main>
     `;
+  }
+
+  protected firstUpdated() {
     // as a wrapper ed-pb catches events from his ed-components childrens
-    // (registered once here, connectedCallback may run several times)
     this.shadowRoot
       .querySelector("article")!
       .addEventListener("edEvent", this._handleResponse.bind(this));
   }
 
-  private async _processEmd() {
-    if (this.label) {
-      this.shadowRoot.querySelector("#label")!.innerHTML = this.label;
+  protected updated(changed: PropertyValues<this>) {
+    // processed once rendered, then when the content changes (moving the
+    // element in the page keeps the answers)
+    if (
+      this.processing === undefined ||
+      changed.has("emd") ||
+      changed.has("isHTML")
+    ) {
+      this.processing = this._processEmd();
     }
+  }
+
+  /** Also wait for the questions built from the markdown content */
+  protected async getUpdateComplete(): Promise<boolean> {
+    const result = await super.getUpdateComplete();
+    await this.processing;
+    return result;
+  }
+
+  private async _processEmd() {
     // TODO use a template before mounting?
-    const emdContent =
-      this.emd === null || this.emd === ""
-        ? this.innerHTML.trim()
-        : this.emd.trim();
+    const emdContent = this.emd ? this.emd.trim() : this.innerHTML.trim();
 
     // parse markdown into html
     const { md2HTML } = this.isHTML
       ? { md2HTML: (s: string) => s }
       : await import("../../common/src/index.js");
+    // state changes below must not happen during the update that started
+    // processing (with html content, nothing was awaited)
+    await null;
 
     // Content may be processed several times (emd changes, attributeChangedCallback
     // and connectedCallback racing on upgrade): reset state after the await so
@@ -145,9 +164,8 @@ export class EdPbElement extends HTMLElement {
     this.nAnsTot = 0;
     this.nAns = 0;
     this.score = 0;
-    this.shadowRoot
-      .querySelectorAll("ed-progress-bar")
-      .forEach((bar) => bar.setAttribute("percent", "0"));
+    this.progress = 0;
+    this.result = 0;
 
     const article = this.shadowRoot.querySelector("article")!;
     article.innerHTML = md2HTML(emdContent);
@@ -199,27 +217,15 @@ export class EdPbElement extends HTMLElement {
         }
       });
   }
-  async connectedCallback() {
-    await this._processEmd();
-  }
-
   private _handleResponse(evt: Event) {
     evt.stopPropagation();
     this.nAns += 1;
     // TODO need to type custom edevents!
     this.score += (evt as CustomEvent<{ score: number }>).detail.score;
 
-    const progressBar =
-      this.shadowRoot.querySelector<EdProgressBarElement>("#bar-progress")!;
-    progressBar.setAttribute(
-      "percent",
-      String(Math.round((100 * this.nAns) / this.nAnsTot)),
-    );
-
-    const resultBar =
-      this.shadowRoot.querySelector<EdProgressBarElement>("#bar-results")!;
+    this.progress = Math.round((100 * this.nAns) / this.nAnsTot);
     const score = Math.round(this.score / this.nAnsTot);
-    resultBar.setAttribute("percent", String(score));
+    this.result = score;
 
     // if finished bubble event
     if (this.nAns < this.nAnsTot) {

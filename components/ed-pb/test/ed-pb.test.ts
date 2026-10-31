@@ -145,4 +145,24 @@ Question
       EdProgressBarElement.define();
     }).not.to.throw();
   });
+
+  it("Keeps the answers when moved in the DOM", async () => {
+    const el = await fixture<EdPbElement>(`<ed-pb>
+Question
+
+- [x] Yes
+- [ ] No
+</ed-pb>`);
+    el.shadowRoot
+      .querySelector("ed-choice")!
+      .shadowRoot.querySelector<HTMLElement>("ed-input-radio.good-answer")!
+      .click();
+    await el.updateComplete;
+    const progress = () =>
+      el.shadowRoot.querySelector("#bar-progress")!.getAttribute("percent");
+    expect(progress()).to.equal("100");
+    await moveInDom(el);
+    await el.updateComplete;
+    expect(progress()).to.equal("100");
+  });
 });
