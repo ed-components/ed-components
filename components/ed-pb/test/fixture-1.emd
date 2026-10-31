@@ -1,0 +1,11 @@
+<ed-pb>
+1. Allow code between question and choices.
+           
+   ```c
+   This is code
+   ```
+   
+   - [x] Good
+   - [ ] Bad
+           
+</ed-pb>

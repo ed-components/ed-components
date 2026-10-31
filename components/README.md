@@ -1,6 +1,6 @@
-# ed-components &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ed-components/ed-components/blob/main/LICENSE) [![npm version](https://img.shields.io/npm/v/@ed-components/ed-components.svg?style=flat)](https://www.npmjs.com/package/@ed-components/ed-components)
+# ed-components
 
- <!-- Badges restants [![CircleCI Status](https://circleci.com/gh/facebook/react.svg?style=shield)](https://circleci.com/gh/facebook/react) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://reactjs.org/docs/how-to-contribute.html#your-first-pull-request) -->
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ed-components/ed-components/blob/main/LICENSE) [![npm version](https://img.shields.io/npm/v/@ed-components/ed-components.svg?style=flat)](https://www.npmjs.com/package/@ed-components/ed-components)
 
 > A set of web-components for education.
 
@@ -18,12 +18,12 @@
 
 - [`<ed-choice>`](./ed-choice/): Single or multiple choice answer.
 - [`<ed-ans>`](./ed-ans/): Simple text answer analyzed with NLP.
-- [`<ed-num>`](./ed-num/)
+- [`<ed-num>`](./ed-num/): Numeric answer.
+- [`<ed-speech>`](./ed-speech/): Speech to text answer.
 
 ### WIP
 
 - [`<ed-survey>`](./ed-survey/)
-- [`<ed-speech>`](./ed-speech/)
 
 ## Importing all elements
 

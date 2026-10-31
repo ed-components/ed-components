@@ -111,6 +111,10 @@ const messages = {
     msg: "Permission to use the microphone was denied. Allow it in the browser settings of this page.",
     class: "alert warning",
   },
+  insecure: {
+    msg: "The microphone is only available on secure pages (https).",
+    class: "alert warning",
+  },
   unsupported: {
     msg: "Recording audio is not supported by this browser.",
     class: "alert warning",
@@ -416,6 +420,8 @@ export class EdSpeechElement extends HTMLElement {
 
 /** Message for an error when starting to record */
 function recordingError(error: unknown): Message {
+  // browsers hide the microphone API on http pages (except localhost)
+  if (!window.isSecureContext) return "insecure";
   if (!navigator.mediaDevices || typeof MediaRecorder === "undefined") {
     return "unsupported";
   }
