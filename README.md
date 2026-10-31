@@ -76,6 +76,12 @@ The website is build using eleventy. Each `README.md` file is turned into a `htm
 
 Each `html` source code starting with `<ed-` is turned into an interactive demo.
 
+Run `pnpm start` to work on the site at <http://localhost:8080>. To test on a
+phone, run `pnpm start:mobile`: it also opens a public https tunnel with
+[localtunnel](https://theboroer.github.io/localtunnel-www/) (the microphone of
+`ed-speech` needs https). The tunnel page asks for a password: the public IP of
+the computer, given by <https://loca.lt/mytunnelpassword>.
+
 ## Syntax overview
 
 Ed components are sort of cousin of

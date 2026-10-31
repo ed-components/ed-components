@@ -2,3 +2,9 @@
   for = "/*"
   [headers.values]
     X-Robots-Tag = "all"
+[[plugins]]
+  package = "netlify-plugin-a11y"
+
+  [plugins.inputs]
+    checkPaths = ["/"]
+    timeout = 60000
