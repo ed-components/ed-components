@@ -32,9 +32,18 @@ export class EdProgressBarElement extends LitElement {
       #label {
         padding-left: 0.3em;
         padding-right: 0.5em;
-        /* same width for the bars of an ed-pb, set from its longest label */
+        /* same width for the bars of an ed-pb, set from its longest label in
+        ch: exact with a monospace font, whatever the letters */
         inline-size: var(--ed-progress-label-width, auto);
         flex-shrink: 0;
+        font-family: var(
+          --font-mono,
+          ui-monospace,
+          SFMono-Regular,
+          Menlo,
+          Consolas,
+          monospace
+        );
       }
       #progress {
         background-color: var(--gray-6, #868e96);
@@ -61,6 +70,8 @@ export class EdProgressBarElement extends LitElement {
         display: flex;
         flex-direction: column;
         font-size: 0.75rem;
+        /* same width for all digits: the text doesn't move with the value */
+        font-variant-numeric: tabular-nums;
         justify-content: center;
         text-align: center;
         white-space: nowrap;

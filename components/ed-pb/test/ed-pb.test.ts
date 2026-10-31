@@ -1,5 +1,6 @@
 import { fixture, expect, html, oneEvent, waitUntil } from "@open-wc/testing";
 import { moveInDom } from "../../common/test/helpers.js";
+import { registerMessages } from "../../common/src/i18n.js";
 import { EdPbElement } from "../src/EdPb.js";
 import "../src/ed-pb.js";
 import { EdProgressBarElement } from "../src/_EdProgressBar.js";
@@ -205,5 +206,21 @@ Question
       );
       expect(labels[0]).to.equal(labels[1]);
     }
+  });
+
+  it("Fits labels of wide letters, with tabular percentages", async () => {
+    // a test language with wide letters, which overflow ch in proportional fonts
+    registerMessages("zz", { progress: "WWWMMM", success: "Ok" });
+    const el = await fixture<EdPbElement>(
+      `<ed-pb ui-lang="zz" label="title"></ed-pb>`,
+    );
+    const bar =
+      el.shadowRoot.querySelector<EdProgressBarElement>("ed-progress-bar")!;
+    const label = bar.shadowRoot.querySelector<HTMLElement>("#label")!;
+    expect(label.scrollWidth).to.be.at.most(label.clientWidth);
+    const percent = bar.shadowRoot.querySelector("#progress-bar")!;
+    expect(getComputedStyle(percent).fontVariantNumeric).to.equal(
+      "tabular-nums",
+    );
   });
 });
