@@ -9,6 +9,8 @@ import { EdPbElement } from "./ed-pb/src/index.js";
 import { EdMicroElement } from "./ed-micro/src/index.js";
 
 // exports
+export { registerMessages } from "./common/src/i18n.js";
+export type { Messages } from "./common/src/i18n.js";
 export { EdAnsElement };
 export { EdNumElement };
 export { EdChoiceElement };
