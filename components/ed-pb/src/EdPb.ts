@@ -1,8 +1,8 @@
 import { css, html, LitElement, type PropertyValues } from "lit";
 import { styleMap } from "lit/directives/style-map.js";
-import { EdProgressBarElement } from "./_EdProgressBar.js";
 import { t } from "../../common/src/i18n.js";
 import { commonSheet } from "../../common/src/styles.js";
+import { EdProgressBarElement } from "./_EdProgressBar.js";
 
 EdProgressBarElement.define();
 

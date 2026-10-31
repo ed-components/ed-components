@@ -1,7 +1,7 @@
-import { html, fixture, expect, oneEvent, waitUntil } from "@open-wc/testing";
-import { EdChoiceElement } from "../src/EdChoice.js";
-import type { EdInputCheckBox } from "../src/_EdInputCheckBox.js";
+import { expect, fixture, html, oneEvent, waitUntil } from "@open-wc/testing";
 import { moveInDom } from "../../common/test/helpers.js";
+import type { EdInputCheckBox } from "../src/_EdInputCheckBox.js";
+import { EdChoiceElement } from "../src/EdChoice.js";
 
 import "../src/ed-choice.js";
 

@@ -2,13 +2,14 @@
 // wink-nlp English model. Until then, ed-ans is not rewritten with Lit like
 // the other components, and its test module can't be imported (wink-nlp).
 //  TODO move this as dynamic import based on attribute lang
+
+import model from "wink-eng-lite-web-model";
 import winkNLP from "wink-nlp";
 import similarity from "wink-nlp/utilities/similarity";
-import model from "wink-eng-lite-web-model";
 
 import { t } from "../../common/src/i18n.js";
-import { submitButtonHTML } from "../../common/src/submitButton.js";
 import { commonSheet, stylesheet } from "../../common/src/styles.js";
+import { submitButtonHTML } from "../../common/src/submitButton.js";
 
 const nlp = winkNLP(model);
 // Acquire "its" and "as" helpers from nlp.

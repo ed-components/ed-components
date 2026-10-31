@@ -1,4 +1,4 @@
-import { fixture, expect } from "@open-wc/testing";
+import { expect, fixture } from "@open-wc/testing";
 import { EdAnsElement } from "../src/EdAns.js";
 import "../src/ed-ans.js";
 

@@ -1,12 +1,12 @@
 // Largerly inspired from https://github.com/modernweb-dev/web/issues/1954#issuecomment-1285280464
 
-import fs from "fs";
+import rollupCommonjs from "@rollup/plugin-commonjs";
+import rollupJson from "@rollup/plugin-json";
+import rollupResolve from "@rollup/plugin-node-resolve";
 // import { playwrightLauncher } from '@web/test-runner-playwright';
 import { esbuildPlugin } from "@web/dev-server-esbuild";
 import { fromRollup } from "@web/dev-server-rollup";
-import rollupCommonjs from "@rollup/plugin-commonjs";
-import rollupResolve from "@rollup/plugin-node-resolve";
-import rollupJson from "@rollup/plugin-json";
+import fs from "fs";
 
 const resolve = fromRollup(rollupResolve);
 const commonjs = fromRollup(rollupCommonjs);

@@ -1,12 +1,14 @@
 // convert to es module
-import path from "node:path";
-import { fileURLToPath } from "url";
+
 import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { customElementsManifestToMarkdown } from "@custom-elements-manifest/to-markdown";
+import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 import markdownit from "markdown-it";
+
 const md = markdownit();
 
 export default {

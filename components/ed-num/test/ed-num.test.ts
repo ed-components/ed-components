@@ -1,6 +1,6 @@
-import { fixture, expect, oneEvent } from "@open-wc/testing";
-import { EdNumElement } from "../src/EdNum.js";
+import { expect, fixture, oneEvent } from "@open-wc/testing";
 import { moveInDom } from "../../common/test/helpers.js";
+import { EdNumElement } from "../src/EdNum.js";
 import "../src/ed-num.js";
 
 describe("EdNum tests", () => {

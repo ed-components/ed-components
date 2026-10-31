@@ -1,4 +1,4 @@
-import { fixture, expect, html, waitUntil } from "@open-wc/testing";
+import { expect, fixture, html, waitUntil } from "@open-wc/testing";
 import { moveInDom } from "../../common/test/helpers.js";
 import { EdMicroElement } from "../src/EdMicro.js";
 import "../src/ed-micro.js";

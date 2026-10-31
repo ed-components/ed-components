@@ -1,10 +1,10 @@
 import { css, html, LitElement } from "lit";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
-import { NudeRating } from "./nudeui/nd-rating.js";
-import { EdSmiley } from "./_EdSmiley.js";
 import { t } from "../../common/src/i18n.js";
 import { commonSheet } from "../../common/src/styles.js";
+import { EdSmiley } from "./_EdSmiley.js";
+import { NudeRating } from "./nudeui/nd-rating.js";
 
 NudeRating.define();
 EdSmiley.define();

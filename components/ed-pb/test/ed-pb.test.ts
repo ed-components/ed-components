@@ -1,6 +1,6 @@
-import { fixture, expect, html, oneEvent, waitUntil } from "@open-wc/testing";
-import { moveInDom } from "../../common/test/helpers.js";
+import { expect, fixture, html, oneEvent, waitUntil } from "@open-wc/testing";
 import { registerMessages } from "../../common/src/i18n.js";
+import { moveInDom } from "../../common/test/helpers.js";
 import { EdPbElement } from "../src/EdPb.js";
 import "../src/ed-pb.js";
 import { EdProgressBarElement } from "../src/_EdProgressBar.js";

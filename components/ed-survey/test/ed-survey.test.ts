@@ -1,6 +1,6 @@
-import { fixture, expect } from "@open-wc/testing";
-import { EdSurveyElement } from "../src/EdSurvey.js";
+import { expect, fixture } from "@open-wc/testing";
 import { moveInDom } from "../../common/test/helpers.js";
+import { EdSurveyElement } from "../src/EdSurvey.js";
 import "../src/ed-survey.js";
 
 describe("EdSurveyElement", () => {

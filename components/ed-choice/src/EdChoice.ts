@@ -1,9 +1,9 @@
 import { css, html, LitElement, type PropertyValues } from "lit";
 import { t } from "../../common/src/i18n.js";
+import { commonSheet } from "../../common/src/styles.js";
 import { submitButtonHTML } from "../../common/src/submitButton.js";
 import { EdInputCheckBox } from "./_EdInputCheckBox.js";
 import { EdInputRadio } from "./_EdInputRadio.js";
-import { commonSheet } from "../../common/src/styles.js";
 
 EdInputCheckBox.define();
 EdInputRadio.define();

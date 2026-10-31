@@ -9,11 +9,11 @@ import {
   DEFAULT_TRANSFORMERS_URL,
   MAX_RECORDING_SECONDS,
   preloadModel,
-  recordMicrophone,
-  transcribeWithWhisper,
   type Recorder,
   type Recording,
+  recordMicrophone,
   type Transcriber,
+  transcribeWithWhisper,
 } from "./whisper.js";
 
 // from bootstrap icons

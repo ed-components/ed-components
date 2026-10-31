@@ -1,7 +1,7 @@
-import { fixture, expect, oneEvent, waitUntil } from "@open-wc/testing";
+import { expect, fixture, oneEvent, waitUntil } from "@open-wc/testing";
 import { EdSpeechElement } from "../src/EdSpeech.js";
-import { normalize, similarityScore } from "../src/similarity.js";
 import { SilenceDetector, trimSilence } from "../src/silence.js";
+import { normalize, similarityScore } from "../src/similarity.js";
 import type { RecordOptions, TranscribeOptions } from "../src/whisper.js";
 import "../src/ed-speech.js";
 
