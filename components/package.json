@@ -14,8 +14,12 @@
   "bugs": "https://github.com/ed-components/ed-components/issues",
   "dependencies": {
     "lit": "catalog:",
+    "mdast-util-from-markdown": "catalog:",
+    "mdast-util-gfm-task-list-item": "catalog:",
+    "mdast-util-math": "catalog:",
     "micromark": "catalog:",
     "micromark-extension-gfm": "catalog:",
+    "micromark-extension-gfm-task-list-item": "catalog:",
     "micromark-extension-math": "catalog:",
     "tslib": "catalog:",
     "wink-eng-lite-web-model": "catalog:",
@@ -24,6 +28,7 @@
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "catalog:",
     "@open-wc/testing": "catalog:",
+    "@types/mdast": "catalog:",
     "@rollup/plugin-commonjs": "catalog:",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
