@@ -1,5 +1,16 @@
 # @ed-components/ed-components
 
+## 0.3.0
+
+### Minor Changes
+
+- fa427e2: A question is written the same way in a problem and in its element alone, following the new [Educational Markdown specification](https://github.com/ed-components/ed-components/blob/main/spec/emd.md): `ed-num` accepts a question with `- :num: 3.14` and shows its stem (the expected number alone is still accepted), `ed-speech` accepts the expected answer as `- :say: hello` (the `answer` attribute still works and takes precedence), and `ed-pb` turns `:say:` lists into `ed-speech`. Questions are found by a common emd parser: `ed-pb` no longer counts a task list without correct choice as a question (the problem could never be completed), numbers question labels by question, and shows HTML content (`ishtml`) without turning its lists into questions.
+
+### Patch Changes
+
+- 4c28604: `ed-choice` shows feedbacks once the learner answered: a blockquote under an answer is the feedback of this answer, shown when it is chosen, as correct or incorrect; a blockquote right after the list is the feedback of the question, such as the solution. Feedbacks are displayed by a new `ed-feedback` element, hidden until revealed and announced to screen readers. In `ed-pb`, the question feedback stays hidden with its question.
+- e0197ba: `ed-num` and `ed-speech` show feedbacks once the learner answered: the score with the correct answer, as correct or incorrect, then the feedback of the question, a blockquote after the answer (`ed-num`) or at the end of the question (`ed-speech`). In `ed-pb`, a blockquote right after a `:num:` list is the feedback of its `ed-num`.
+
 ## 0.2.1
 
 ### Patch Changes
