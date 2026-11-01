@@ -29,6 +29,8 @@
             <blockquote>
                 <p>{{ npmPackage.description }}</p>
             </blockquote>
+            {# each element is imported on its own, see components/README.md #}
+            <pre class="language-js"><code class="language-js">import "@ed-components/ed-components/{{ id }}";</code></pre>
         {% endif %}
         
         {# Include tab layout for components: doc, api, playground #}

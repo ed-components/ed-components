@@ -5,10 +5,6 @@ import { moveInDom } from "../../common/test/helpers.js";
 import { EdPbElement } from "../src/EdPb.js";
 import "../src/ed-pb.js";
 import { EdProgressBarElement } from "../src/_EdProgressBar.js";
-// ed-pb wraps questions in ed-choice components
-import "../../ed-choice/src/ed-choice.js";
-import "../../ed-num/src/ed-num.js";
-import "../../ed-speech/src/ed-speech.js";
 
 describe("EdPb tests", () => {
   it("passes the a11y audit", async () => {
@@ -171,6 +167,13 @@ Question
     await waitUntil(() => el.shadowRoot.querySelector("ed-ans"));
     expect(el.shadowRoot.querySelector("ed-ans")!.hasAttribute("html")).to.be
       .true;
+  });
+
+  it("Defines the components answering its questions", () => {
+    // imported alone: ed-pb defines them
+    for (const tag of ["ed-choice", "ed-num", "ed-speech"]) {
+      expect(customElements.get(tag), tag).to.exist;
+    }
   });
 
   it("Can be defined twice", () => {

@@ -3,9 +3,16 @@ import { styleMap } from "lit/directives/style-map.js";
 import type { FoundQuestion } from "../../common/src/emd.js";
 import { t } from "../../common/src/i18n.js";
 import { commonSheet } from "../../common/src/styles.js";
+import { EdChoiceElement } from "../../ed-choice/src/EdChoice.js";
+import { EdNumElement } from "../../ed-num/src/EdNum.js";
+import { EdSpeechElement } from "../../ed-speech/src/EdSpeech.js";
 import { EdProgressBarElement } from "./_EdProgressBar.js";
 
 EdProgressBarElement.define();
+// the components answering the questions, created by their tag name
+EdChoiceElement.define();
+EdNumElement.define();
+EdSpeechElement.define();
 
 /**
  * The question feedback, a blockquote right after the list, moved into the

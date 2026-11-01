@@ -49,6 +49,30 @@
     "./common.js": {
       "types": "./dist/dts/common/src/index.d.ts",
       "default": "./dist/esm/common/src/index.js"
+    },
+    "./ed-choice": {
+      "types": "./dist/dts/ed-choice/src/ed-choice.d.ts",
+      "default": "./dist/esm/ed-choice/src/ed-choice.js"
+    },
+    "./ed-micro": {
+      "types": "./dist/dts/ed-micro/src/ed-micro.d.ts",
+      "default": "./dist/esm/ed-micro/src/ed-micro.js"
+    },
+    "./ed-num": {
+      "types": "./dist/dts/ed-num/src/ed-num.d.ts",
+      "default": "./dist/esm/ed-num/src/ed-num.js"
+    },
+    "./ed-pb": {
+      "types": "./dist/dts/ed-pb/src/ed-pb.d.ts",
+      "default": "./dist/esm/ed-pb/src/ed-pb.js"
+    },
+    "./ed-speech": {
+      "types": "./dist/dts/ed-speech/src/ed-speech.d.ts",
+      "default": "./dist/esm/ed-speech/src/ed-speech.js"
+    },
+    "./ed-survey": {
+      "types": "./dist/dts/ed-survey/src/ed-survey.d.ts",
+      "default": "./dist/esm/ed-survey/src/ed-survey.js"
     }
   },
   "files": [
@@ -73,7 +97,11 @@
     "test": "wtr --coverage",
     "test:watch": "wtr --watch"
   },
-  "sideEffects": false,
+  "sideEffects": [
+    "./dist/ed-components.js",
+    "./dist/esm/ed-components.js",
+    "./dist/esm/*/src/ed-*.js"
+  ],
   "types": "dist/index.d.ts",
   "customElements": "ed-survey/custom-elements.json"
 }

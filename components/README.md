@@ -54,7 +54,29 @@ import  registerElements from "@ed-components/ed-components";
 registerElements()
 ```
 
-You also can register the elements you use and rename them. See dedicated pages for each component.
+## Importing one element
+
+Each element can be imported on its own: the import registers it, with the
+elements it uses (`ed-pb` registers `ed-choice`, `ed-num` and `ed-speech`).
+
+```js
+import "@ed-components/ed-components/ed-choice";
+```
+
+The entry points are `ed-choice`, `ed-micro`, `ed-num`, `ed-pb`, `ed-speech`
+and `ed-survey`, also from a CDN:
+
+```js
+import "https://esm.sh/@ed-components/ed-components/ed-num";
+```
+
+To register an element under another name, import its class from the main
+entry point, bundlers keep only the elements you use:
+
+```js
+import { EdNumElement } from "@ed-components/ed-components";
+EdNumElement.define("my-num");
+```
 
 ## Styling
 
