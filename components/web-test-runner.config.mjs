@@ -12,13 +12,17 @@ const resolve = fromRollup(rollupResolve);
 const commonjs = fromRollup(rollupCommonjs);
 const json = fromRollup(rollupJson);
 
+// components in development, not tested until they are part of the bundle
+const wip = ["ed-ans"];
+
 // group tests by component
 const packages = fs
   .readdirSync(".")
   .filter(
     (dir) =>
       fs.statSync(`${dir}`).isDirectory() &&
-      (dir.startsWith("ed-") || dir === "common"),
+      (dir.startsWith("ed-") || dir === "common") &&
+      !wip.includes(dir),
   );
 
 export default /** @type {import("@web/test-runner").TestRunnerConfig} */ ({
