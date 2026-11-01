@@ -5,6 +5,8 @@ export default async function (eleventyConfig) {
   eleventyConfig.ignores.add("design/*");
   // changesets pending release, see .changeset/README.md
   eleventyConfig.ignores.add(".changeset/*");
+  // draft specification, not a documentation page yet
+  eleventyConfig.ignores.add("spec/*");
   eleventyConfig.watchIgnores.add("design/*");
   // eleventyConfig.addWatchTarget("./components/dist/index.js");
   eleventyConfig.addWatchTarget("./**/README.md");
