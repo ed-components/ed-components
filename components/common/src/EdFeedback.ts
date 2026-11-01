@@ -32,11 +32,15 @@ export class EdFeedbackElement extends LitElement {
     commonSheet,
     css`
       :host {
+        /* empty block until revealed: no blank line under the answers */
+        display: block;
+        --_color: var(--ed-primary);
+      }
+      :host([revealed]) {
         /* inline-block: the line-through of a wrong answer doesn't
         propagate to the feedback */
         display: inline-block;
         inline-size: 100%;
-        --_color: var(--ed-primary);
       }
       :host([type="correct"]) {
         --_color: var(--ed-success);
@@ -54,6 +58,13 @@ export class EdFeedbackElement extends LitElement {
       }
       .icon {
         color: var(--_color);
+      }
+      strong {
+        margin-inline-end: 0.5ch;
+      }
+      /* the first paragraph follows the heading, on the same line */
+      ::slotted(p:first-child) {
+        display: inline;
       }
       ::slotted(:first-child) {
         margin-block-start: 0.2em;
