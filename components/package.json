@@ -46,6 +46,14 @@
       "types": "./dist/dts/ed-components.d.ts",
       "default": "./dist/esm/ed-components.js"
     },
+    "./i18n": {
+      "types": "./dist/dts/common/src/i18n.d.ts",
+      "default": "./dist/esm/common/src/i18n.js"
+    },
+    "./emd": {
+      "types": "./dist/dts/common/src/emd.d.ts",
+      "default": "./dist/esm/common/src/emd.js"
+    },
     "./common.js": {
       "types": "./dist/dts/common/src/index.d.ts",
       "default": "./dist/esm/common/src/index.js"

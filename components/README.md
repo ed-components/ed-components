@@ -78,6 +78,21 @@ import { EdNumElement } from "@ed-components/ed-components";
 EdNumElement.define("my-num");
 ```
 
+## Other entry points
+
+- `@ed-components/ed-components/i18n`: `registerMessages` to change the
+  interface messages, see [Internationalization](../#internationalization).
+- `@ed-components/ed-components/emd`: `parseQuestions`, the parser of the
+  [Educational Markdown](https://github.com/ed-components/ed-components/blob/main/spec/emd.md)
+  questions, and the types of their model, without the elements.
+
+```js
+import { parseQuestions } from "@ed-components/ed-components/emd";
+
+parseQuestions("Value of $\\pi$?\n\n- :num: 3,14");
+// [{ question: { type: "numeric", stem: "Value of $\\pi$?", answer: 3.14 }, list: 0 }]
+```
+
 ## Styling
 
 Via CSS custom properties (variables) inspired by bootstrap.

@@ -70,13 +70,15 @@ Messages can be changed, or another language added, with `registerMessages`
 (missing messages fall back to English):
 
 ```js
-import { registerMessages } from "@ed-components/ed-components";
+import { registerMessages } from "@ed-components/ed-components/i18n";
 
 registerMessages("fr", { submit: "Valider" });
 registerMessages("de", { submit: "Prüfen", progress: "Fortschritt" });
 ```
 
-The message keys are listed in `components/common/src/i18n.ts`.
+The message keys are listed in `components/common/src/i18n.ts`, and typed by
+`Messages`. `@ed-components/ed-components/i18n` loads no element, unlike the
+main entry point from a CDN.
 
 ## events
 

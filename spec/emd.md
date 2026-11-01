@@ -262,7 +262,7 @@ problems.
 ## 6. Model
 
 Parsers produce this model, written as TypeScript types (implemented by
-`components/common/src/emd.ts`). Rich content is emd source, without the
+`components/common/src/emd.ts`, published as `@ed-components/ed-components/emd`). Rich content is emd source, without the
 indentation and blockquote markers of its container, so that each renderer
 converts it in its own format.
 
