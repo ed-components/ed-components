@@ -1,6 +1,17 @@
 ## Usage
 
-The correct answer is provided inside the element.
+The content is written as a numeric question of an [ed-pb](../ed-pb/)
+problem: the question, then the correct answer after `:num:` in a list.
+
+```html
+<ed-num>
+How many Wonders of the ancient World were there?
+
+- :num: 7
+</ed-num>
+```
+
+The correct answer alone is also accepted, written with a dot or a comma.
 
 ```html
 <ed-num>
@@ -40,9 +51,11 @@ solution, shown at the same time.
 
 ```html
 <ed-num>
-3.14
+Value of $\pi$ to two decimals?
 
-> $\pi$ is about 3.14, the ratio of a circle's circumference to its diameter.
+- :num: 3,14
+
+> $\pi$ is the ratio of a circle's circumference to its diameter.
 </ed-num>
 ```
 

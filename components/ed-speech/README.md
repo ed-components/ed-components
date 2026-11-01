@@ -21,6 +21,17 @@ shown, and the learner can submit it or try again.
 </ed-speech>
 ```
 
+The expected answer can also be written in the content, as in an
+[ed-pb](../ed-pb/) problem: after `:say:` in a list.
+
+```html
+<ed-speech lang="en">
+  Say «Hello».
+
+  - :say: Hello
+</ed-speech>
+```
+
 As in every ed-component, you can use Markdown as content.
 
 ```html
@@ -35,12 +46,15 @@ As in every ed-component, you can use Markdown as content.
 </ed-speech>
 ```
 
-A blockquote at the end of the question is its feedback, shown once the
-learner submitted the answer, with the score when there is an expected answer.
+A blockquote after the answer is the feedback of the question (at the end of
+the question without `:say:` list), shown once the learner submitted the
+answer, with the score when there is an expected answer.
 
 ```html
-<ed-speech lang="en" answer="heat">
+<ed-speech lang="en">
   Say **heat**.
+
+  - :say: heat
 
   > _heat_ has a long vowel, unlike _hit_.
 </ed-speech>
@@ -50,7 +64,8 @@ learner submitted the answer, with the score when there is an expected answer.
 
 - `lang`: language of the answer (`fr`, `en`, `es`…), defaults to the page
   language.
-- `answer`: expected answer. The `edEvent` then gets a `score` from 0 to 100,
+- `answer`: expected answer, instead of the `:say:` list. The `edEvent` then
+  gets a `score` from 0 to 100,
   the similarity between the transcription and the answer, ignoring case,
   accents and punctuation.
 - `silence`: seconds of silence after speech stopping the recording, `2` by

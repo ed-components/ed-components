@@ -10,6 +10,11 @@ Some specific markdown is wrapped inside an adapted ed-components.
    for text answers.
 3. Unordered lists with `num` metadata(`:num:`) are wrapped into `<ed-num>` for
    numeric answers.
+4. Unordered lists with `say` metadata(`:say:`) are wrapped into `<ed-speech>`
+   for spoken answers, in the page language.
+
+A question is written the same way in a problem and in its element alone, see
+the [Educational Markdown specification](https://github.com/ed-components/ed-components/blob/main/spec/emd.md).
 
 ```html
 <ed-pb>
@@ -81,8 +86,8 @@ Some specific markdown is wrapped inside an adapted ed-components.
 
 ### Feedbacks
 
-A blockquote right after the list of a choice or numeric question is its
-feedback, such as the solution, shown once the learner answered (see the
+A blockquote right after the list of a choice, numeric or speech question is
+its feedback, such as the solution, shown once the learner answered (see the
 feedbacks of [ed-choice](../ed-choice/#feedbacks) and
 [ed-num](../ed-num/#feedback)).
 

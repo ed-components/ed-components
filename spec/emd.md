@@ -1,7 +1,7 @@
 # Educational Markdown (emd)
 
-**Draft 0.1** · 2026-11-01 · Status: working draft, describes the syntax
-implemented by ed-components 0.2 and the questions it raises.
+**Draft 0.2** · 2026-11-01 · Status: working draft, describes the syntax
+implemented by ed-components and the questions it raises.
 
 Educational Markdown (emd) is Markdown extended to write exercises: questions,
 answers, scores and feedbacks. This specification defines **what an author
@@ -58,6 +58,7 @@ A question is made of:
 | `- [ ]` or `- [x]`     | choice          | `ed-choice`   |
 | `- :num: <number>`     | numeric         | `ed-num`      |
 | `- :100: <text>`       | text (WIP)      | `ed-ans`      |
+| `- :say: <text>`       | speech          | `ed-speech`   |
 
 Any other bullet list is ordinary content.
 
@@ -120,7 +121,7 @@ The learner answers a number, with a dot or a comma as decimal separator.
   asked ([open question 9.2](#92-question-options)) or when `a = 0`.
 
 Options of the HTML element (`min`, `max`, `step`, `eval`) have no emd syntax
-yet.
+yet ([open question 9.2](#92-question-options)).
 
 ### 3.3 Text (work in progress)
 
@@ -137,19 +138,49 @@ What is the capital of France?
 
 **Score**: the best product of the similarity between the response and an
 answer with the score of that answer. The similarity is implementation
-defined: ed-components 0.2 compare bags of words, a language model is planned.
+defined: ed-components compare bags of words, a language model is planned.
 
-### 3.4 Standalone elements
+### 3.4 Speech
 
-ed-components can also be used one question at a time. Their content is emd,
-with differences listed in [section 9.1](#91-one-syntax-per-question-type):
+The list has one item: `:say:` then the expected answer, that the learner
+says.
 
-- `ed-choice`: a stem and a choice list;
-- `ed-num`: the expected number alone (no `:num:` list), then an optional
-  question feedback;
-- `ed-speech`: a stem, then an optional question feedback; the expected answer
-  is the `answer` attribute (no emd syntax);
-- `ed-survey`: a stem, without answer nor score.
+```md
+Say «hello».
+
+- :say: hello
+```
+
+**Score**: the similarity between the transcription of the response and the
+expected answer, ignoring case, accents and punctuation (ed-components use a
+normalized Levenshtein distance). The language of the answer has no emd syntax
+yet ([open question 9.2](#92-question-options)): it is the page language.
+
+### 3.5 Standalone elements
+
+ed-components can also be used one question at a time: the content of the
+element is **one question, written as in a problem**, so that a question can
+be moved between a problem and an element unchanged.
+
+```md
+<ed-num>
+Value of $\pi$?
+
+- :num: 3,14
+
+> $\pi \approx 3.14159$
+</ed-num>
+```
+
+For compatibility, ed-components also accept:
+
+- `ed-num`: the expected number alone, then an optional question feedback
+  (`3,14`, equivalent to `- :num: 3,14`);
+- `ed-speech`: a stem without answer list, the expected answer being the
+  `answer` attribute (which also overrides a `:say:` list); a blockquote at
+  the end is then the question feedback.
+
+`ed-survey` has a stem only, without answer nor score.
 
 ## 4. Feedbacks
 
@@ -160,7 +191,9 @@ specific places:
   learner selects this choice, as correct or incorrect.
 - **question feedback**: a blockquote right after the answer list (same
   container, no other block in between), such as the solution. It is shown
-  once the learner answers, whatever the answer.
+  once the learner answers, whatever the answer. A question without answer
+  list (a standalone `ed-speech` without `:say:` list) has its question
+  feedback at the end.
 
 ```md
 What is $E$ in $E=mc^2$?
@@ -210,10 +243,12 @@ item of an ordered list:
    > The others were destroyed by earthquakes and fires.
 ```
 
-- Every answer list of the document is a question, in document order.
+- Every answer list of the document is a question, in document order. Lists
+  inside a question (in a choice or a feedback) are not questions.
+- The stem of a question is the content of its container before the answer
+  list, after the previous question of the same container.
 - Each question gets a label: `Q<n>: ` followed by the first 30 characters of
-  its container text, where `n` is the position of the list among all the
-  lists of the document (questions or not).
+  the text of its stem, where `n` is the number of the question.
 - The score of the problem is the mean of the question scores, unanswered
   questions counting 0. Renderers SHOULD show the progress (answered
   questions) and the score while answering.
@@ -226,20 +261,25 @@ problems.
 
 ## 6. Model
 
-Parsers produce this model, written as TypeScript types. Rich content is a list
-of [mdast](https://github.com/syntax-tree/mdast) nodes (the Markdown syntax
-tree of the unified ecosystem, with `math` and `inlineMath` nodes), so that
-each renderer converts it in its own format.
+Parsers produce this model, written as TypeScript types (implemented by
+`components/common/src/emd.ts`). Rich content is emd source, without the
+indentation and blockquote markers of its container, so that each renderer
+converts it in its own format.
 
 ```ts
-type Content = import("mdast").RootContent[];
+/** emd source */
+type Content = string;
 
 interface Document {
   type: "document";
   children: (Content[number] | Question)[];
 }
 
-type Question = ChoiceQuestion | NumericQuestion | TextQuestion;
+type Question =
+  | ChoiceQuestion
+  | NumericQuestion
+  | TextQuestion
+  | SpeechQuestion;
 
 interface QuestionBase {
   /** Content before the answer list */
@@ -262,17 +302,21 @@ interface ChoiceQuestion extends QuestionBase {
 interface NumericQuestion extends QuestionBase {
   type: "numeric";
   answer: number;
-  evaluation: "relative" | "exact";
-  min?: number;
-  max?: number;
-  step?: number;
 }
 
 interface TextQuestion extends QuestionBase {
   type: "text";
   answers: { text: string; score: number }[];
 }
+
+interface SpeechQuestion extends QuestionBase {
+  type: "speech";
+  answer: string;
+}
 ```
+
+Options (numeric evaluation, bounds, speech language) will be added with their
+syntax ([open question 9.2](#92-question-options)).
 
 A problem is a `Document` whose questions are scored together.
 
@@ -293,8 +337,8 @@ a blank to fill, then MAY add an answer key.
 
 ## 8. Conformance examples
 
-Each example pairs an emd input with its model. `Content` is abbreviated as
-its text in quotes. They SHOULD become fixture files
+Each example pairs an emd input with its model. They are tested in
+`components/common/test/emd.test.ts`, and SHOULD become fixture files
 (`spec/fixtures/<name>.md` and `<name>.json`) shared by parsers and renderers.
 
 ### 8.1 Single choice with feedbacks
@@ -362,7 +406,6 @@ Value of $\pi$ to two decimals?
   "type": "numeric",
   "stem": "Value of $\\pi$ to two decimals?",
   "answer": 3.14,
-  "evaluation": "relative",
   "feedback": "$\\pi \\approx 3.14159$"
 }
 ```
@@ -381,9 +424,6 @@ Answering `3` scores `round(100 × (1 − 0.14 / 3.14)) = 96`.
 
 The model has no question: two lists and a blockquote of content.
 
-ed-components 0.2 differ: `ed-pb` counts the first list as a question that can
-never be answered, so the problem is never completed.
-
 ## 9. Open questions
 
 These points are inconsistent or missing in the current syntax, and SHOULD be
@@ -391,15 +431,14 @@ settled before version 1.0.
 
 ### 9.1 One syntax per question type
 
-A numeric question is `- :num: 3.14` in a problem, but `3.14` alone in
-`ed-num`. A question feedback is a blockquote after the list, but a final
-blockquote in `ed-speech`. Standalone elements SHOULD accept the problem
-syntax, so that a question can be moved between them unchanged.
+Settled in draft 0.2: a standalone element contains one question written as in
+a problem ([section 3.5](#35-standalone-elements)). The former syntaxes stay
+accepted for compatibility, and SHOULD be removed in version 1.0.
 
 ### 9.2 Question options
 
 Options have no emd syntax: numeric `eval`, `min`, `max`, `step`; speech
-`answer` and `lang`; choice shuffling. Candidates:
+`lang`; choice shuffling. Candidates:
 
 - attributes after the list, as in Pandoc or markdown-it-attrs:
   `- :num: 3.14 {eval=exact}`;
@@ -434,18 +473,13 @@ multiple choice would let authors choose.
 with emoji plugins, so text questions do not preview as intended there. `:num:`
 has no such conflict.
 
-### 9.6 Speech questions in problems
+### 9.6 Identifiers
 
-`ed-speech` has no syntax in a problem. Candidate: `- :say: hello`, with the
-language as an option ([9.2](#92-question-options)).
-
-### 9.7 Identifiers
-
-Question labels are built from the position of the list and the first 30
-characters of its container, so they change with the text and may collide. Learning records (xAPI) need stable
+Question labels are built from the number of the question and the first 30
+characters of its stem, so they change with the text and may collide. Learning records (xAPI) need stable
 identifiers: e.g. from heading ids, or an `id` option.
 
-### 9.8 Open edX and other formats
+### 9.7 Open edX and other formats
 
 Compared to the
 [Open edX OLX](https://docs.openedx.org/en/latest/educators/references/course_development/exercise_tools/single_select_xml.html)
