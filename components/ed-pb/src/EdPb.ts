@@ -1,14 +1,11 @@
 import { css, html, LitElement, type PropertyValues } from "lit";
 import { styleMap } from "lit/directives/style-map.js";
+import type { FoundQuestion } from "../../common/src/emd.js";
 import { t } from "../../common/src/i18n.js";
 import { commonSheet } from "../../common/src/styles.js";
 import { EdProgressBarElement } from "./_EdProgressBar.js";
 
 EdProgressBarElement.define();
-
-// integers, decimals (dot or comma) and scientific notation: 42, -3.14, 6,02e23
-const edNumRegex =
-  /^:num:\s+(?<answer>[-+]?\d+(?:[.,]\d+)?(?:e[-+]?\d+)?)\s*$/im;
 
 /**
  * The question feedback, a blockquote right after the list, moved into the
@@ -23,14 +20,50 @@ function takeFeedback(ul: HTMLUListElement) {
   return next.outerHTML;
 }
 
+/** Component answering a question, replacing its answer list */
+function questionElement({ question }: FoundQuestion, ul: HTMLUListElement) {
+  switch (question.type) {
+    case "choice": {
+      const edChoice = document.createElement("ed-choice");
+      // already parsed, with the feedbacks
+      edChoice.isHTML = true;
+      edChoice.innerHTML = ul.outerHTML + takeFeedback(ul);
+      return edChoice;
+    }
+    case "text": {
+      // ed-ans (work in progress) has no feedback
+      const edAns = document.createElement("ed-ans");
+      // content is already parsed (ed-ans names this attribute html)
+      edAns.setAttribute("html", "");
+      edAns.innerHTML = ul.outerHTML;
+      return edAns;
+    }
+    case "numeric": {
+      const edNum = document.createElement("ed-num");
+      takeFeedback(ul);
+      // the stem stays in the problem
+      edNum.emdQuestion = { ...question, stem: "" };
+      return edNum;
+    }
+    case "speech": {
+      const edSpeech = document.createElement("ed-speech");
+      takeFeedback(ul);
+      edSpeech.emdQuestion = { ...question, stem: "" };
+      return edSpeech;
+    }
+  }
+}
+
 /**
  * This component is a wrapper that allows to include multiple questions
  * with answers of different types in a lightweight markup langage based
  * on markdown.
- * Currently:
+ * Its questions are found by the emd parser (spec/emd.md):
  * - single and multiple choice answer via ed-choice component using gfm task-lists.
  * - text answer via ed-ans component using unordered lists with scores.
- * - numeric answers via vanilla ed-ans component.
+ * - numeric answers via ed-num component.
+ * - speech answers via ed-speech component.
+ * HTML content (`ishtml`) is shown as is, without questions.
  * @export
  * @class EdPbElement
  * @extends {LitElement}
@@ -172,10 +205,15 @@ export class EdPbElement extends LitElement {
     // TODO use a template before mounting?
     const emdContent = this.emd ? this.emd.trim() : this.innerHTML.trim();
 
-    // parse markdown into html
-    const { md2HTML } = this.isHTML
-      ? { md2HTML: (s: string) => s }
+    // parse markdown into html, and find its questions
+    const { md2HTML, unescapeMarkdown } = this.isHTML
+      ? { md2HTML: (s: string) => s, unescapeMarkdown: (s: string) => s }
       : await import("../../common/src/index.js");
+    const found = this.isHTML
+      ? []
+      : (await import("../../common/src/emd.js")).parseQuestions(
+          unescapeMarkdown(emdContent),
+        );
     // state changes below must not happen during the update that started
     // processing (with html content, nothing was awaited)
     await null;
@@ -191,54 +229,25 @@ export class EdPbElement extends LitElement {
 
     const article = this.shadowRoot.querySelector("article")!;
     article.innerHTML = md2HTML(emdContent);
-    // turn lists into ed components
-    this.shadowRoot
-      .querySelectorAll("ul")
-      .forEach((ul: HTMLUListElement, i: number) => {
-        // type of answer depends on list item type
-        const li = ul.querySelector("li");
-        if (li === null) {
-          return;
-        }
-        // TODO make it uniques checking for collisions
-        const label = `Q${i + 1}: ${(ul.parentElement?.innerText ?? "").slice(
-          0,
-          30,
-        )}`;
-
-        // task-list is turned into ed-choice component
-        if (li.querySelector("input[type='checkbox']:disabled") !== null) {
-          this.nAnsTot += 1;
-          // replace task-list with ed-choice
-          const edChoice = document.createElement("ed-choice");
-          edChoice.label = label;
-          // we don't require to transform md->html
-          edChoice.isHTML = true;
-          edChoice.innerHTML = ul.outerHTML + takeFeedback(ul);
-          ul.replaceWith(edChoice);
-        } else if (li.innerText.startsWith(":100: ")) {
-          // verify if it is an ed-ans
-          this.nAnsTot += 1;
-          // replace unorder-list with ed-ans
-          const edAns = document.createElement("ed-ans");
-          edAns.label = label;
-          // content is already parsed (ed-ans names this attribute html)
-          edAns.setAttribute("html", "");
-          edAns.innerHTML = ul.outerHTML;
-          ul.replaceWith(edAns);
-        } else if (li.innerText.startsWith(":num: ")) {
-          const answer = edNumRegex.exec(li.innerText)?.groups?.answer;
-          if (answer) {
-            // replace unorder-list with ed-num
-            this.nAnsTot += 1;
-            const edNum = document.createElement("ed-num");
-            edNum.label = label;
-            edNum.innerHTML = answer + takeFeedback(ul);
-            ul.replaceWith(edNum);
-          }
-        }
-      });
+    // the answer lists are the n-th lists of the html, before replacing them
+    const lists = article.querySelectorAll("ul");
+    found.forEach((question, i) => {
+      const ul = lists[question.list];
+      // raw html lists in the content would shift the lists
+      if (ul === undefined) {
+        return;
+      }
+      const element = questionElement(question, ul);
+      // TODO make it uniques checking for collisions
+      const stem = document.createElement("template");
+      stem.innerHTML = md2HTML(question.question.stem);
+      const text = (stem.content.textContent ?? "").trim().replace(/\s+/g, " ");
+      element.label = `Q${i + 1}: ${text.slice(0, 30)}`;
+      ul.replaceWith(element);
+      this.nAnsTot += 1;
+    });
   }
+
   private _handleResponse(evt: Event) {
     evt.stopPropagation();
     this.nAns += 1;

@@ -8,6 +8,7 @@ import { EdProgressBarElement } from "../src/_EdProgressBar.js";
 // ed-pb wraps questions in ed-choice components
 import "../../ed-choice/src/ed-choice.js";
 import "../../ed-num/src/ed-num.js";
+import "../../ed-speech/src/ed-speech.js";
 
 describe("EdPb tests", () => {
   it("passes the a11y audit", async () => {
@@ -108,11 +109,10 @@ Q3
 
 - :num: 6.02e23
 </ed-pb>`);
-    await waitUntil(() => el.shadowRoot.querySelectorAll("ed-num").length > 0);
-    const answers = Array.from(el.shadowRoot.querySelectorAll("ed-num")).map(
-      (num) => num.innerHTML,
-    );
-    expect(answers).to.deep.equal(["3.14", "-2,5", "6.02e23"]);
+    await el.updateComplete;
+    const nums = Array.from(el.shadowRoot.querySelectorAll("ed-num"));
+    await Promise.all(nums.map((num) => num.updateComplete));
+    expect(nums.map((num) => num._answer)).to.deep.equal([3.14, -2.5, 6.02e23]);
   });
 
   it("Progress bar can be created from javascript", async () => {
@@ -260,5 +260,59 @@ Value of π?
       edNum.shadowRoot.querySelector<EdFeedbackElement>("#explanation")!;
     expect(feedback.textContent).to.contain("π is about 3.14.");
     expect(feedback.revealed).to.be.false;
+  });
+
+  it("Turns speech lists into ed-speech", async () => {
+    const el = await fixture<EdPbElement>(`<ed-pb label="title">
+1. Say «hello».
+
+   - :say: hello
+
+   > Hello is a greeting.
+</ed-pb>`);
+    await el.updateComplete;
+    const edSpeech = el.shadowRoot.querySelector("ed-speech")!;
+    await edSpeech.updateComplete;
+    expect(edSpeech.expectedAnswer).to.equal("hello");
+    expect(edSpeech.label).to.equal("Q1: Say «hello».");
+    expect(
+      edSpeech.shadowRoot.querySelector("#explanation")!.textContent,
+    ).to.contain("Hello is a greeting.");
+    expect(el.shadowRoot.querySelector("article blockquote")).to.be.null;
+  });
+
+  it("Numbers the questions, not the lists", async () => {
+    const el = await fixture<EdPbElement>(`<ed-pb label="title">
+- a list of content
+
+1. First?
+
+   - :num: 1
+</ed-pb>`);
+    await el.updateComplete;
+    expect(el.shadowRoot.querySelector("ed-num")!.label).to.equal("Q1: First?");
+  });
+
+  it("Ignores task lists without a correct choice", async () => {
+    const el = await fixture<EdPbElement>(`<ed-pb label="title">
+- [ ] no correct choice
+- [ ] at all
+
+Q2
+
+- :num: 2
+</ed-pb>`);
+    await el.updateComplete;
+    expect(el.shadowRoot.querySelector("ed-choice")).to.be.null;
+    const edNum = el.shadowRoot.querySelector("ed-num")!;
+    await edNum.updateComplete;
+    // the problem has one question: answering it completes the problem
+    const input = edNum.shadowRoot.querySelector("input")!;
+    input.value = "2";
+    input.dispatchEvent(new Event("input"));
+    await edNum.updateComplete;
+    setTimeout(() => edNum.shadowRoot.querySelector("button")!.click());
+    const { detail } = await oneEvent(el, "edEvent");
+    expect(detail.verb).to.equal("COMPLETED");
   });
 });

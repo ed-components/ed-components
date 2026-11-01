@@ -105,7 +105,7 @@ describe("EdNum feedbacks", () => {
 
   it("Reveals the score and the explanation once answered", async () => {
     const el = await fixture<EdNumElement>(
-      `<ed-num>3.14<blockquote><p>π is about 3.14.</p></blockquote></ed-num>`,
+      `<ed-num>3.14\n\n&gt; π is about 3.14.</ed-num>`,
     );
     expect(el._answer).to.equal(3.14);
     expect(revealed(el)).to.deep.equal([]);
@@ -138,10 +138,48 @@ describe("EdNum feedbacks", () => {
   });
 
   it("passes the a11y audit once answered", async () => {
-    const el = await fixture<EdNumElement>(
-      `<ed-num>3<blockquote><p>Three.</p></blockquote></ed-num>`,
-    );
+    const el = await fixture<EdNumElement>(`<ed-num>3\n\n> Three.</ed-num>`);
     await answer(el, "2");
     await expect(el).shadowDom.to.be.accessible();
+  });
+});
+
+describe("EdNum emd syntax", () => {
+  it("Reads a question written as in a problem", async () => {
+    const el = await fixture<EdNumElement>(`<ed-num>
+Value of **π**?
+
+- :num: 3,14
+
+> About 3.14.
+</ed-num>`);
+    expect(el._answer).to.equal(3.14);
+    expect(el.shadowRoot.querySelector(".stem")!.innerHTML).to.contain(
+      "<strong>π</strong>",
+    );
+    expect(el.shadowRoot.querySelector("#explanation")!.textContent).to.contain(
+      "About 3.14.",
+    );
+  });
+
+  it("Has no stem with the expected number alone", async () => {
+    const el = await fixture<EdNumElement>(`<ed-num>-24</ed-num>`);
+    expect(el._answer).to.equal(-24);
+    expect(el.shadowRoot.querySelector(".stem")).to.be.null;
+  });
+
+  it("Renders a question given by a wrapper", async () => {
+    const el = await fixture<EdNumElement>(`<ed-num>1</ed-num>`);
+    el.emdQuestion = {
+      type: "numeric",
+      stem: "",
+      answer: 7,
+      feedback: "Seven *wonders*.",
+    };
+    await el.updateComplete;
+    expect(el._answer).to.equal(7);
+    expect(el.shadowRoot.querySelector("#explanation")!.innerHTML).to.contain(
+      "<em>wonders</em>",
+    );
   });
 });

@@ -160,6 +160,32 @@ describe("EdSpeechElement feedbacks", () => {
     ]);
   });
 
+  it("reads the expected answer written as in a problem", async () => {
+    const el = await fixture<EdSpeechElement>(
+      `<ed-speech lang="en">Say **hello**.
+
+- :say: hello
+
+> A greeting.</ed-speech>`,
+    );
+    expect(el.expectedAnswer).to.equal("hello");
+    expect(el.shadowRoot.querySelector(".question")!.textContent).to.equal(
+      "Say hello.",
+    );
+    await respond(el, "Hello");
+    expect(revealed(el)).to.deep.equal([
+      "correct: Score: 100% the correct answer was: hello",
+      "info: A greeting.",
+    ]);
+  });
+
+  it("prefers the answer attribute", async () => {
+    const el = await fixture<EdSpeechElement>(
+      `<ed-speech answer="hi">Say hi.\n\n- :say: hello</ed-speech>`,
+    );
+    expect(el.expectedAnswer).to.equal("hi");
+  });
+
   it("only shows the explanation without expected answer", async () => {
     const el = await fixture<EdSpeechElement>(
       `<ed-speech ishtml>Speak<blockquote><p>Well done.</p></blockquote></ed-speech>`,

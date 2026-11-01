@@ -1,10 +1,11 @@
-import { css, html, LitElement } from "lit";
+import { css, html, LitElement, type PropertyValues } from "lit";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import {
   answerFeedbacks,
   EdFeedbackElement,
   splitFeedback,
 } from "../../common/src/EdFeedback.js";
+import type { SpeechQuestion } from "../../common/src/emd.js";
 import { t } from "../../common/src/i18n.js";
 import { commonSheet } from "../../common/src/styles.js";
 import { submitButton } from "../../common/src/submitButton.js";
@@ -58,7 +59,8 @@ type Message = keyof typeof messages;
  * "fr"), defaults to the page language.
  * @attr {string} answer - Expected answer: the event gets a score from 0 to
  * 100 based on the similarity with the transcription (ignoring case, accents
- * and punctuation).
+ * and punctuation). It can also be written in the content, as in a problem:
+ * `- :say: hello` (spec/emd.md).
  * @attr {number} silence - Seconds of silence after speech stopping the
  * recording, 2 by default, 0 to stop only with the microphone button.
  * @attr {string} model - Whisper model on the Hugging Face hub, e.g.
@@ -89,6 +91,8 @@ export class EdSpeechElement extends LitElement {
     readonly: { type: Boolean, reflect: true },
     // HTML lowercases attribute names
     isHTML: { type: Boolean, attribute: "ishtml" },
+    // question parsed by a wrapper (ed-pb), instead of the content
+    emdQuestion: { attribute: false },
     // rendered state
     questionHTML: { state: true, attribute: false },
     message: { state: true, attribute: false },
@@ -97,6 +101,7 @@ export class EdSpeechElement extends LitElement {
     transcript: { state: true, attribute: false },
     explanation: { state: true, attribute: false },
     score: { state: true, attribute: false },
+    contentAnswer: { state: true, attribute: false },
   };
 
   static styles = [
@@ -175,6 +180,8 @@ export class EdSpeechElement extends LitElement {
 
   declare isHTML: boolean;
 
+  declare emdQuestion?: SpeechQuestion;
+
   declare private questionHTML: string;
 
   declare private message: Message;
@@ -192,7 +199,15 @@ export class EdSpeechElement extends LitElement {
   // similarity with the expected answer, once answered
   declare private score?: number;
 
+  // expected answer written in the content (`- :say: hello`)
+  declare private contentAnswer?: string;
+
   question = "";
+
+  label?: string;
+
+  // content being parsed
+  private processing?: Promise<void>;
 
   private recording?: Recording;
 
@@ -239,17 +254,57 @@ export class EdSpeechElement extends LitElement {
     return Number.isFinite(this.silence) && this.silence > 0 ? this.silence : 0;
   }
 
-  async connectedCallback() {
-    super.connectedCallback();
+  /** The `answer` attribute, else the answer written in the content */
+  get expectedAnswer() {
+    return this.answer ?? this.contentAnswer;
+  }
+
+  protected updated(changed: PropertyValues<this>) {
+    // processed once rendered, then when the content format or the question
+    // changes (moving the element in the page keeps the answer)
+    if (
+      this.processing === undefined ||
+      changed.has("isHTML") ||
+      changed.has("emdQuestion")
+    ) {
+      this.processing = this._processContent();
+    }
+  }
+
+  /** Also wait for the question parsed from the content, and its rendering */
+  protected async getUpdateComplete(): Promise<boolean> {
+    const result = await super.getUpdateComplete();
+    await this.processing;
+    return (await super.getUpdateComplete()) && result;
+  }
+
+  private async _processContent() {
+    // state changes must not happen during the update that started processing
+    await null;
     const content = this.innerHTML.trim();
+    const { md2HTML, unescapeMarkdown } = await import(
+      "../../common/src/index.js"
+    );
+    let question = this.emdQuestion;
+    if (question === undefined && !this.isHTML) {
+      const { parseQuestions } = await import("../../common/src/emd.js");
+      question = parseQuestions(unescapeMarkdown(content))
+        .map((found) => found.question)
+        .find((found): found is SpeechQuestion => found.type === "speech");
+    }
+    if (question !== undefined) {
+      this.question = question.stem || t(this, "speechQuestion");
+      this.questionHTML = question.stem ? md2HTML(question.stem) : "";
+      this.explanation = question.feedback && md2HTML(question.feedback);
+      this.contentAnswer = question.answer;
+      return;
+    }
+    // a question without expected answer, then an optional final blockquote
     this.question = content || t(this, "speechQuestion");
-    // parse markdown into html
-    const html = this.isHTML
-      ? content
-      : (await import("../../common/src/index.js")).md2HTML(content);
-    // a blockquote at the end is the explanation
-    const { content: question, feedback } = splitFeedback(html);
-    this.questionHTML = question;
+    const { content: stem, feedback } = splitFeedback(
+      this.isHTML ? content : md2HTML(content),
+    );
+    this.questionHTML = stem;
     this.explanation = feedback;
   }
 
@@ -299,7 +354,7 @@ export class EdSpeechElement extends LitElement {
       ${answerFeedbacks(this, {
         answered: this.readonly,
         score: this.score,
-        answer: this.answer,
+        answer: this.expectedAnswer,
         explanation: this.explanation,
       })}
     `;
@@ -383,7 +438,7 @@ export class EdSpeechElement extends LitElement {
     const response = this.transcript;
     if (response.length === 0 || this.readonly) return;
 
-    const { answer } = this;
+    const answer = this.expectedAnswer;
     this.score =
       answer === undefined ? undefined : similarityScore(response, answer);
     const url = this.ownerDocument.location as Location;
@@ -394,6 +449,7 @@ export class EdSpeechElement extends LitElement {
           date: new Date().toISOString(),
           url: url.host + url.pathname,
           tag: this.tagName,
+          label: this.label,
           question: this.question,
           verb: "RESPONDED",
           response,
