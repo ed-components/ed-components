@@ -121,6 +121,54 @@ describe("EdSpeechElement", () => {
   });
 });
 
+describe("EdSpeechElement feedbacks", () => {
+  afterEach(() => {
+    EdSpeechElement.recorder = recorder;
+    EdSpeechElement.transcriber = transcriber;
+  });
+
+  /** Record `text` and submit it */
+  async function respond(el: EdSpeechElement, text: string) {
+    fakeSpeech(text);
+    mic(el).click();
+    await waitUntil(() => mic(el).getAttribute("aria-pressed") === "true");
+    mic(el).click();
+    await waitUntil(() => transcript(el) === text);
+    submit(el).click();
+    await el.updateComplete;
+  }
+  const revealed = (el: EdSpeechElement) =>
+    [...el.shadowRoot.querySelectorAll("ed-feedback")]
+      .filter((feedback) => feedback.revealed)
+      .map((feedback) => `${feedback.type}: ${feedback.textContent?.trim()}`);
+
+  it("reveals the score and the explanation once answered", async () => {
+    const el = await fixture<EdSpeechElement>(
+      `<ed-speech lang="en" answer="heat">Say **heat**.
+
+> _heat_ has a long vowel.</ed-speech>`,
+    );
+    const question = el.shadowRoot.querySelector(".question")!;
+    // markdown is parsed asynchronously
+    await waitUntil(() => question.textContent !== "");
+    expect(question.textContent).to.equal("Say heat.");
+    expect(revealed(el)).to.deep.equal([]);
+    await respond(el, "Heat!");
+    expect(revealed(el)).to.deep.equal([
+      "correct: Score: 100% the correct answer was: heat",
+      "info: heat has a long vowel.",
+    ]);
+  });
+
+  it("only shows the explanation without expected answer", async () => {
+    const el = await fixture<EdSpeechElement>(
+      `<ed-speech ishtml>Speak<blockquote><p>Well done.</p></blockquote></ed-speech>`,
+    );
+    await respond(el, "Hello");
+    expect(revealed(el)).to.deep.equal(["info: Well done."]);
+  });
+});
+
 describe("EdSpeechElement silence", () => {
   afterEach(() => {
     EdSpeechElement.recorder = recorder;

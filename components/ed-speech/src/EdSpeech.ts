@@ -1,5 +1,10 @@
 import { css, html, LitElement } from "lit";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
+import {
+  answerFeedbacks,
+  EdFeedbackElement,
+  splitFeedback,
+} from "../../common/src/EdFeedback.js";
 import { t } from "../../common/src/i18n.js";
 import { commonSheet } from "../../common/src/styles.js";
 import { submitButton } from "../../common/src/submitButton.js";
@@ -15,6 +20,8 @@ import {
   type Transcriber,
   transcribeWithWhisper,
 } from "./whisper.js";
+
+EdFeedbackElement.define();
 
 // from bootstrap icons
 const micIcon = `<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -88,6 +95,8 @@ export class EdSpeechElement extends LitElement {
     isRecording: { state: true, attribute: false },
     progress: { state: true, attribute: false },
     transcript: { state: true, attribute: false },
+    explanation: { state: true, attribute: false },
+    score: { state: true, attribute: false },
   };
 
   static styles = [
@@ -177,6 +186,12 @@ export class EdSpeechElement extends LitElement {
 
   declare private transcript: string;
 
+  // feedback of the question, shown once answered
+  declare private explanation?: string;
+
+  // similarity with the expected answer, once answered
+  declare private score?: number;
+
   question = "";
 
   private recording?: Recording;
@@ -228,13 +243,14 @@ export class EdSpeechElement extends LitElement {
     super.connectedCallback();
     const content = this.innerHTML.trim();
     this.question = content || t(this, "speechQuestion");
-    if (this.isHTML) {
-      this.questionHTML = content;
-    } else {
-      // parse markdown into html
-      const { md2HTML } = await import("../../common/src/index.js");
-      this.questionHTML = md2HTML(content);
-    }
+    // parse markdown into html
+    const html = this.isHTML
+      ? content
+      : (await import("../../common/src/index.js")).md2HTML(content);
+    // a blockquote at the end is the explanation
+    const { content: question, feedback } = splitFeedback(html);
+    this.questionHTML = question;
+    this.explanation = feedback;
   }
 
   disconnectedCallback() {
@@ -280,6 +296,12 @@ export class EdSpeechElement extends LitElement {
         .value=${this.progress ?? 0}
       ></progress>
       <p id="transcript" class="final">${this.transcript}</p>
+      ${answerFeedbacks(this, {
+        answered: this.readonly,
+        score: this.score,
+        answer: this.answer,
+        explanation: this.explanation,
+      })}
     `;
   }
 
@@ -362,6 +384,8 @@ export class EdSpeechElement extends LitElement {
     if (response.length === 0 || this.readonly) return;
 
     const { answer } = this;
+    this.score =
+      answer === undefined ? undefined : similarityScore(response, answer);
     const url = this.ownerDocument.location as Location;
     this.dispatchEvent(
       new CustomEvent("edEvent", {
@@ -373,9 +397,7 @@ export class EdSpeechElement extends LitElement {
           question: this.question,
           verb: "RESPONDED",
           response,
-          ...(answer === undefined
-            ? {}
-            : { answer, score: similarityScore(response, answer) }),
+          ...(answer === undefined ? {} : { answer, score: this.score }),
         },
       }),
     );

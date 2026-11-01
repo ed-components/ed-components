@@ -35,6 +35,17 @@ As in every ed-component, you can use Markdown as content.
 </ed-speech>
 ```
 
+A blockquote at the end of the question is its feedback, shown once the
+learner submitted the answer, with the score when there is an expected answer.
+
+```html
+<ed-speech lang="en" answer="heat">
+  Say **heat**.
+
+  > _heat_ has a long vowel, unlike _hit_.
+</ed-speech>
+```
+
 ## Attributes
 
 - `lang`: language of the answer (`fr`, `en`, `es`…), defaults to the page

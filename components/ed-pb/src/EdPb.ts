@@ -11,6 +11,19 @@ const edNumRegex =
   /^:num:\s+(?<answer>[-+]?\d+(?:[.,]\d+)?(?:e[-+]?\d+)?)\s*$/im;
 
 /**
+ * The question feedback, a blockquote right after the list, moved into the
+ * component replacing the list, which reveals it once answered.
+ */
+function takeFeedback(ul: HTMLUListElement) {
+  const next = ul.nextElementSibling;
+  if (next?.tagName !== "BLOCKQUOTE") {
+    return "";
+  }
+  next.remove();
+  return next.outerHTML;
+}
+
+/**
  * This component is a wrapper that allows to include multiple questions
  * with answers of different types in a lightweight markup langage based
  * on markdown.
@@ -201,12 +214,7 @@ export class EdPbElement extends LitElement {
           edChoice.label = label;
           // we don't require to transform md->html
           edChoice.isHTML = true;
-          // with the question feedback, a blockquote right after the list,
-          // revealed by ed-choice once answered
-          const next = ul.nextElementSibling;
-          const feedback = next?.tagName === "BLOCKQUOTE" ? next : null;
-          edChoice.innerHTML = ul.outerHTML + (feedback?.outerHTML ?? "");
-          feedback?.remove();
+          edChoice.innerHTML = ul.outerHTML + takeFeedback(ul);
           ul.replaceWith(edChoice);
         } else if (li.innerText.startsWith(":100: ")) {
           // verify if it is an ed-ans
@@ -225,7 +233,7 @@ export class EdPbElement extends LitElement {
             this.nAnsTot += 1;
             const edNum = document.createElement("ed-num");
             edNum.label = label;
-            edNum.innerHTML = answer;
+            edNum.innerHTML = answer + takeFeedback(ul);
             ul.replaceWith(edNum);
           }
         }

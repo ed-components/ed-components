@@ -79,6 +79,31 @@ Some specific markdown is wrapped inside an adapted ed-components.
 </ed-pb>
 ```
 
+### Feedbacks
+
+A blockquote right after the list of a choice or numeric question is its
+feedback, such as the solution, shown once the learner answered (see the
+feedbacks of [ed-choice](../ed-choice/#feedbacks) and
+[ed-num](../ed-num/#feedback)).
+
+```html
+<ed-pb>
+1. What is $E$ in $E=mc^2$?
+
+   - [ ] mass
+     > No, $m$ is the mass.
+   - [x] energy
+
+   > $E$ is the energy, $m$ the mass and $c$ the speed of light.
+
+1. How many Wonders of the ancient World are still in existence?
+
+   - :num: 1
+
+   > Only the Great Pyramid of Giza.
+</ed-pb>
+```
+
 ### `emd` attribute
 
 You can provide the `emd` content as an attribute to allow re-rendering the component on change. In that case, **`innerHTML` content is totally ignored**.

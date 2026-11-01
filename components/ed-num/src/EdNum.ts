@@ -1,8 +1,15 @@
 import { css, html, LitElement } from "lit";
 import { ifDefined } from "lit/directives/if-defined.js";
+import {
+  answerFeedbacks,
+  EdFeedbackElement,
+  splitFeedback,
+} from "../../common/src/EdFeedback.js";
 import { formatNumber, t } from "../../common/src/i18n.js";
 import { commonSheet } from "../../common/src/styles.js";
 import { submitButton } from "../../common/src/submitButton.js";
+
+EdFeedbackElement.define();
 
 // accept french decimal separator: "3,14" -> 3.14
 const parseNumber = (s: string) => Number(s.trim().replace(",", "."));
@@ -29,6 +36,7 @@ export class EdNumElement extends LitElement {
     // custom elements manifest, which ignores state)
     value: { state: true, attribute: false },
     score: { state: true, attribute: false },
+    explanation: { state: true, attribute: false },
   };
 
   static styles = [
@@ -62,6 +70,12 @@ export class EdNumElement extends LitElement {
 
   declare private score?: number;
 
+  // feedback of the question, shown once answered
+  declare private explanation?: string;
+
+  // markdown explanation being parsed
+  private processing?: Promise<void>;
+
   label?: string;
 
   // parsed from the content when connected
@@ -81,8 +95,32 @@ export class EdNumElement extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    // the content is the answer
-    this._answer = parseNumber(this.textContent ?? "");
+    // the content is the answer, then an optional explanation: a blockquote,
+    // in html or in markdown
+    const text = [...this.childNodes]
+      .filter((node) => node.nodeType === Node.TEXT_NODE)
+      .map((node) => node.textContent)
+      .join("");
+    const quote = text.search(/^\s*>/m);
+    this._answer = parseNumber(quote === -1 ? text : text.slice(0, quote));
+    const blockquote = this.querySelector(":scope > blockquote");
+    if (blockquote !== null) {
+      this.explanation = blockquote.innerHTML;
+    } else if (quote !== -1) {
+      this.processing = this._parseExplanation(text.slice(quote));
+    }
+  }
+
+  private async _parseExplanation(markdown: string) {
+    const { md2HTML } = await import("../../common/src/index.js");
+    this.explanation = splitFeedback(md2HTML(markdown)).feedback;
+  }
+
+  /** Also wait for the explanation parsed from markdown */
+  protected async getUpdateComplete(): Promise<boolean> {
+    await this.processing;
+    // then the update rendering it
+    return super.getUpdateComplete();
   }
 
   render() {
@@ -107,13 +145,12 @@ export class EdNumElement extends LitElement {
           onClick: this._handleResponse,
         })}
       </div>
-      <output name="answer"
-        >${
-          answered
-            ? t(this, "score", this.score!, formatNumber(this, this._answer))
-            : ""
-        }</output
-      >
+      ${answerFeedbacks(this, {
+        answered,
+        score: this.score,
+        answer: formatNumber(this, this._answer),
+        explanation: this.explanation,
+      })}
     `;
   }
 

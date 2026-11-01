@@ -32,6 +32,20 @@ If the answer is 0 the score is also 0 or 100% as no error can be calculated.
 </ed-num>
 ```
 
+### Feedback
+
+Once the learner answered, the score is shown with the correct answer. A
+blockquote after the answer is the feedback of the question, such as the
+solution, shown at the same time.
+
+```html
+<ed-num>
+3.14
+
+> $\pi$ is about 3.14, the ratio of a circle's circumference to its diameter.
+</ed-num>
+```
+
 ## Credits
 
 This component is inspired by the [numerical input problem](https://edx.readthedocs.io/projects/open-edx-building-and-running-a-course/en/latest/exercises_tools/numerical_input.html#numerical-input-problem-olx-reference) used in [Open edx](https://edx.readthedocs.io/projects/open-edx-building-and-running-a-course/en/latest/index.html).

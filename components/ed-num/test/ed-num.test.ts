@@ -62,9 +62,10 @@ describe("EdNum tests", () => {
     expect(detail.score).to.equal(75);
     await el.updateComplete;
     expect(input.disabled).to.be.true;
-    expect(el.shadowRoot.querySelector("output")!.textContent).to.contain(
-      "Score: 75%",
-    );
+    const feedback = el.shadowRoot.querySelector("#score-feedback")!;
+    expect(feedback.getAttribute("type")).to.equal("incorrect");
+    expect(feedback.hasAttribute("revealed")).to.be.true;
+    expect(feedback.textContent).to.contain("Score: 75%");
   });
 
   it("Speaks the interface language", async () => {
@@ -81,8 +82,66 @@ describe("EdNum tests", () => {
     await el.updateComplete;
     el.shadowRoot.querySelector("button")!.click();
     await el.updateComplete;
-    expect(el.shadowRoot.querySelector("output")!.textContent).to.contain(
-      "la bonne réponse était\u00a0: 3,14",
+    expect(
+      el.shadowRoot.querySelector("#score-feedback")!.textContent,
+    ).to.contain("la bonne réponse était\u00a0: 3,14");
+  });
+});
+
+describe("EdNum feedbacks", () => {
+  /** Answer `value` and wait for the feedbacks */
+  async function answer(el: EdNumElement, value: string) {
+    const input = el.shadowRoot.querySelector("input")!;
+    input.value = value;
+    input.dispatchEvent(new Event("input"));
+    await el.updateComplete;
+    el.shadowRoot.querySelector("button")!.click();
+    await el.updateComplete;
+  }
+  const revealed = (el: EdNumElement) =>
+    [...el.shadowRoot.querySelectorAll("ed-feedback")]
+      .filter((feedback) => feedback.revealed)
+      .map((feedback) => `${feedback.type}: ${feedback.textContent?.trim()}`);
+
+  it("Reveals the score and the explanation once answered", async () => {
+    const el = await fixture<EdNumElement>(
+      `<ed-num>3.14<blockquote><p>π is about 3.14.</p></blockquote></ed-num>`,
     );
+    expect(el._answer).to.equal(3.14);
+    expect(revealed(el)).to.deep.equal([]);
+    await answer(el, "3.14");
+    expect(revealed(el)).to.deep.equal([
+      "correct: Score: 100% the correct answer was: 3.14",
+      "info: π is about 3.14.",
+    ]);
+  });
+
+  it("Parses a markdown explanation", async () => {
+    const el = await fixture<EdNumElement>(
+      `<ed-num>-2,5
+
+> The **opposite** of 2.5.</ed-num>`,
+    );
+    expect(el._answer).to.equal(-2.5);
+    const explanation = el.shadowRoot.querySelector("#explanation")!;
+    expect(explanation.innerHTML).to.contain("<strong>opposite</strong>");
+    await answer(el, "2.5");
+    expect(revealed(el)).to.deep.equal([
+      "incorrect: Score: 0% the correct answer was: -2.5",
+      "info: The opposite of 2.5.",
+    ]);
+  });
+
+  it("Has no explanation without blockquote", async () => {
+    const el = await fixture<EdNumElement>(`<ed-num>3</ed-num>`);
+    expect(el.shadowRoot.querySelector("#explanation")).to.be.null;
+  });
+
+  it("passes the a11y audit once answered", async () => {
+    const el = await fixture<EdNumElement>(
+      `<ed-num>3<blockquote><p>Three.</p></blockquote></ed-num>`,
+    );
+    await answer(el, "2");
+    await expect(el).shadowDom.to.be.accessible();
   });
 });

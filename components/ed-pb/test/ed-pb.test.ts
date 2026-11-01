@@ -7,6 +7,7 @@ import "../src/ed-pb.js";
 import { EdProgressBarElement } from "../src/_EdProgressBar.js";
 // ed-pb wraps questions in ed-choice components
 import "../../ed-choice/src/ed-choice.js";
+import "../../ed-num/src/ed-num.js";
 
 describe("EdPb tests", () => {
   it("passes the a11y audit", async () => {
@@ -239,6 +240,25 @@ Question
       .querySelector("ed-choice")!
       .shadowRoot.querySelector<EdFeedbackElement>("#content > ed-feedback")!;
     expect(feedback.textContent).to.contain("Because.");
+    expect(feedback.revealed).to.be.false;
+  });
+
+  it("Moves the question feedback into its ed-num", async () => {
+    const el = await fixture<EdPbElement>(`<ed-pb label="title">
+Value of π?
+
+- :num: 3.14
+
+> π is about 3.14.
+</ed-pb>`);
+    await waitUntil(() => el.shadowRoot.querySelector("ed-num") !== null);
+    expect(el.shadowRoot.querySelector("article > blockquote")).to.be.null;
+    const edNum = el.shadowRoot.querySelector("ed-num")!;
+    await edNum.updateComplete;
+    expect(edNum._answer).to.equal(3.14);
+    const feedback =
+      edNum.shadowRoot.querySelector<EdFeedbackElement>("#explanation")!;
+    expect(feedback.textContent).to.contain("π is about 3.14.");
     expect(feedback.revealed).to.be.false;
   });
 });

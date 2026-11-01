@@ -1,4 +1,5 @@
 import { css, html, LitElement, nothing } from "lit";
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { t } from "./i18n.js";
 import { commonSheet } from "./styles.js";
 
@@ -96,6 +97,63 @@ export class EdFeedbackElement extends LitElement {
       }
     </div>`;
   }
+}
+
+/**
+ * Split a blockquote at the end of `html`, the feedback of a question: returns
+ * the html without it and the content of the blockquote.
+ */
+export function splitFeedback(html: string): {
+  content: string;
+  feedback?: string;
+} {
+  const template = document.createElement("template");
+  template.innerHTML = html;
+  const last = template.content.lastElementChild;
+  if (last?.tagName !== "BLOCKQUOTE") {
+    return { content: html };
+  }
+  last.remove();
+  return { content: template.innerHTML.trim(), feedback: last.innerHTML };
+}
+
+/**
+ * Feedbacks of a scored question, revealed once answered: the score with the
+ * correct answer (when there is one), then the explanation (when there is one).
+ * The elements render them in their shadow root, after defining ed-feedback.
+ */
+export function answerFeedbacks(
+  el: Element,
+  {
+    answered,
+    score,
+    answer,
+    explanation,
+  }: {
+    answered: boolean;
+    score?: number;
+    answer?: string;
+    explanation?: string;
+  },
+) {
+  return html`${
+    answer === undefined
+      ? nothing
+      : html`<ed-feedback
+          id="score-feedback"
+          type=${score === 100 ? "correct" : "incorrect"}
+          ?revealed=${answered}
+          ><p>
+            ${answered && score !== undefined ? t(el, "score", score, answer) : ""}
+          </p></ed-feedback
+        >`
+  }${
+    explanation
+      ? html`<ed-feedback id="explanation" ?revealed=${answered}
+          >${unsafeHTML(explanation)}</ed-feedback
+        >`
+      : nothing
+  }`;
 }
 
 declare global {
