@@ -1,5 +1,13 @@
 # @ed-components/ed-components
 
+## 0.4.0
+
+### Minor Changes
+
+- dfe02a5: `ed-ans`, a work in progress, is no longer part of the bundle: `EdAnsElement` isn't exported nor registered anymore, and the package no longer depends on `wink-nlp`. `ed-pb` leaves text questions (`:100:`) without answer unless the page defines `ed-ans`.
+- 871e01c: New entry points: `@ed-components/ed-components/i18n` (`registerMessages`, `Messages`) changes the interface messages without loading the elements, and `@ed-components/ed-components/emd` (`parseQuestions` and the types of the questions model) parses Educational Markdown questions for other renderers.
+- 9512e8f: Each element can be imported on its own: `@ed-components/ed-components/ed-choice`, `ed-micro`, `ed-num`, `ed-pb`, `ed-speech` and `ed-survey` register their element. `ed-pb` registers the elements answering its questions. Bundlers no longer drop `import "@ed-components/ed-components/ed-components"`: the package declared no side effects.
+
 ## 0.3.0
 
 ### Minor Changes
