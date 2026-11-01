@@ -21,9 +21,7 @@
     "micromark-extension-gfm": "catalog:",
     "micromark-extension-gfm-task-list-item": "catalog:",
     "micromark-extension-math": "catalog:",
-    "tslib": "catalog:",
-    "wink-eng-lite-web-model": "catalog:",
-    "wink-nlp": "catalog:"
+    "tslib": "catalog:"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "catalog:",

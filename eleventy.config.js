@@ -7,6 +7,8 @@ export default async function (eleventyConfig) {
   eleventyConfig.ignores.add(".changeset/*");
   // draft specification, not a documentation page yet
   eleventyConfig.ignores.add("spec/*");
+  // work in progress, not part of the bundle used by the pages
+  eleventyConfig.ignores.add("components/ed-ans/**");
   eleventyConfig.watchIgnores.add("design/*");
   // eleventyConfig.addWatchTarget("./components/dist/index.js");
   eleventyConfig.addWatchTarget("./**/README.md");

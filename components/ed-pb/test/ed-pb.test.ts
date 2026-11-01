@@ -131,7 +131,38 @@ Q3
     expect(bar.shadowRoot.querySelectorAll("#label").length).to.equal(1);
   });
 
-  it("Passes parsed HTML to ed-ans", async () => {
+  it("Skips text questions without ed-ans, hiding their answers", async () => {
+    const el = await fixture<EdPbElement>(`<ed-pb>
+1. Question
+
+   - :100: secret answer
+
+1. Other question
+
+   - [x] Yes
+   - [ ] No
+</ed-pb>`);
+    await el.updateComplete;
+    const article = el.shadowRoot.querySelector("article")!;
+    expect(article.textContent).not.to.contain("secret answer");
+    expect(article.querySelector("ed-ans")).to.be.null;
+    // the problem is completed by its other questions
+    await waitUntil(() =>
+      article
+        .querySelector("ed-choice")
+        ?.shadowRoot.querySelector("ed-input-radio.good-answer"),
+    );
+    const radio = article
+      .querySelector("ed-choice")!
+      .shadowRoot.querySelector<HTMLElement>("ed-input-radio.good-answer")!;
+    setTimeout(() => radio.click());
+    const { detail } = await oneEvent(el, "edEvent");
+    expect(detail.verb).to.equal("COMPLETED");
+  });
+
+  it("Passes parsed HTML to ed-ans when the page defines it", async () => {
+    // ed-ans itself can't be imported in tests (wink-nlp)
+    customElements.define("ed-ans", class extends HTMLElement {});
     const el = await fixture<EdPbElement>(`<ed-pb>
 Question
 

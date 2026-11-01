@@ -7,7 +7,9 @@ Some specific markdown is wrapped inside an adapted ed-components.
 1. Task-list are wrapped into `<ed-choice>` for single and multiple-choice
    answers.
 2. Unordered lists with `score` metadata(`:100:`) are wrapped into `<ed-ans>`
-   for text answers.
+   for text answers, when the page defines it: `<ed-ans>` is a work in
+   progress, not part of the bundle. Otherwise the question is left without
+   answer.
 3. Unordered lists with `num` metadata(`:num:`) are wrapped into `<ed-num>` for
    numeric answers.
 4. Unordered lists with `say` metadata(`:say:`) are wrapped into `<ed-speech>`
@@ -52,23 +54,6 @@ the [Educational Markdown specification](https://github.com/ed-components/ed-com
     
     - Hello
     - World
-
-1. Here is the second question, don't bother about which is the right number,
-   markdown oredred lists handle this natively.
-
-   This time, we'll use
-   [nlp](https://en.wikipedia.org/wiki/Natural_language_processing) to score the
-   answer of the student.
-
-   Under the hood it uses `<ed-ans>` component.
-
-   What is the capital of France?
-
-   > You must write a sentence. 
-
-   - :100: Paris is the capital of France.
-   - :100: The capital of France is Paris.
-   - :50: Paris.
 
 1. You can also use `ed-num` component for numeric answers.
    

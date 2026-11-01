@@ -20,7 +20,10 @@ function takeFeedback(ul: HTMLUListElement) {
   return next.outerHTML;
 }
 
-/** Component answering a question, replacing its answer list */
+/**
+ * Component answering a question, replacing its answer list; undefined when
+ * the component isn't available
+ */
 function questionElement({ question }: FoundQuestion, ul: HTMLUListElement) {
   switch (question.type) {
     case "choice": {
@@ -31,7 +34,12 @@ function questionElement({ question }: FoundQuestion, ul: HTMLUListElement) {
       return edChoice;
     }
     case "text": {
-      // ed-ans (work in progress) has no feedback
+      // ed-ans is a work in progress, not part of the bundle: it answers text
+      // questions only when the page defines it
+      if (customElements.get("ed-ans") === undefined) {
+        return undefined;
+      }
+      // ed-ans has no feedback
       const edAns = document.createElement("ed-ans");
       // content is already parsed (ed-ans names this attribute html)
       edAns.setAttribute("html", "");
@@ -60,7 +68,8 @@ function questionElement({ question }: FoundQuestion, ul: HTMLUListElement) {
  * on markdown.
  * Its questions are found by the emd parser (spec/emd.md):
  * - single and multiple choice answer via ed-choice component using gfm task-lists.
- * - text answer via ed-ans component using unordered lists with scores.
+ * - text answer via ed-ans component using unordered lists with scores, when
+ *   the page defines it (work in progress, not part of the bundle).
  * - numeric answers via ed-num component.
  * - speech answers via ed-speech component.
  * HTML content (`ishtml`) is shown as is, without questions.
@@ -238,6 +247,11 @@ export class EdPbElement extends LitElement {
         return;
       }
       const element = questionElement(question, ul);
+      if (element === undefined) {
+        // the list holds the answers: the question is left unanswerable
+        ul.remove();
+        return;
+      }
       // TODO make it uniques checking for collisions
       const stem = document.createElement("template");
       stem.innerHTML = md2HTML(question.question.stem);

@@ -17,13 +17,13 @@
 ### Single answer components
 
 - [`<ed-choice>`](./ed-choice/): Single or multiple choice answer.
-- [`<ed-ans>`](./ed-ans/): Simple text answer analyzed with NLP.
 - [`<ed-num>`](./ed-num/): Numeric answer.
 - [`<ed-speech>`](./ed-speech/): Speech to text answer.
 
 ### WIP
 
 - [`<ed-survey>`](./ed-survey/)
+- `<ed-ans>`: Simple text answer analyzed with NLP, not part of the bundle.
 
 ## Importing all elements
 
