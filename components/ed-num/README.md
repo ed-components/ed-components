@@ -48,4 +48,4 @@ solution, shown at the same time.
 
 ## Credits
 
-This component is inspired by the [numerical input problem](https://edx.readthedocs.io/projects/open-edx-building-and-running-a-course/en/latest/exercises_tools/numerical_input.html#numerical-input-problem-olx-reference) used in [Open edx](https://edx.readthedocs.io/projects/open-edx-building-and-running-a-course/en/latest/index.html).
+This component is inspired by the [numerical input problem](https://docs.openedx.org/en/latest/educators/references/course_development/exercise_tools/numerical_input_xml.html) used in [Open edx](https://docs.openedx.org/).

@@ -87,26 +87,30 @@ as correct or incorrect, and the feedback of the question.
 
 ## OLX compatibility
 
-[Edx single select problem OLX](https://edx.readthedocs.io/projects/open-edx-building-and-running-a-course/en/latest/exercises_tools/single_select.html#elements)
+[Edx single select problem OLX](https://docs.openedx.org/en/latest/educators/references/course_development/exercise_tools/single_select_xml.html)
 can include this hierarchy of child elements.
 
 ```
-<multiplechoiceresponse>      <ed-choice shuffle="true">
+<multiplechoiceresponse>      <ed-choice>
     <label>                   This is my label
     <description>             > optional description
-    <choicegroup>             
+    <choicegroup>
           <choice>            - [x] True answer
               <choicehint>      > Optional choice hint
                               - [ ] False answer
                                 > Optional choice hint
-    
+
     <solution>                > solution
-<demandhint>
-    <hint>                    - optional additional information that learners can access if needed.
                               </ed-choice>
 ```
 
-Choice hints and the solution are [feedbacks](#feedbacks).
+Choice hints and the solution are [feedbacks](#feedbacks). A question with
+several true answers is a
+[multi-select problem](https://docs.openedx.org/en/latest/educators/references/course_development/exercise_tools/multi_select_xml.html).
+
+Not supported yet: shuffled choices (`shuffle` and `fixed`), hints on demand
+(`<demandhint>`), partial credit (`correct="partial"`) and answer pools
+(`answer-pool`).
 
 **TODO**
 
